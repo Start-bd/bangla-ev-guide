@@ -3,8 +3,7 @@ import type {} from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-// TODO: replace with your project URL once a project name or custom domain is set.
-const BASE_URL = "";
+const BASE_URL = "https://banglaev.com";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -45,11 +44,13 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         const xml = [
           `<?xml version="1.0" encoding="UTF-8"?>`,
-          `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
+          `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">`,
           ...all.map((e) =>
             [
               `  <url>`,
               `    <loc>${BASE_URL}${e.path}</loc>`,
+              `    <xhtml:link rel="alternate" hreflang="bn" href="${BASE_URL}${e.path}"/>`,
+              `    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}${e.path}?lang=en"/>`,
               "lastmod" in e && e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
               `    <changefreq>${e.changefreq}</changefreq>`,
               `    <priority>${e.priority}</priority>`,
