@@ -54,9 +54,9 @@ export const Route = createFileRoute("/byd/$slug")({
         { property: "og:title", content: meta.t },
         { property: "og:description", content: meta.d },
         { property: "og:type", content: "product" },
-        { property: "og:url", content: `/byd/${slug}` },
+        { property: "og:url", content: absUrl(`/byd/${slug}`) },
       ],
-      links: [{ rel: "canonical", href: `/byd/${slug}` }],
+      links: localeLinks(`/byd/${slug}`),
     };
   },
   component: ModelPage,
