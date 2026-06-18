@@ -19,9 +19,9 @@ export const Route = createFileRoute("/news/$slug")({
     meta: [
       { title: `${params.slug} | BanglaEV` },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: `/news/${params.slug}` },
+      { property: "og:url", content: absUrl(`/news/${params.slug}`) },
     ],
-    links: [{ rel: "canonical", href: `/news/${params.slug}` }],
+    links: localeLinks(`/news/${params.slug}`),
   }),
   notFoundComponent: () => (
     <div className="container-page py-24 text-center">
