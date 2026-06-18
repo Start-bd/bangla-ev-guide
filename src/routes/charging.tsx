@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Zap, Home, MapPin } from "lucide-react";
+import { localeLinks, absUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/charging")({
   head: () => ({
