@@ -31,9 +31,9 @@ export const Route = createFileRoute("/byd")({
       { name: "description", content: "BYD Bangladesh-এর সকল গাড়ির দাম, স্পেসিফিকেশন ও শোরুম লোকেশন। BYD Seal ৳৮৯.৯ লাখ, Sealion 6 ৳৬৪.৯ লাখ, Atto 3 দাম ২০২৬।" },
       { property: "og:title", content: "BYD বাংলাদেশ — সকল মডেল, দাম ও শোরুম" },
       { property: "og:description", content: "BYD Seal, Sealion 6, Atto 3, Dolphin — সব মডেলের দাম ও শোরুম এক জায়গায়।" },
-      { property: "og:url", content: "/byd" },
+      { property: "og:url", content: absUrl("/byd") },
     ],
-    links: [{ rel: "canonical", href: "/byd" }],
+    links: localeLinks("/byd"),
     scripts: [
       {
         type: "application/ld+json",
