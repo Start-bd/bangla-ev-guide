@@ -13,9 +13,9 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "BanglaEV বাংলাদেশের স্বাধীন EV রিসার্চ ও তথ্য প্ল্যাটফর্ম। যোগাযোগ ও বিজ্ঞাপন পার্টনারশিপের তথ্য।" },
       { property: "og:title", content: "আমাদের সম্পর্কে — BanglaEV" },
       { property: "og:description", content: "বাংলাদেশের স্বাধীন EV তথ্য প্ল্যাটফর্ম।" },
-      { property: "og:url", content: "/about" },
+      { property: "og:url", content: absUrl("/about") },
     ],
-    links: [{ rel: "canonical", href: "/about" }],
+    links: localeLinks("/about"),
   }),
   component: AboutPage,
 });
