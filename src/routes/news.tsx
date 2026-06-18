@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Zap } from "lucide-react";
 import { getPosts } from "@/lib/posts.functions";
+import { localeLinks, absUrl } from "@/lib/seo";
 
 const postsQO = queryOptions({ queryKey: ["posts", 50], queryFn: () => getPosts({ data: { limit: 50 } }) });
 
