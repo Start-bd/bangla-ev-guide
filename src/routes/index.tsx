@@ -5,6 +5,7 @@ import { getFeaturedModels } from "@/lib/models.functions";
 import { getPosts } from "@/lib/posts.functions";
 import { ModelCard } from "@/components/site/ModelCard";
 import { CostCalculator } from "@/components/site/CostCalculator";
+import { localeLinks, absUrl } from "@/lib/seo";
 
 const featuredQO = queryOptions({ queryKey: ["models", "featured"], queryFn: () => getFeaturedModels() });
 const postsQO = queryOptions({ queryKey: ["posts", 4], queryFn: () => getPosts({ data: { limit: 4 } }) });
