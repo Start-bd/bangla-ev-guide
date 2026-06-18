@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { submitLead } from "@/lib/leads.functions";
+import { localeLinks, absUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
