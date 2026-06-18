@@ -9,9 +9,9 @@ export const Route = createFileRoute("/charging")({
       { name: "description", content: "বাংলাদেশে EV চার্জিং স্টেশন: ১৪+ পাবলিক স্টেশন, ২০২৬-এর লক্ষ্য ১,২০০। হোম চার্জিং, BERC ট্যারিফ ৳৭.৬৪/kWh — সম্পূর্ণ গাইড।" },
       { property: "og:title", content: "EV চার্জিং বাংলাদেশ — কোথায়, কিভাবে" },
       { property: "og:description", content: "বাংলাদেশে EV চার্জিং স্টেশন ও হোম চার্জিং গাইড।" },
-      { property: "og:url", content: "/charging" },
+      { property: "og:url", content: absUrl("/charging") },
     ],
-    links: [{ rel: "canonical", href: "/charging" }],
+    links: localeLinks("/charging"),
   }),
   component: ChargingPage,
 });
