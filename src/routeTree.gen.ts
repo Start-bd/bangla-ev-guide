@@ -17,6 +17,8 @@ import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as BydRouteImport } from './routes/byd'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NewsIndexRouteImport } from './routes/news.index'
+import { Route as BydIndexRouteImport } from './routes/byd.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as BydSlugRouteImport } from './routes/byd.$slug'
 
@@ -60,6 +62,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsIndexRoute = NewsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => NewsRoute,
+} as any)
+const BydIndexRoute = BydIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BydRoute,
+} as any)
 const NewsSlugRoute = NewsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -82,18 +94,20 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/byd/$slug': typeof BydSlugRoute
   '/news/$slug': typeof NewsSlugRoute
+  '/byd/': typeof BydIndexRoute
+  '/news/': typeof NewsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/byd': typeof BydRouteWithChildren
   '/calculator': typeof CalculatorRoute
   '/charging': typeof ChargingRoute
   '/compare': typeof CompareRoute
-  '/news': typeof NewsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/byd/$slug': typeof BydSlugRoute
   '/news/$slug': typeof NewsSlugRoute
+  '/byd': typeof BydIndexRoute
+  '/news': typeof NewsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +121,8 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/byd/$slug': typeof BydSlugRoute
   '/news/$slug': typeof NewsSlugRoute
+  '/byd/': typeof BydIndexRoute
+  '/news/': typeof NewsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,18 +137,20 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/byd/$slug'
     | '/news/$slug'
+    | '/byd/'
+    | '/news/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/byd'
     | '/calculator'
     | '/charging'
     | '/compare'
-    | '/news'
     | '/sitemap.xml'
     | '/byd/$slug'
     | '/news/$slug'
+    | '/byd'
+    | '/news'
   id:
     | '__root__'
     | '/'
@@ -145,6 +163,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/byd/$slug'
     | '/news/$slug'
+    | '/byd/'
+    | '/news/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -216,6 +236,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/news/': {
+      id: '/news/'
+      path: '/'
+      fullPath: '/news/'
+      preLoaderRoute: typeof NewsIndexRouteImport
+      parentRoute: typeof NewsRoute
+    }
+    '/byd/': {
+      id: '/byd/'
+      path: '/'
+      fullPath: '/byd/'
+      preLoaderRoute: typeof BydIndexRouteImport
+      parentRoute: typeof BydRoute
+    }
     '/news/$slug': {
       id: '/news/$slug'
       path: '/$slug'
@@ -235,20 +269,24 @@ declare module '@tanstack/react-router' {
 
 interface BydRouteChildren {
   BydSlugRoute: typeof BydSlugRoute
+  BydIndexRoute: typeof BydIndexRoute
 }
 
 const BydRouteChildren: BydRouteChildren = {
   BydSlugRoute: BydSlugRoute,
+  BydIndexRoute: BydIndexRoute,
 }
 
 const BydRouteWithChildren = BydRoute._addFileChildren(BydRouteChildren)
 
 interface NewsRouteChildren {
   NewsSlugRoute: typeof NewsSlugRoute
+  NewsIndexRoute: typeof NewsIndexRoute
 }
 
 const NewsRouteChildren: NewsRouteChildren = {
   NewsSlugRoute: NewsSlugRoute,
+  NewsIndexRoute: NewsIndexRoute,
 }
 
 const NewsRouteWithChildren = NewsRoute._addFileChildren(NewsRouteChildren)

@@ -3,6 +3,7 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getAllModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
 import { useState } from "react";
+import { localeLinks, absUrl } from "@/lib/seo";
 
 const allQO = queryOptions({ queryKey: ["models", "all"], queryFn: () => getAllModels() });
 
@@ -13,9 +14,9 @@ export const Route = createFileRoute("/compare")({
       { name: "description", content: "ইলেকট্রিক গাড়ি তুলনা: BYD Seal, Sealion 6, Atto 3, MG 4, Hyundai Ioniq 5 — দাম, রেঞ্জ, ব্যাটারি, স্পেক্স পাশাপাশি।" },
       { property: "og:title", content: "EV Comparison Bangladesh — BYD vs MG vs Hyundai" },
       { property: "og:description", content: "সকল EV-এর দাম ও স্পেক্স তুলনা।" },
-      { property: "og:url", content: "/compare" },
+      { property: "og:url", content: absUrl("/compare") },
     ],
-    links: [{ rel: "canonical", href: "/compare" }],
+    links: localeLinks("/compare"),
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(allQO),
   component: ComparePage,

@@ -4,6 +4,7 @@ import { Battery, Gauge, Zap, Shield, Palette, ArrowRight, Award } from "lucide-
 import { getModelBySlug, getBydModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
+import { localeLinks, absUrl } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
@@ -53,9 +54,9 @@ export const Route = createFileRoute("/byd/$slug")({
         { property: "og:title", content: meta.t },
         { property: "og:description", content: meta.d },
         { property: "og:type", content: "product" },
-        { property: "og:url", content: `/byd/${slug}` },
+        { property: "og:url", content: absUrl(`/byd/${slug}`) },
       ],
-      links: [{ rel: "canonical", href: `/byd/${slug}` }],
+      links: localeLinks(`/byd/${slug}`),
     };
   },
   component: ModelPage,

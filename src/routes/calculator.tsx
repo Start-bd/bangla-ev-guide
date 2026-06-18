@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CostCalculator } from "@/components/site/CostCalculator";
+import { localeLinks, absUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/calculator")({
   head: () => ({
@@ -8,9 +9,9 @@ export const Route = createFileRoute("/calculator")({
       { name: "description", content: "ইলেকট্রিক গাড়ি বনাম পেট্রোল — আপনার দৈনিক ড্রাইভিং দিয়ে মাসিক ও বার্ষিক সাশ্রয় হিসাব করুন।" },
       { property: "og:title", content: "EV vs পেট্রোল কস্ট ক্যালকুলেটর — বাংলাদেশ" },
       { property: "og:description", content: "EV-তে শিফট করলে বছরে কত টাকা সাশ্রয়?" },
-      { property: "og:url", content: "/calculator" },
+      { property: "og:url", content: absUrl("/calculator") },
     ],
-    links: [{ rel: "canonical", href: "/calculator" }],
+    links: localeLinks("/calculator"),
     scripts: [
       {
         type: "application/ld+json",
