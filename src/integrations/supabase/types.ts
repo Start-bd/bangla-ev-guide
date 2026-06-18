@@ -14,7 +14,150 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ev_models: {
+        Row: {
+          battery_kwh: number | null
+          brand: string
+          charging_time_min: number | null
+          cons: string[] | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          image_url: string | null
+          is_featured: boolean | null
+          model: string
+          price_bdt: number | null
+          pros: string[] | null
+          range_km: number | null
+          slug: string
+          specs: Json | null
+          type: string | null
+          zero_to_hundred: number | null
+        }
+        Insert: {
+          battery_kwh?: number | null
+          brand: string
+          charging_time_min?: number | null
+          cons?: string[] | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean | null
+          model: string
+          price_bdt?: number | null
+          pros?: string[] | null
+          range_km?: number | null
+          slug: string
+          specs?: Json | null
+          type?: string | null
+          zero_to_hundred?: number | null
+        }
+        Update: {
+          battery_kwh?: number | null
+          brand?: string
+          charging_time_min?: number | null
+          cons?: string[] | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean | null
+          model?: string
+          price_bdt?: number | null
+          pros?: string[] | null
+          range_km?: number | null
+          slug?: string
+          specs?: Json | null
+          type?: string | null
+          zero_to_hundred?: number | null
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string | null
+          name: string
+          phone: string | null
+          source: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          phone?: string | null
+          source?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string | null
+          source?: string | null
+        }
+        Relationships: []
+      }
+      posts: {
+        Row: {
+          author: string | null
+          category: string | null
+          content_bn: string | null
+          content_en: string | null
+          cover_url: string | null
+          created_at: string | null
+          excerpt_bn: string | null
+          id: string
+          meta_description: string | null
+          meta_title: string | null
+          published: boolean | null
+          published_at: string | null
+          slug: string
+          title_bn: string
+          title_en: string | null
+        }
+        Insert: {
+          author?: string | null
+          category?: string | null
+          content_bn?: string | null
+          content_en?: string | null
+          cover_url?: string | null
+          created_at?: string | null
+          excerpt_bn?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          published?: boolean | null
+          published_at?: string | null
+          slug: string
+          title_bn: string
+          title_en?: string | null
+        }
+        Update: {
+          author?: string | null
+          category?: string | null
+          content_bn?: string | null
+          content_en?: string | null
+          cover_url?: string | null
+          created_at?: string | null
+          excerpt_bn?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          published?: boolean | null
+          published_at?: string | null
+          slug?: string
+          title_bn?: string
+          title_en?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
