@@ -17,9 +17,9 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD Seal, Sealion 6, Atto 3, MG 4, Hyundai Ioniq 5 — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।" },
       { property: "og:title", content: "BanglaEV — বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড" },
       { property: "og:description", content: "BYD, MG, Hyundai সহ সকল EV-এর দাম, রিভিউ ও তুলনা।" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: absUrl("/") },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: localeLinks("/"),
   }),
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(featuredQO);
