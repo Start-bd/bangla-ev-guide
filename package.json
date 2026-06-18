@@ -9,7 +9,8 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test:seo": "bun scripts/check-seo-head.ts"
   },
   "dependencies": {
     "@fontsource/hind-siliguri": "^5.2.7",
