@@ -4,6 +4,7 @@ import { Battery, Gauge, Zap, Shield, Palette, ArrowRight, Award } from "lucide-
 import { getModelBySlug, getBydModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
+import { localeLinks, absUrl } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
