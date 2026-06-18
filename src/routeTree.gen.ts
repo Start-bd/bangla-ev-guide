@@ -9,38 +9,206 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as CompareRouteImport } from './routes/compare'
+import { Route as ChargingRouteImport } from './routes/charging'
+import { Route as CalculatorRouteImport } from './routes/calculator'
+import { Route as BydRouteImport } from './routes/byd'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NewsSlugRouteImport } from './routes/news.$slug'
+import { Route as BydSlugRouteImport } from './routes/byd.$slug'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChargingRoute = ChargingRouteImport.update({
+  id: '/charging',
+  path: '/charging',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalculatorRoute = CalculatorRouteImport.update({
+  id: '/calculator',
+  path: '/calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BydRoute = BydRouteImport.update({
+  id: '/byd',
+  path: '/byd',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsSlugRoute = NewsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => NewsRoute,
+} as any)
+const BydSlugRoute = BydSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BydRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/byd': typeof BydRouteWithChildren
+  '/calculator': typeof CalculatorRoute
+  '/charging': typeof ChargingRoute
+  '/compare': typeof CompareRoute
+  '/news': typeof NewsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/byd/$slug': typeof BydSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/byd': typeof BydRouteWithChildren
+  '/calculator': typeof CalculatorRoute
+  '/charging': typeof ChargingRoute
+  '/compare': typeof CompareRoute
+  '/news': typeof NewsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/byd/$slug': typeof BydSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/byd': typeof BydRouteWithChildren
+  '/calculator': typeof CalculatorRoute
+  '/charging': typeof ChargingRoute
+  '/compare': typeof CompareRoute
+  '/news': typeof NewsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/byd/$slug': typeof BydSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/byd'
+    | '/calculator'
+    | '/charging'
+    | '/compare'
+    | '/news'
+    | '/sitemap.xml'
+    | '/byd/$slug'
+    | '/news/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/byd'
+    | '/calculator'
+    | '/charging'
+    | '/compare'
+    | '/news'
+    | '/sitemap.xml'
+    | '/byd/$slug'
+    | '/news/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/byd'
+    | '/calculator'
+    | '/charging'
+    | '/compare'
+    | '/news'
+    | '/sitemap.xml'
+    | '/byd/$slug'
+    | '/news/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BydRoute: typeof BydRouteWithChildren
+  CalculatorRoute: typeof CalculatorRoute
+  ChargingRoute: typeof ChargingRoute
+  CompareRoute: typeof CompareRoute
+  NewsRoute: typeof NewsRouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/charging': {
+      id: '/charging'
+      path: '/charging'
+      fullPath: '/charging'
+      preLoaderRoute: typeof ChargingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calculator': {
+      id: '/calculator'
+      path: '/calculator'
+      fullPath: '/calculator'
+      preLoaderRoute: typeof CalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/byd': {
+      id: '/byd'
+      path: '/byd'
+      fullPath: '/byd'
+      preLoaderRoute: typeof BydRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +216,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/news/$slug': {
+      id: '/news/$slug'
+      path: '/$slug'
+      fullPath: '/news/$slug'
+      preLoaderRoute: typeof NewsSlugRouteImport
+      parentRoute: typeof NewsRoute
+    }
+    '/byd/$slug': {
+      id: '/byd/$slug'
+      path: '/$slug'
+      fullPath: '/byd/$slug'
+      preLoaderRoute: typeof BydSlugRouteImport
+      parentRoute: typeof BydRoute
+    }
   }
 }
 
+interface BydRouteChildren {
+  BydSlugRoute: typeof BydSlugRoute
+}
+
+const BydRouteChildren: BydRouteChildren = {
+  BydSlugRoute: BydSlugRoute,
+}
+
+const BydRouteWithChildren = BydRoute._addFileChildren(BydRouteChildren)
+
+interface NewsRouteChildren {
+  NewsSlugRoute: typeof NewsSlugRoute
+}
+
+const NewsRouteChildren: NewsRouteChildren = {
+  NewsSlugRoute: NewsSlugRoute,
+}
+
+const NewsRouteWithChildren = NewsRoute._addFileChildren(NewsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BydRoute: BydRouteWithChildren,
+  CalculatorRoute: CalculatorRoute,
+  ChargingRoute: ChargingRoute,
+  CompareRoute: CompareRoute,
+  NewsRoute: NewsRouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
