@@ -14,25 +14,35 @@ function pub() {
 export const getPosts = createServerFn({ method: "GET" })
   .inputValidator((d) => z.object({ limit: z.number().int().min(1).max(50).optional() }).parse(d ?? {}))
   .handler(async ({ data }) => {
-    const { data: rows, error } = await pub()
-      .from("posts")
-      .select("id, slug, title_bn, title_en, excerpt_bn, category, cover_url, author, published_at")
-      .eq("published", true)
-      .order("published_at", { ascending: false })
-      .limit(data.limit ?? 20);
-    if (error) throw new Error(error.message);
-    return rows ?? [];
+    try {
+      const { data: rows, error } = await pub()
+        .from("posts")
+        .select("id, slug, title_bn, title_en, excerpt_bn, category, cover_url, author, published_at")
+        .eq("published", true)
+        .order("published_at", { ascending: false })
+        .limit(data.limit ?? 20);
+      if (error) throw new Error(error.message);
+      return rows ?? [];
+    } catch (e) {
+      console.error("getPosts failed:", e);
+      return [];
+    }
   });
 
 export const getPostBySlug = createServerFn({ method: "GET" })
   .inputValidator((d) => z.object({ slug: z.string() }).parse(d))
   .handler(async ({ data }) => {
-    const { data: row, error } = await pub()
-      .from("posts")
-      .select("*")
-      .eq("slug", data.slug)
-      .eq("published", true)
-      .maybeSingle();
-    if (error) throw new Error(error.message);
-    return row;
+    try {
+      const { data: row, error } = await pub()
+        .from("posts")
+        .select("*")
+        .eq("slug", data.slug)
+        .eq("published", true)
+        .maybeSingle();
+      if (error) throw new Error(error.message);
+      return row;
+    } catch (e) {
+      console.error("getPostBySlug failed:", e);
+      return null;
+    }
   });

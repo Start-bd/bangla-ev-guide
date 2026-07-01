@@ -12,42 +12,62 @@ function pub() {
 }
 
 export const getAllModels = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await pub()
-    .from("ev_models")
-    .select("*")
-    .order("display_order", { ascending: true });
-  if (error) throw new Error(error.message);
-  return data ?? [];
+  try {
+    const { data, error } = await pub()
+      .from("ev_models")
+      .select("*")
+      .order("display_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  } catch (e) {
+    console.error("getAllModels failed:", e);
+    return [];
+  }
 });
 
 export const getFeaturedModels = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await pub()
-    .from("ev_models")
-    .select("*")
-    .eq("is_featured", true)
-    .order("display_order", { ascending: true });
-  if (error) throw new Error(error.message);
-  return data ?? [];
+  try {
+    const { data, error } = await pub()
+      .from("ev_models")
+      .select("*")
+      .eq("is_featured", true)
+      .order("display_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  } catch (e) {
+    console.error("getFeaturedModels failed:", e);
+    return [];
+  }
 });
 
 export const getBydModels = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await pub()
-    .from("ev_models")
-    .select("*")
-    .eq("brand", "BYD")
-    .order("display_order", { ascending: true });
-  if (error) throw new Error(error.message);
-  return data ?? [];
+  try {
+    const { data, error } = await pub()
+      .from("ev_models")
+      .select("*")
+      .eq("brand", "BYD")
+      .order("display_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  } catch (e) {
+    console.error("getBydModels failed:", e);
+    return [];
+  }
 });
 
 export const getModelBySlug = createServerFn({ method: "GET" })
   .inputValidator((d) => z.object({ slug: z.string() }).parse(d))
   .handler(async ({ data }) => {
-    const { data: row, error } = await pub()
-      .from("ev_models")
-      .select("*")
-      .eq("slug", data.slug)
-      .maybeSingle();
-    if (error) throw new Error(error.message);
-    return row;
+    try {
+      const { data: row, error } = await pub()
+        .from("ev_models")
+        .select("*")
+        .eq("slug", data.slug)
+        .maybeSingle();
+      if (error) throw new Error(error.message);
+      return row;
+    } catch (e) {
+      console.error("getModelBySlug failed:", e);
+      return null;
+    }
   });
