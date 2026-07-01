@@ -65,7 +65,14 @@ export const Route = createFileRoute("/byd/")({
       },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(bydQO),
+  loader: async ({ context }) => {
+    try {
+      return await context.queryClient.ensureQueryData(bydQO);
+    } catch (e) {
+      ssrLog.error({ scope: "loader", event: "loader_failed", route: "/byd" }, e);
+      throw e;
+    }
+  },
   component: BydHub,
 });
 
