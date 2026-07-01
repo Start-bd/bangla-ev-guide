@@ -90,12 +90,29 @@ function BydHub() {
 
       <section className="container-page py-16">
         <h2 className="mb-8 text-3xl font-bold">BYD মডেল লাইনআপ</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {models.map((m) => (
-            <ModelCard key={m.id} {...m} />
-          ))}
-        </div>
+        {models.length === 0 ? (
+          <div className="rounded-2xl border border-border bg-accent p-8 text-center">
+            <p className="text-lg font-semibold">মডেল তথ্য এখন লোড করা যাচ্ছে না</p>
+            <p className="mt-2 text-muted-foreground">
+              আমাদের সার্ভার সাময়িকভাবে অনুপলব্ধ। কিছুক্ষণ পর আবার চেষ্টা করুন, অথবা সরাসরি{" "}
+              <strong>CG Runner BD Ltd</strong> শোরুমে যোগাযোগ করুন।
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 font-semibold text-primary-foreground"
+            >
+              আবার চেষ্টা করুন
+            </button>
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {models.map((m) => (
+              <ModelCard key={m.id} {...m} />
+            ))}
+          </div>
+        )}
       </section>
+
 
       <section id="showrooms" className="bg-accent py-16">
         <div className="container-page">
