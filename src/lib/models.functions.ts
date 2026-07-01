@@ -12,12 +12,17 @@ function pub() {
 }
 
 export const getAllModels = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await pub()
-    .from("ev_models")
-    .select("*")
-    .order("display_order", { ascending: true });
-  if (error) throw new Error(error.message);
-  return data ?? [];
+  try {
+    const { data, error } = await pub()
+      .from("ev_models")
+      .select("*")
+      .order("display_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  } catch (e) {
+    console.error("getAllModels failed:", e);
+    return [];
+  }
 });
 
 export const getFeaturedModels = createServerFn({ method: "GET" }).handler(async () => {
