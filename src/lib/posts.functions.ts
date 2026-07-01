@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
+import { ssrLog } from "@/lib/ssr-logger";
 
 function pub() {
   return createClient<Database>(
@@ -24,7 +25,7 @@ export const getPosts = createServerFn({ method: "GET" })
       if (error) throw new Error(error.message);
       return rows ?? [];
     } catch (e) {
-      console.error("getPosts failed:", e);
+      ssrLog.error({ scope: "server-fn", event: "db_read_failed", fn: "getPosts" }, e);
       return [];
     }
   });
@@ -42,7 +43,7 @@ export const getPostBySlug = createServerFn({ method: "GET" })
       if (error) throw new Error(error.message);
       return row;
     } catch (e) {
-      console.error("getPostBySlug failed:", e);
+      ssrLog.error({ scope: "server-fn", event: "db_read_failed", fn: "getPostBySlug", slug: data.slug }, e);
       return null;
     }
   });
