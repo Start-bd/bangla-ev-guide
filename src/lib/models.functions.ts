@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
+import { ssrLog } from "@/lib/ssr-logger";
 
 function pub() {
   return createClient<Database>(
@@ -11,22 +12,28 @@ function pub() {
   );
 }
 
-export const getAllModels = createServerFn({ method: "GET" }).handler(async () => {
+async function safeQuery<T>(fn: string, run: () => Promise<T>, fallback: T): Promise<T> {
   try {
+    return await run();
+  } catch (e) {
+    ssrLog.error({ scope: "server-fn", event: "db_read_failed", fn }, e);
+    return fallback;
+  }
+}
+
+export const getAllModels = createServerFn({ method: "GET" }).handler(() =>
+  safeQuery("getAllModels", async () => {
     const { data, error } = await pub()
       .from("ev_models")
       .select("*")
       .order("display_order", { ascending: true });
     if (error) throw new Error(error.message);
     return data ?? [];
-  } catch (e) {
-    console.error("getAllModels failed:", e);
-    return [];
-  }
-});
+  }, []),
+);
 
-export const getFeaturedModels = createServerFn({ method: "GET" }).handler(async () => {
-  try {
+export const getFeaturedModels = createServerFn({ method: "GET" }).handler(() =>
+  safeQuery("getFeaturedModels", async () => {
     const { data, error } = await pub()
       .from("ev_models")
       .select("*")
@@ -34,14 +41,11 @@ export const getFeaturedModels = createServerFn({ method: "GET" }).handler(async
       .order("display_order", { ascending: true });
     if (error) throw new Error(error.message);
     return data ?? [];
-  } catch (e) {
-    console.error("getFeaturedModels failed:", e);
-    return [];
-  }
-});
+  }, []),
+);
 
-export const getBydModels = createServerFn({ method: "GET" }).handler(async () => {
-  try {
+export const getBydModels = createServerFn({ method: "GET" }).handler(() =>
+  safeQuery("getBydModels", async () => {
     const { data, error } = await pub()
       .from("ev_models")
       .select("*")
@@ -49,16 +53,13 @@ export const getBydModels = createServerFn({ method: "GET" }).handler(async () =
       .order("display_order", { ascending: true });
     if (error) throw new Error(error.message);
     return data ?? [];
-  } catch (e) {
-    console.error("getBydModels failed:", e);
-    return [];
-  }
-});
+  }, []),
+);
 
 export const getModelBySlug = createServerFn({ method: "GET" })
   .inputValidator((d) => z.object({ slug: z.string() }).parse(d))
-  .handler(async ({ data }) => {
-    try {
+  .handler(({ data }) =>
+    safeQuery(`getModelBySlug(${data.slug})`, async () => {
       const { data: row, error } = await pub()
         .from("ev_models")
         .select("*")
@@ -66,8 +67,5 @@ export const getModelBySlug = createServerFn({ method: "GET" })
         .maybeSingle();
       if (error) throw new Error(error.message);
       return row;
-    } catch (e) {
-      console.error("getModelBySlug failed:", e);
-      return null;
-    }
-  });
+    }, null),
+  );

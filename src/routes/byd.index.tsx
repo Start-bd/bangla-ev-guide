@@ -4,6 +4,7 @@ import { MapPin, Phone, ArrowRight } from "lucide-react";
 import { getBydModels } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
 import { localeLinks, absUrl } from "@/lib/seo";
+import { ssrLog } from "@/lib/ssr-logger";
 
 const bydQO = queryOptions({ queryKey: ["models", "byd"], queryFn: () => getBydModels() });
 
@@ -64,7 +65,14 @@ export const Route = createFileRoute("/byd/")({
       },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(bydQO),
+  loader: async ({ context }) => {
+    try {
+      return await context.queryClient.ensureQueryData(bydQO);
+    } catch (e) {
+      ssrLog.error({ scope: "loader", event: "loader_failed", route: "/byd" }, e);
+      throw e;
+    }
+  },
   component: BydHub,
 });
 
