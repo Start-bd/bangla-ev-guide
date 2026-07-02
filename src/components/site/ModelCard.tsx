@@ -1,6 +1,22 @@
 import { Link } from "@tanstack/react-router";
 import { Battery, Gauge, Zap } from "lucide-react";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
+import sealImg from "@/assets/models/seal.webp";
+import sealion6Img from "@/assets/models/sealion-6.webp";
+import atto3Img from "@/assets/models/atto-3.webp";
+import dolphinImg from "@/assets/models/dolphin.webp";
+import mg4Img from "@/assets/models/mg-4.webp";
+import ioniq5Img from "@/assets/models/ioniq-5.webp";
+
+const MODEL_IMAGES: Record<string, string> = {
+  seal: sealImg,
+  "sealion-6": sealion6Img,
+  "atto-3": atto3Img,
+  dolphin: dolphinImg,
+  "mg-4": mg4Img,
+  "ioniq-5": ioniq5Img,
+};
+
 
 interface ModelCardProps {
   brand: string;
@@ -18,12 +34,24 @@ export function ModelCard(p: ModelCardProps) {
   const isByd = p.brand.toLowerCase() === "byd";
   const to = isByd ? "/byd/$slug" : null;
 
+  const img = MODEL_IMAGES[p.slug];
   const Inner = (
     <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl">
       <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-[var(--color-navy)] to-[oklch(0.3_0.05_275)]">
-        <div className="absolute inset-0 grid place-items-center">
-          <Zap className="h-16 w-16 text-white/15" />
-        </div>
+        {img ? (
+          <img
+            src={img}
+            alt={`${p.brand} ${p.model}`}
+            width={1280}
+            height={800}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 grid place-items-center">
+            <Zap className="h-16 w-16 text-white/15" />
+          </div>
+        )}
         <div className="absolute left-3 top-3 rounded-full bg-primary/95 px-3 py-1 text-xs font-semibold text-primary-foreground">
           {p.type ?? "EV"}
         </div>
@@ -31,6 +59,7 @@ export function ModelCard(p: ModelCardProps) {
           {p.brand}
         </div>
       </div>
+
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div>
           <h3 className="font-display text-xl font-bold leading-tight">
