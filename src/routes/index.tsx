@@ -6,6 +6,8 @@ import { getPosts } from "@/lib/posts.functions";
 import { ModelCard } from "@/components/site/ModelCard";
 import { CostCalculator } from "@/components/site/CostCalculator";
 import { localeLinks, absUrl } from "@/lib/seo";
+import heroCar from "@/assets/hero-car.jpg";
+
 
 const featuredQO = queryOptions({ queryKey: ["models", "featured"], queryFn: () => getFeaturedModels() });
 const postsQO = queryOptions({ queryKey: ["posts", 4], queryFn: () => getPosts({ data: { limit: 4 } }) });
