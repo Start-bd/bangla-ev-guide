@@ -73,6 +73,49 @@ async function waitForServer(timeoutMs = 45_000) {
   throw new Error(`dev server did not become ready on ${BASE}`);
 }
 
+/**
+ * Poll the Supabase-backed backend before firing SSR requests so a cold /
+ * restarting DB doesn't produce a false "loader failure" in CI. We probe
+ * the PostgREST root with the anon key (HEAD /rest/v1/) and treat any
+ * <500 response as healthy — 401/404 both prove the edge is up. When no
+ * Supabase env is configured we skip the wait (nothing to check).
+ */
+async function waitForBackend(timeoutMs = 60_000) {
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) {
+    console.log("[check-ssr-byd] no VITE_SUPABASE_URL/KEY set — skipping backend wait.");
+    return;
+  }
+  const endpoint = url.replace(/\/+$/, "") + "/rest/v1/";
+  const deadline = Date.now() + timeoutMs;
+  let lastStatus: number | string = "n/a";
+  let attempts = 0;
+  while (Date.now() < deadline) {
+    attempts++;
+    try {
+      const res = await fetch(endpoint, {
+        method: "HEAD",
+        headers: { apikey: key, Authorization: `Bearer ${key}` },
+      });
+      lastStatus = res.status;
+      if (res.status < 500) {
+        console.log(
+          `[check-ssr-byd] backend healthy after ${attempts} probe(s) (status ${res.status}).`,
+        );
+        return;
+      }
+    } catch (e) {
+      lastStatus = (e as Error).message;
+    }
+    await new Promise((r) => setTimeout(r, 1000));
+  }
+  throw new Error(
+    `backend did not become healthy within ${timeoutMs}ms (last status: ${lastStatus})`,
+  );
+}
+
+
 async function main() {
   await mkdir(dirname(LOG_PATH), { recursive: true });
 
