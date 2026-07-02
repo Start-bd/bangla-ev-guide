@@ -1,20 +1,26 @@
 import { Link } from "@tanstack/react-router";
 import { Battery, Gauge, Zap } from "lucide-react";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
-import sealImg from "@/assets/models/seal.webp";
-import sealion6Img from "@/assets/models/sealion-6.webp";
-import atto3Img from "@/assets/models/atto-3.webp";
-import dolphinImg from "@/assets/models/dolphin.webp";
-import mg4Img from "@/assets/models/mg-4.webp";
-import ioniq5Img from "@/assets/models/ioniq-5.webp";
+import sealSrc from "@/assets/models/seal.webp?w=480;800;1280&format=webp&as=srcset";
+import sealion6Src from "@/assets/models/sealion-6.webp?w=480;800;1280&format=webp&as=srcset";
+import atto3Src from "@/assets/models/atto-3.webp?w=480;800;1280&format=webp&as=srcset";
+import dolphinSrc from "@/assets/models/dolphin.webp?w=480;800;1280&format=webp&as=srcset";
+import mg4Src from "@/assets/models/mg-4.webp?w=480;800;1280&format=webp&as=srcset";
+import ioniq5Src from "@/assets/models/ioniq-5.webp?w=480;800;1280&format=webp&as=srcset";
+import sealImg from "@/assets/models/seal.webp?w=800&format=webp";
+import sealion6Img from "@/assets/models/sealion-6.webp?w=800&format=webp";
+import atto3Img from "@/assets/models/atto-3.webp?w=800&format=webp";
+import dolphinImg from "@/assets/models/dolphin.webp?w=800&format=webp";
+import mg4Img from "@/assets/models/mg-4.webp?w=800&format=webp";
+import ioniq5Img from "@/assets/models/ioniq-5.webp?w=800&format=webp";
 
-const MODEL_IMAGES: Record<string, string> = {
-  seal: sealImg,
-  "sealion-6": sealion6Img,
-  "atto-3": atto3Img,
-  dolphin: dolphinImg,
-  "mg-4": mg4Img,
-  "ioniq-5": ioniq5Img,
+const MODEL_IMAGES: Record<string, { src: string; srcSet: string }> = {
+  seal: { src: sealImg, srcSet: sealSrc },
+  "sealion-6": { src: sealion6Img, srcSet: sealion6Src },
+  "atto-3": { src: atto3Img, srcSet: atto3Src },
+  dolphin: { src: dolphinImg, srcSet: dolphinSrc },
+  "mg-4": { src: mg4Img, srcSet: mg4Src },
+  "ioniq-5": { src: ioniq5Img, srcSet: ioniq5Src },
 };
 
 
@@ -40,11 +46,14 @@ export function ModelCard(p: ModelCardProps) {
       <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-[var(--color-navy)] to-[oklch(0.3_0.05_275)]">
         {img ? (
           <img
-            src={img}
+            src={img.src}
+            srcSet={img.srcSet}
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             alt={`${p.brand} ${p.model}`}
             width={1280}
             height={800}
             loading="lazy"
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
