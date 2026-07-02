@@ -63,10 +63,16 @@ function HomePage() {
 
           <div className="relative hidden md:block">
             <div className="absolute -inset-10 rounded-full bg-primary/20 blur-3xl" />
-            <div className="relative grid h-full place-items-center">
-              <Zap className="h-64 w-64 text-primary animate-bolt drop-shadow-[0_0_40px_oklch(0.66_0.18_148/0.6)]" strokeWidth={1.5} />
-            </div>
+            <img
+              src={heroCar}
+              alt="BYD Seal electric sedan in Bangladesh at sunset"
+              width={1920}
+              height={1088}
+              fetchPriority="high"
+              className="relative rounded-2xl shadow-2xl shadow-black/40 ring-1 ring-white/10"
+            />
           </div>
+
         </div>
       </section>
 
