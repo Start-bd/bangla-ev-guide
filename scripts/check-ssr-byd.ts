@@ -146,7 +146,9 @@ async function main() {
   });
 
   try {
+    await waitForBackend();
     await waitForServer();
+
     for (const path of ROUTES) {
       const res = await fetch(BASE + path, { redirect: "manual" });
       // Give the server a beat to flush console output.
