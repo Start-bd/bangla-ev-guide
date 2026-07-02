@@ -1,6 +1,22 @@
 import { Link } from "@tanstack/react-router";
 import { Battery, Gauge, Zap } from "lucide-react";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
+import sealImg from "@/assets/models/seal.webp";
+import sealion6Img from "@/assets/models/sealion-6.webp";
+import atto3Img from "@/assets/models/atto-3.webp";
+import dolphinImg from "@/assets/models/dolphin.webp";
+import mg4Img from "@/assets/models/mg-4.webp";
+import ioniq5Img from "@/assets/models/ioniq-5.webp";
+
+const MODEL_IMAGES: Record<string, string> = {
+  seal: sealImg,
+  "sealion-6": sealion6Img,
+  "atto-3": atto3Img,
+  dolphin: dolphinImg,
+  "mg-4": mg4Img,
+  "ioniq-5": ioniq5Img,
+};
+
 
 interface ModelCardProps {
   brand: string;
