@@ -56,6 +56,19 @@ for (const [slug, entry] of Object.entries(MODEL_IMAGES)) {
 }
 
 
+const BRAND_TINTS: Record<string, string> = {
+  BYD: "from-[#0b3d91] to-[#1a1a2e]",
+  MG: "from-[#c8102e] to-[#3a0a12]",
+  Hyundai: "from-[#002c5f] to-[#0a1a33]",
+  Kia: "from-[#05141f] to-[#1a2833]",
+  Tesla: "from-[#111111] to-[#3a0000]",
+  Neta: "from-[#0e7c66] to-[#0a1a33]",
+  Wuling: "from-[#1e40af] to-[#0b1f3a]",
+  Zeekr: "from-[#1e293b] to-[#0f172a]",
+  Deepal: "from-[#0f3d2e] to-[#0a1a1f]",
+  Dongfeng: "from-[#7c2d12] to-[#1a0a05]",
+};
+
 interface ModelCardProps {
   brand: string;
   model: string;
@@ -65,18 +78,18 @@ interface ModelCardProps {
   range_km: number | null;
   battery_kwh: number | null;
   zero_to_hundred: number | null;
-  hrefBase?: string; // default "/byd/" for BYD; else compose by brand
+  hrefBase?: string;
 }
 
 export function ModelCard(p: ModelCardProps) {
   const isByd = p.brand.toLowerCase() === "byd";
-  const to = isByd ? "/byd/$slug" : null;
-
   const img = MODEL_IMAGES[p.slug];
   if (!img) warnFallback(p.slug, p.brand, p.model);
+  const tint = BRAND_TINTS[p.brand] ?? "from-[var(--color-navy)] to-[oklch(0.3_0.05_275)]";
+
   const Inner = (
     <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl">
-      <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-[var(--color-navy)] to-[oklch(0.3_0.05_275)]">
+      <div className={`relative aspect-[16/10] overflow-hidden bg-gradient-to-br ${tint}`}>
         {img ? (
           <img
             src={img.src}
@@ -91,7 +104,13 @@ export function ModelCard(p: ModelCardProps) {
           />
         ) : (
           <div className="absolute inset-0 grid place-items-center">
-            <Zap className="h-16 w-16 text-white/15" />
+            <div className="text-center">
+              <Zap className="mx-auto h-12 w-12 text-white/25" strokeWidth={1.5} />
+              <p className="mt-3 font-display text-2xl font-black tracking-tight text-white/85">
+                {p.brand}
+              </p>
+              <p className="text-sm font-medium text-white/60">{p.model}</p>
+            </div>
           </div>
         )}
         <div className="absolute left-3 top-3 rounded-full bg-primary/95 px-3 py-1 text-xs font-semibold text-primary-foreground">
@@ -137,11 +156,14 @@ export function ModelCard(p: ModelCardProps) {
     </div>
   );
 
-  return to ? (
-    <Link to={to} params={{ slug: p.slug }} className="block h-full">
+  // BYD keeps its dedicated hub URL (SEO); other brands route through /models/$slug.
+  return isByd ? (
+    <Link to="/byd/$slug" params={{ slug: p.slug }} className="block h-full">
       {Inner}
     </Link>
   ) : (
-    <div className="block h-full opacity-90">{Inner}</div>
+    <Link to="/models/$slug" params={{ slug: p.slug }} className="block h-full">
+      {Inner}
+    </Link>
   );
 }
