@@ -13,7 +13,7 @@ import sys
 from playwright.async_api import async_playwright
 
 BASE = os.environ.get("BASE_URL", "http://localhost:8080")
-ROUTES = ["/", "/byd"]
+ROUTES = ["/", "/byd", "/compare"]
 BREAKPOINTS = [
     ("mobile", 390, 844),
     ("tablet", 820, 1180),
