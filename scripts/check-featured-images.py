@@ -24,7 +24,7 @@ EXPECTED_WIDTHS = ["480w", "800w", "1280w"]
 CARD_EVAL = """
 () => {
   const imgs = Array.from(document.querySelectorAll('img'))
-    .filter(i => /\\/assets\\/models\\//.test(i.currentSrc || i.src));
+    .filter(i => /\\b480w\\b/.test(i.getAttribute('srcset') || ''));
   return imgs.map(i => ({
     src: i.currentSrc || i.src,
     srcset: i.getAttribute('srcset') || '',
