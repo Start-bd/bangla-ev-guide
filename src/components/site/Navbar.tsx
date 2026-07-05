@@ -3,6 +3,7 @@ import { Zap, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const nav = [
+  { to: "/models", label: "সকল EV" },
   { to: "/byd", label: "BYD" },
   { to: "/compare", label: "তুলনা" },
   { to: "/calculator", label: "ক্যালকুলেটর" },

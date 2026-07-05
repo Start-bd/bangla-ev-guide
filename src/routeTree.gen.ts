@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as NewsRouteImport } from './routes/news'
+import { Route as ModelsRouteImport } from './routes/models'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as ChargingRouteImport } from './routes/charging'
 import { Route as CalculatorRouteImport } from './routes/calculator'
@@ -18,9 +19,12 @@ import { Route as BydRouteImport } from './routes/byd'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
+import { Route as ModelsIndexRouteImport } from './routes/models.index'
 import { Route as BydIndexRouteImport } from './routes/byd.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
+import { Route as ModelsSlugRouteImport } from './routes/models.$slug'
 import { Route as BydSlugRouteImport } from './routes/byd.$slug'
+import { Route as BrandsBrandRouteImport } from './routes/brands.$brand'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -30,6 +34,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const NewsRoute = NewsRouteImport.update({
   id: '/news',
   path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelsRoute = ModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompareRoute = CompareRouteImport.update({
@@ -67,6 +76,11 @@ const NewsIndexRoute = NewsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => NewsRoute,
 } as any)
+const ModelsIndexRoute = ModelsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ModelsRoute,
+} as any)
 const BydIndexRoute = BydIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -77,10 +91,20 @@ const NewsSlugRoute = NewsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => NewsRoute,
 } as any)
+const ModelsSlugRoute = ModelsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ModelsRoute,
+} as any)
 const BydSlugRoute = BydSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => BydRoute,
+} as any)
+const BrandsBrandRoute = BrandsBrandRouteImport.update({
+  id: '/brands/$brand',
+  path: '/brands/$brand',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -90,11 +114,15 @@ export interface FileRoutesByFullPath {
   '/calculator': typeof CalculatorRoute
   '/charging': typeof ChargingRoute
   '/compare': typeof CompareRoute
+  '/models': typeof ModelsRouteWithChildren
   '/news': typeof NewsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
+  '/models/$slug': typeof ModelsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/byd/': typeof BydIndexRoute
+  '/models/': typeof ModelsIndexRoute
   '/news/': typeof NewsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -104,9 +132,12 @@ export interface FileRoutesByTo {
   '/charging': typeof ChargingRoute
   '/compare': typeof CompareRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
+  '/models/$slug': typeof ModelsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/byd': typeof BydIndexRoute
+  '/models': typeof ModelsIndexRoute
   '/news': typeof NewsIndexRoute
 }
 export interface FileRoutesById {
@@ -117,11 +148,15 @@ export interface FileRoutesById {
   '/calculator': typeof CalculatorRoute
   '/charging': typeof ChargingRoute
   '/compare': typeof CompareRoute
+  '/models': typeof ModelsRouteWithChildren
   '/news': typeof NewsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
+  '/models/$slug': typeof ModelsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/byd/': typeof BydIndexRoute
+  '/models/': typeof ModelsIndexRoute
   '/news/': typeof NewsIndexRoute
 }
 export interface FileRouteTypes {
@@ -133,11 +168,15 @@ export interface FileRouteTypes {
     | '/calculator'
     | '/charging'
     | '/compare'
+    | '/models'
     | '/news'
     | '/sitemap.xml'
+    | '/brands/$brand'
     | '/byd/$slug'
+    | '/models/$slug'
     | '/news/$slug'
     | '/byd/'
+    | '/models/'
     | '/news/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -147,9 +186,12 @@ export interface FileRouteTypes {
     | '/charging'
     | '/compare'
     | '/sitemap.xml'
+    | '/brands/$brand'
     | '/byd/$slug'
+    | '/models/$slug'
     | '/news/$slug'
     | '/byd'
+    | '/models'
     | '/news'
   id:
     | '__root__'
@@ -159,11 +201,15 @@ export interface FileRouteTypes {
     | '/calculator'
     | '/charging'
     | '/compare'
+    | '/models'
     | '/news'
     | '/sitemap.xml'
+    | '/brands/$brand'
     | '/byd/$slug'
+    | '/models/$slug'
     | '/news/$slug'
     | '/byd/'
+    | '/models/'
     | '/news/'
   fileRoutesById: FileRoutesById
 }
@@ -174,8 +220,10 @@ export interface RootRouteChildren {
   CalculatorRoute: typeof CalculatorRoute
   ChargingRoute: typeof ChargingRoute
   CompareRoute: typeof CompareRoute
+  ModelsRoute: typeof ModelsRouteWithChildren
   NewsRoute: typeof NewsRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  BrandsBrandRoute: typeof BrandsBrandRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/news'
       fullPath: '/news'
       preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/models': {
+      id: '/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof ModelsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compare': {
@@ -243,6 +298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsIndexRouteImport
       parentRoute: typeof NewsRoute
     }
+    '/models/': {
+      id: '/models/'
+      path: '/'
+      fullPath: '/models/'
+      preLoaderRoute: typeof ModelsIndexRouteImport
+      parentRoute: typeof ModelsRoute
+    }
     '/byd/': {
       id: '/byd/'
       path: '/'
@@ -257,12 +319,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsSlugRouteImport
       parentRoute: typeof NewsRoute
     }
+    '/models/$slug': {
+      id: '/models/$slug'
+      path: '/$slug'
+      fullPath: '/models/$slug'
+      preLoaderRoute: typeof ModelsSlugRouteImport
+      parentRoute: typeof ModelsRoute
+    }
     '/byd/$slug': {
       id: '/byd/$slug'
       path: '/$slug'
       fullPath: '/byd/$slug'
       preLoaderRoute: typeof BydSlugRouteImport
       parentRoute: typeof BydRoute
+    }
+    '/brands/$brand': {
+      id: '/brands/$brand'
+      path: '/brands/$brand'
+      fullPath: '/brands/$brand'
+      preLoaderRoute: typeof BrandsBrandRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -278,6 +354,19 @@ const BydRouteChildren: BydRouteChildren = {
 }
 
 const BydRouteWithChildren = BydRoute._addFileChildren(BydRouteChildren)
+
+interface ModelsRouteChildren {
+  ModelsSlugRoute: typeof ModelsSlugRoute
+  ModelsIndexRoute: typeof ModelsIndexRoute
+}
+
+const ModelsRouteChildren: ModelsRouteChildren = {
+  ModelsSlugRoute: ModelsSlugRoute,
+  ModelsIndexRoute: ModelsIndexRoute,
+}
+
+const ModelsRouteWithChildren =
+  ModelsRoute._addFileChildren(ModelsRouteChildren)
 
 interface NewsRouteChildren {
   NewsSlugRoute: typeof NewsSlugRoute
@@ -298,8 +387,10 @@ const rootRouteChildren: RootRouteChildren = {
   CalculatorRoute: CalculatorRoute,
   ChargingRoute: ChargingRoute,
   CompareRoute: CompareRoute,
+  ModelsRoute: ModelsRouteWithChildren,
   NewsRoute: NewsRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  BrandsBrandRoute: BrandsBrandRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

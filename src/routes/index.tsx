@@ -15,10 +15,10 @@ const postsQO = queryOptions({ queryKey: ["posts", 4], queryFn: () => getPosts({
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "BanglaEV — বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড | BYD, MG, Hyundai" },
-      { name: "description", content: "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD Seal, Sealion 6, Atto 3, MG 4, Hyundai Ioniq 5 — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।" },
+      { title: "BanglaEV — বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড | BYD, MG, Hyundai, Kia, Tesla" },
+      { name: "description", content: "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।" },
       { property: "og:title", content: "BanglaEV — বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড" },
-      { property: "og:description", content: "BYD, MG, Hyundai সহ সকল EV-এর দাম, রিভিউ ও তুলনা।" },
+      { property: "og:description", content: "BYD, MG, Hyundai, Kia, Tesla সহ সকল EV-এর দাম, রিভিউ ও তুলনা।" },
       { property: "og:url", content: absUrl("/") },
     ],
     links: localeLinks("/"),
@@ -29,6 +29,15 @@ export const Route = createFileRoute("/")({
   },
   component: HomePage,
 });
+
+const BRANDS: { slug: string; name: string; note: string }[] = [
+  { slug: "byd", name: "BYD", note: "Blade Battery • ফ্ল্যাগশিপ" },
+  { slug: "mg", name: "MG", note: "ব্রিটিশ-চীনা লাইনআপ" },
+  { slug: "hyundai", name: "Hyundai", note: "Ioniq 5 / 6 / Kona" },
+  { slug: "kia", name: "Kia", note: "EV6 • Niro EV" },
+  { slug: "tesla", name: "Tesla", note: "Model 3 • Model Y" },
+  { slug: "zeekr", name: "Zeekr", note: "প্রিমিয়াম চীনা" },
+];
 
 function HomePage() {
   const { data: models } = useSuspenseQuery(featuredQO);
@@ -45,15 +54,15 @@ function HomePage() {
               বাংলাদেশের #১ EV পোর্টাল
             </div>
             <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">
-              বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন
+              বাংলাদেশের সম্পূর্ণ EV গাইড
             </h1>
             <p className="mt-5 max-w-xl text-lg text-white/80">
-              BYD, MG, Hyundai Ioniq — সব EV-এর দাম, রিভিউ ও গাইড এক জায়গায়। শোরুম খুঁজুন, খরচ হিসাব করুন,
-              বিশেষজ্ঞ রিভিউ পড়ুন।
+              BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr — বাংলাদেশে উপলব্ধ সকল ইলেকট্রিক গাড়ির
+              দাম, রিভিউ, তুলনা ও চার্জিং গাইড এক জায়গায়।
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/byd" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-105">
-                BYD গাড়ি দেখুন <ArrowRight className="h-4 w-4" />
+              <Link to="/models" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-105">
+                সকল EV দেখুন <ArrowRight className="h-4 w-4" />
               </Link>
               <Link to="/compare" className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur hover:bg-white/15">
                 দাম তুলনা করুন
@@ -65,7 +74,7 @@ function HomePage() {
             <div className="absolute -inset-10 rounded-full bg-primary/20 blur-3xl" />
             <img
               src={heroCar}
-              alt="BYD Seal electric sedan in Bangladesh at sunset"
+              alt="Electric cars in Bangladesh at sunset"
               width={1920}
               height={1088}
               fetchPriority="high"
@@ -76,6 +85,45 @@ function HomePage() {
         </div>
       </section>
 
+      {/* BRAND STRIP */}
+      <section className="border-b border-border bg-card">
+        <div className="container-page py-10">
+          <div className="mb-6 flex flex-col items-start justify-between gap-2 md:flex-row md:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wider text-primary">ব্র্যান্ড</p>
+              <h2 className="mt-1 text-2xl font-bold">ব্র্যান্ড অনুযায়ী ব্রাউজ করুন</h2>
+            </div>
+            <Link to="/models" className="text-sm font-semibold text-primary hover:underline">
+              সব মডেল →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {BRANDS.map((b) =>
+              b.slug === "byd" ? (
+                <Link
+                  key={b.slug}
+                  to="/byd"
+                  className="group rounded-2xl border border-border bg-background p-4 transition hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md"
+                >
+                  <div className="font-display text-lg font-black tracking-tight">{b.name}</div>
+                  <div className="text-xs text-muted-foreground">{b.note}</div>
+                </Link>
+              ) : (
+                <Link
+                  key={b.slug}
+                  to="/brands/$brand"
+                  params={{ brand: b.slug }}
+                  className="group rounded-2xl border border-border bg-background p-4 transition hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md"
+                >
+                  <div className="font-display text-lg font-black tracking-tight">{b.name}</div>
+                  <div className="text-xs text-muted-foreground">{b.note}</div>
+                </Link>
+              ),
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* FEATURED MODELS */}
       <section className="container-page py-20">
         <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
@@ -83,7 +131,7 @@ function HomePage() {
             <p className="text-sm font-semibold uppercase tracking-wider text-primary">ফিচার্ড মডেল</p>
             <h2 className="mt-2 text-3xl font-bold md:text-4xl">জনপ্রিয় EV গাড়ি</h2>
           </div>
-          <Link to="/byd" className="text-sm font-semibold text-primary hover:underline">
+          <Link to="/models" className="text-sm font-semibold text-primary hover:underline">
             সকল মডেল দেখুন →
           </Link>
         </div>

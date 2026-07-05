@@ -21,6 +21,7 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         const staticPaths = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
+          { path: "/models", changefreq: "weekly", priority: "0.9" },
           { path: "/byd", changefreq: "weekly", priority: "0.9" },
           { path: "/compare", changefreq: "weekly", priority: "0.8" },
           { path: "/calculator", changefreq: "monthly", priority: "0.8" },
@@ -33,6 +34,14 @@ export const Route = createFileRoute("/sitemap.xml")({
           .filter((m) => m.brand === "BYD")
           .map((m) => ({ path: `/byd/${m.slug}`, changefreq: "monthly", priority: "0.8" }));
 
+        const modelPaths = (models ?? [])
+          .filter((m) => m.brand !== "BYD")
+          .map((m) => ({ path: `/models/${m.slug}`, changefreq: "monthly", priority: "0.7" }));
+
+        const brandPaths = Array.from(
+          new Set((models ?? []).filter((m) => m.brand !== "BYD").map((m) => m.brand.toLowerCase())),
+        ).map((b) => ({ path: `/brands/${b}`, changefreq: "weekly", priority: "0.7" }));
+
         const postPaths = (posts ?? []).map((p) => ({
           path: `/news/${p.slug}`,
           lastmod: p.published_at ?? undefined,
@@ -40,7 +49,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           priority: "0.6",
         }));
 
-        const all = [...staticPaths, ...bydPaths, ...postPaths];
+        const all = [...staticPaths, ...bydPaths, ...modelPaths, ...brandPaths, ...postPaths];
 
         const xml = [
           `<?xml version="1.0" encoding="UTF-8"?>`,
