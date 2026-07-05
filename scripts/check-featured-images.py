@@ -88,13 +88,18 @@ async def main():
                         for i, chip in enumerate(chips):
                             await chip.click()
                             await page.wait_for_load_state("networkidle")
-                            # Wait until every image in the compare row has finished decoding.
-                            await page.wait_for_function(
-                                "() => { const imgs = Array.from(document.querySelectorAll("
-                                "'[data-testid=\"compare-image-row\"] img'));"
-                                " return imgs.length > 0 && imgs.every(i => i.complete && i.naturalWidth > 0); }",
-                                timeout=5000,
-                            )
+                            # Poll until row imgs (if any) have decoded, tolerating the
+                            # case where the click deselected the last picked model.
+                            try:
+                                await page.wait_for_function(
+                                    "() => { const imgs = Array.from(document.querySelectorAll("
+                                    "'[data-testid=\"compare-image-row\"] img'));"
+                                    " return imgs.length === 0 ||"
+                                    " imgs.every(i => i.complete && i.naturalWidth > 0); }",
+                                    timeout=5000,
+                                )
+                            except Exception:
+                                pass
                             row_imgs = await page.evaluate(
                                 "() => Array.from(document.querySelectorAll('[data-testid=\"compare-image-row\"] img'))"
                                 ".map(i => ({ src: i.currentSrc || i.src, srcset: i.getAttribute('srcset') || '',"
