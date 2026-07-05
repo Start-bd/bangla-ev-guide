@@ -4,6 +4,8 @@ import { getAllModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
 import { useState } from "react";
 import { localeLinks, absUrl } from "@/lib/seo";
+import { MODEL_IMAGES } from "@/components/site/ModelCard";
+import { Zap } from "lucide-react";
 
 const allQO = queryOptions({ queryKey: ["models", "all"], queryFn: () => getAllModels() });
 
