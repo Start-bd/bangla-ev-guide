@@ -56,6 +56,20 @@ export const getBydModels = createServerFn({ method: "GET" }).handler(() =>
   }, []),
 );
 
+export const getModelsByBrand = createServerFn({ method: "GET" })
+  .inputValidator((d) => z.object({ brand: z.string() }).parse(d))
+  .handler(({ data }) =>
+    safeQuery(`getModelsByBrand(${data.brand})`, async () => {
+      const { data: rows, error } = await pub()
+        .from("ev_models")
+        .select("*")
+        .ilike("brand", data.brand)
+        .order("display_order", { ascending: true });
+      if (error) throw new Error(error.message);
+      return rows ?? [];
+    }, []),
+  );
+
 export const getModelBySlug = createServerFn({ method: "GET" })
   .inputValidator((d) => z.object({ slug: z.string() }).parse(d))
   .handler(({ data }) =>
