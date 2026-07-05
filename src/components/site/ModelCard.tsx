@@ -73,6 +73,7 @@ export function ModelCard(p: ModelCardProps) {
   const to = isByd ? "/byd/$slug" : null;
 
   const img = MODEL_IMAGES[p.slug];
+  if (!img) warnFallback(p.slug, p.brand, p.model);
   const Inner = (
     <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl">
       <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-[var(--color-navy)] to-[oklch(0.3_0.05_275)]">
