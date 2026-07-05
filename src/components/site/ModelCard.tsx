@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Battery, Gauge, Zap } from "lucide-react";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
+import { ssrLog } from "@/lib/ssr-logger";
 import sealSrc from "@/assets/models/seal.webp?w=480;800;1280&format=webp&as=srcset";
 import sealion6Src from "@/assets/models/sealion-6.webp?w=480;800;1280&format=webp&as=srcset";
 import atto3Src from "@/assets/models/atto-3.webp?w=480;800;1280&format=webp&as=srcset";
@@ -23,6 +24,36 @@ const MODEL_IMAGES: Record<string, { src: string; srcSet: string }> = {
   "ioniq-5": { src: ioniq5Img, srcSet: ioniq5Src },
   "hyundai-ioniq-5": { src: ioniq5Img, srcSet: ioniq5Src },
 };
+
+const WIDTH_RE = /\s\d+w(?:,|$)/;
+const EXPECTED_WIDTHS = [480, 800, 1280];
+
+function assertValidMapping(slug: string, entry: { src: string; srcSet: string }): boolean {
+  const missingWidths = EXPECTED_WIDTHS.filter((w) => !entry.srcSet.includes(`${w}w`));
+  if (!entry.src || !entry.srcSet || !WIDTH_RE.test(entry.srcSet) || missingWidths.length > 0) {
+    ssrLog.error(
+      { scope: "model-card", event: "invalid_srcset_mapping", slug, missingWidths },
+      new Error(`ModelCard mapping for slug "${slug}" is missing srcset widths`),
+    );
+    return false;
+  }
+  return true;
+}
+
+const warnedSlugs = new Set<string>();
+function warnFallback(slug: string, brand: string, model: string) {
+  if (warnedSlugs.has(slug)) return;
+  warnedSlugs.add(slug);
+  ssrLog.error(
+    { scope: "model-card", event: "fallback_image_used", slug, brand, model },
+    new Error(`ModelCard has no srcset image for slug "${slug}" — falling back to placeholder icon`),
+  );
+}
+
+// Validate every registered mapping once at module load.
+for (const [slug, entry] of Object.entries(MODEL_IMAGES)) {
+  assertValidMapping(slug, entry);
+}
 
 
 interface ModelCardProps {
