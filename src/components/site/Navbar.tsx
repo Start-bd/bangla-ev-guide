@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Zap, Menu, X } from "lucide-react";
 import { useState } from "react";
+import logo from "@/assets/logo-banglaev.png";
 
 const nav = [
   { to: "/models", label: "সকল EV" },
@@ -17,14 +18,15 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="container-page flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 font-display font-extrabold text-lg">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <Zap className="h-5 w-5" strokeWidth={2.5} />
-          </span>
-          <span className="leading-none">
-            BanglaEV
-            <span className="block text-[10px] font-medium text-muted-foreground">বাংলাইভি</span>
-          </span>
+        <Link to="/" className="flex items-center" aria-label="BanglaEV — home">
+          <img
+            src={logo}
+            alt="BanglaEV logo"
+            width={1536}
+            height={512}
+            className="h-9 w-auto"
+            decoding="async"
+          />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
