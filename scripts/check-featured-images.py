@@ -51,6 +51,8 @@ async def main():
                 for route in ROUTES:
                     label = f"[{name} {route}]"
                     await page.goto(f"{BASE}{route}", wait_until="networkidle")
+                    if route == "/compare":
+                        await page.wait_for_selector('[data-testid="compare-image-row"] img', timeout=10000)
                     await page.evaluate(
                         "async () => { window.scrollTo(0, document.body.scrollHeight);"
                         " await new Promise(r => setTimeout(r, 400)); window.scrollTo(0, 0); }"
