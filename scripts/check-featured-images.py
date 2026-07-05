@@ -13,7 +13,7 @@ import sys
 from playwright.async_api import async_playwright
 
 BASE = os.environ.get("BASE_URL", "http://localhost:8080")
-ROUTES = ["/", "/byd"]
+ROUTES = ["/", "/byd", "/compare"]
 BREAKPOINTS = [
     ("mobile", 390, 844),
     ("tablet", 820, 1180),
@@ -51,6 +51,8 @@ async def main():
                 for route in ROUTES:
                     label = f"[{name} {route}]"
                     await page.goto(f"{BASE}{route}", wait_until="networkidle")
+                    if route == "/compare":
+                        await page.wait_for_selector('[data-testid="compare-image-row"] img', timeout=10000)
                     await page.evaluate(
                         "async () => { window.scrollTo(0, document.body.scrollHeight);"
                         " await new Promise(r => setTimeout(r, 400)); window.scrollTo(0, 0); }"
@@ -77,6 +79,42 @@ async def main():
                     # no fallback was rendered.
 
                     print(f"OK {label} {len(cards)} card(s)")
+
+                    # On /compare, exercise every selectable model chip so every
+                    # slug's image is force-mounted at least once at this breakpoint.
+                    if route == "/compare":
+                        chips = await page.locator("section.container-page button.rounded-full").all()
+                        chip_labels = [await c.inner_text() for c in chips]
+                        for i, chip in enumerate(chips):
+                            await chip.click()
+                            await page.wait_for_load_state("networkidle")
+                            # Poll until row imgs (if any) have decoded, tolerating the
+                            # case where the click deselected the last picked model.
+                            try:
+                                await page.wait_for_function(
+                                    "() => { const imgs = Array.from(document.querySelectorAll("
+                                    "'[data-testid=\"compare-image-row\"] img'));"
+                                    " return imgs.length === 0 ||"
+                                    " imgs.every(i => i.complete && i.naturalWidth > 0); }",
+                                    timeout=5000,
+                                )
+                            except Exception:
+                                pass
+                            row_imgs = await page.evaluate(
+                                "() => Array.from(document.querySelectorAll('[data-testid=\"compare-image-row\"] img'))"
+                                ".map(i => ({ src: i.currentSrc || i.src, srcset: i.getAttribute('srcset') || '',"
+                                " alt: i.alt, naturalWidth: i.naturalWidth, complete: i.complete }))"
+                            )
+                            if not row_imgs:
+                                # chip may have deselected the last picked model — that's fine, skip
+                                continue
+                            for c in row_imgs:
+                                ctxlbl = f'{label} compare chip="{chip_labels[i]}" alt="{c["alt"]}"'
+                                if not c["srcset"] or not all(w in c["srcset"] for w in EXPECTED_WIDTHS):
+                                    fail(f"{ctxlbl} srcset missing widths: {c['srcset']}")
+                                if not c["complete"] or c["naturalWidth"] == 0:
+                                    fail(f"{ctxlbl} image did not load (naturalWidth={c['naturalWidth']})")
+                        print(f"OK {label} exercised {len(chips)} compare chip(s)")
                 await ctx.close()
         finally:
             await browser.close()

@@ -4,6 +4,8 @@ import { getAllModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
 import { useState } from "react";
 import { localeLinks, absUrl } from "@/lib/seo";
+import { MODEL_IMAGES } from "@/components/site/ModelCard";
+import { Zap } from "lucide-react";
 
 const allQO = queryOptions({ queryKey: ["models", "all"], queryFn: () => getAllModels() });
 
@@ -68,6 +70,35 @@ function ComparePage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
+              <tr data-testid="compare-image-row">
+                <td className="bg-muted/40 px-4 py-3 font-medium">ছবি</td>
+                {picked.map((m) => {
+                  const img = MODEL_IMAGES[m.slug];
+                  return (
+                    <td key={m.id} className="px-4 py-3">
+                      <div className="relative aspect-[16/10] w-40 overflow-hidden rounded-lg bg-gradient-to-br from-[var(--color-navy)] to-[oklch(0.3_0.05_275)]">
+                        {img ? (
+                          <img
+                            src={img.src}
+                            srcSet={img.srcSet}
+                            sizes="160px"
+                            alt={`${m.brand} ${m.model}`}
+                            width={1280}
+                            height={800}
+                            loading="lazy"
+                            decoding="async"
+                            className="absolute inset-0 h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 grid place-items-center">
+                            <Zap className="h-6 w-6 text-white/20" />
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  );
+                })}
+              </tr>
               <CRow label="দাম" picked={picked} get={(m) => formatBDTLakh(m.price_bdt)} />
               <CRow label="রেঞ্জ" picked={picked} get={(m) => formatKm(m.range_km)} />
               <CRow label="ব্যাটারি" picked={picked} get={(m) => (m.battery_kwh ? `${toBnDigits(String(m.battery_kwh))} kWh` : "—")} />
