@@ -21,6 +21,7 @@ const MODEL_IMAGES: Record<string, { src: string; srcSet: string }> = {
   dolphin: { src: dolphinImg, srcSet: dolphinSrc },
   "mg-4": { src: mg4Img, srcSet: mg4Src },
   "ioniq-5": { src: ioniq5Img, srcSet: ioniq5Src },
+  "hyundai-ioniq-5": { src: ioniq5Img, srcSet: ioniq5Src },
 };
 
 
