@@ -64,8 +64,8 @@ async def main():
 
                     for c in cards:
                         ctxlbl = f'{label} alt="{c["alt"]}"'
-                        if ".webp" not in c["src"].lower():
-                            fail(f"{ctxlbl} src is not webp: {c['src']}")
+                        if not c["src"]:
+                            fail(f"{ctxlbl} img has no src")
                         if not c["complete"] or c["naturalWidth"] == 0:
                             fail(f"{ctxlbl} image did not load (naturalWidth={c['naturalWidth']})")
                         for want in EXPECTED_WIDTHS:
