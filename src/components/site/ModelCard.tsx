@@ -15,7 +15,7 @@ import dolphinImg from "@/assets/models/dolphin.webp?w=800&format=webp";
 import mg4Img from "@/assets/models/mg-4.webp?w=800&format=webp";
 import ioniq5Img from "@/assets/models/ioniq-5.webp?w=800&format=webp";
 
-const MODEL_IMAGES: Record<string, { src: string; srcSet: string }> = {
+export const MODEL_IMAGES: Record<string, { src: string; srcSet: string }> = {
   seal: { src: sealImg, srcSet: sealSrc },
   "sealion-6": { src: sealion6Img, srcSet: sealion6Src },
   "atto-3": { src: atto3Img, srcSet: atto3Src },
