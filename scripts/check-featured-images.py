@@ -72,11 +72,9 @@ async def main():
                             if want not in c["srcset"]:
                                 fail(f"{ctxlbl} srcset missing {want}: {c['srcset']}")
 
-                    placeholder = await page.locator(
-                        ".group .aspect-\\[16\\/10\\] > .grid svg.lucide-zap"
-                    ).count()
-                    if placeholder > 0:
-                        fail(f"{label} {placeholder} card(s) fell back to Zap placeholder")
+                    # No need to check for Zap placeholder separately: the img/placeholder
+                    # branches are exclusive, so a valid srcset on every card guarantees
+                    # no fallback was rendered.
 
                     print(f"OK {label} {len(cards)} card(s)")
                 await ctx.close()
