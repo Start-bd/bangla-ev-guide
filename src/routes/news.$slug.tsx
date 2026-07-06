@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getPostBySlug } from "@/lib/posts.functions";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
 
 const postQO = (slug: string) =>
   queryOptions({
@@ -15,14 +15,28 @@ const postQO = (slug: string) =>
 
 export const Route = createFileRoute("/news/$slug")({
   loader: ({ context, params }) => context.queryClient.ensureQueryData(postQO(params.slug)),
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.slug} | BanglaEV` },
-      { property: "og:type", content: "article" },
-      { property: "og:url", content: absUrl(`/news/${params.slug}`) },
-    ],
-    links: localeLinks(`/news/${params.slug}`),
-  }),
+  head: ({ params, loaderData }) => {
+    const title = loaderData?.title_bn ?? loaderData?.meta_title ?? params.slug;
+    const desc =
+      loaderData?.meta_description ??
+      loaderData?.excerpt_bn ??
+      "BanglaEV — বাংলাদেশের EV খবর ও রিভিউ।";
+    const fullTitle = `${title} | BanglaEV`;
+    return {
+      meta: [
+        { title: fullTitle },
+        { name: "description", content: desc },
+        ...ogMeta({
+          title: fullTitle,
+          description: desc,
+          path: `/news/${params.slug}`,
+          type: "article",
+          image: loaderData?.cover_url ?? null,
+        }),
+      ],
+      links: localeLinks(`/news/${params.slug}`),
+    };
+  },
   notFoundComponent: () => (
     <div className="container-page py-24 text-center">
       <h1 className="text-2xl font-bold">পোস্ট পাওয়া যায়নি</h1>
