@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-route
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getModelsByBrand } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
 
 const brandQO = (brand: string) =>
   queryOptions({
@@ -36,18 +36,17 @@ export const Route = createFileRoute("/brands/$brand")({
   },
   loader: ({ context, params }) =>
     context.queryClient.ensureQueryData(brandQO(params.brand)),
-  head: ({ params }) => {
+  head: ({ params, loaderData }) => {
     const b = params.brand;
     const display = b.charAt(0).toUpperCase() + b.slice(1);
     const t = `${display} Electric Cars in Bangladesh 2026 | Price & Specs — BanglaEV`;
     const d = `${display} EV লাইনআপ বাংলাদেশে — সকল মডেলের দাম, রেঞ্জ, ব্যাটারি ও স্পেসিফিকেশন।`;
+    const firstImage = loaderData?.find((m) => m.image_url)?.image_url ?? null;
     return {
       meta: [
         { title: t },
         { name: "description", content: d },
-        { property: "og:title", content: t },
-        { property: "og:description", content: d },
-        { property: "og:url", content: absUrl(`/brands/${b}`) },
+        ...ogMeta({ title: t, description: d, path: `/brands/${b}`, image: firstImage }),
       ],
       links: localeLinks(`/brands/${b}`),
     };
