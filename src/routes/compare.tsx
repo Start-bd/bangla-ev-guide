@@ -3,24 +3,21 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getAllModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
 import { useMemo, useState } from "react";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
 import { MODEL_IMAGES } from "@/components/site/ModelCard";
 import { Zap, X } from "lucide-react";
 
 const allQO = queryOptions({ queryKey: ["models", "all"], queryFn: () => getAllModels() });
 
+const CMP_TITLE = "Compare Electric Cars Bangladesh 2026 | BYD, MG, Hyundai, Kia, Tesla | BanglaEV";
+const CMP_DESC = "যে কোনো ব্র্যান্ডের ইলেকট্রিক গাড়ি পাশাপাশি তুলনা করুন — BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr। দাম, রেঞ্জ, ব্যাটারি ও স্পেসিফিকেশন।";
+
 export const Route = createFileRoute("/compare")({
   head: () => ({
     meta: [
-      { title: "Compare Electric Cars Bangladesh 2026 | BYD, MG, Hyundai, Kia, Tesla | BanglaEV" },
-      {
-        name: "description",
-        content:
-          "যে কোনো ব্র্যান্ডের ইলেকট্রিক গাড়ি পাশাপাশি তুলনা করুন — BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr। দাম, রেঞ্জ, ব্যাটারি ও স্পেসিফিকেশন।",
-      },
-      { property: "og:title", content: "EV Comparison Bangladesh — All Brands" },
-      { property: "og:description", content: "সকল ব্র্যান্ডের EV পাশাপাশি তুলনা করুন।" },
-      { property: "og:url", content: absUrl("/compare") },
+      { title: CMP_TITLE },
+      { name: "description", content: CMP_DESC },
+      ...ogMeta({ title: CMP_TITLE, description: CMP_DESC, path: "/compare" }),
     ],
     links: localeLinks("/compare"),
   }),
