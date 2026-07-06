@@ -30,9 +30,11 @@ export const Route = createFileRoute("/byd/")({
     meta: [
       { title: "BYD Car Price in Bangladesh 2026 | BYD Seal, Atto 3, Sealion 6 | BanglaEV" },
       { name: "description", content: "BYD Bangladesh-এর সকল গাড়ির দাম, স্পেসিফিকেশন ও শোরুম লোকেশন। BYD Seal ৳৮৯.৯ লাখ, Sealion 6 ৳৬৪.৯ লাখ, Atto 3 দাম ২০২৬।" },
-      { property: "og:title", content: "BYD বাংলাদেশ — সকল মডেল, দাম ও শোরুম" },
-      { property: "og:description", content: "BYD Seal, Sealion 6, Atto 3, Dolphin — সব মডেলের দাম ও শোরুম এক জায়গায়।" },
-      { property: "og:url", content: absUrl("/byd") },
+      ...ogMeta({
+        title: "BYD বাংলাদেশ — সকল মডেল, দাম ও শোরুম",
+        description: "BYD Seal, Sealion 6, Atto 3, Dolphin — সব মডেলের দাম ও শোরুম এক জায়গায়।",
+        path: "/byd",
+      }),
     ],
     links: localeLinks("/byd"),
     scripts: [
