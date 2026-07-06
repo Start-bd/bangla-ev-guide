@@ -4,7 +4,7 @@ import { Battery, Gauge, Zap, Shield, Palette, ArrowRight, Award } from "lucide-
 import { getModelBySlug, getBydModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
@@ -19,14 +19,16 @@ const siblingsQO = queryOptions({ queryKey: ["models", "byd"], queryFn: () => ge
 
 export const Route = createFileRoute("/byd/$slug")({
   loader: async ({ context, params }) => {
-    await Promise.all([
+    const [model] = await Promise.all([
       context.queryClient.ensureQueryData(modelQO(params.slug)),
       context.queryClient.ensureQueryData(siblingsQO),
     ]);
+    // Return a slim, serialisable snapshot for head() — full model still comes
+    // from the query cache in the component via useSuspenseQuery.
+    return { image_url: model.image_url ?? null };
   },
   head: ({ params, loaderData }) => {
     const slug = params.slug;
-    // loaderData is undefined for void loaders; pull from queryClient at render time instead
     const titles: Record<string, { t: string; d: string }> = {
       seal: {
         t: "BYD Seal Price in Bangladesh 2026 — স্পেক্স, রিভিউ | BanglaEV",
@@ -46,15 +48,17 @@ export const Route = createFileRoute("/byd/$slug")({
       },
     };
     const meta = titles[slug] ?? { t: `${slug} | BanglaEV`, d: "EV মডেল বিস্তারিত।" };
-    void loaderData;
     return {
       meta: [
         { title: meta.t },
         { name: "description", content: meta.d },
-        { property: "og:title", content: meta.t },
-        { property: "og:description", content: meta.d },
-        { property: "og:type", content: "product" },
-        { property: "og:url", content: absUrl(`/byd/${slug}`) },
+        ...ogMeta({
+          title: meta.t,
+          description: meta.d,
+          path: `/byd/${slug}`,
+          type: "product",
+          image: loaderData?.image_url,
+        }),
       ],
       links: localeLinks(`/byd/${slug}`),
     };
