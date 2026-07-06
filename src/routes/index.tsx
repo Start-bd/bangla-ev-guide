@@ -5,21 +5,22 @@ import { getFeaturedModels } from "@/lib/models.functions";
 import { getPosts } from "@/lib/posts.functions";
 import { ModelCard } from "@/components/site/ModelCard";
 import { CostCalculator } from "@/components/site/CostCalculator";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
 import heroCar from "@/assets/hero-car.jpg";
 
 
 const featuredQO = queryOptions({ queryKey: ["models", "featured"], queryFn: () => getFeaturedModels() });
 const postsQO = queryOptions({ queryKey: ["posts", 4], queryFn: () => getPosts({ data: { limit: 4 } }) });
 
+const HOME_TITLE = "BanglaEV — বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড | BYD, MG, Hyundai, Kia, Tesla";
+const HOME_DESC = "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "BanglaEV — বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড | BYD, MG, Hyundai, Kia, Tesla" },
-      { name: "description", content: "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।" },
-      { property: "og:title", content: "BanglaEV — বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড" },
-      { property: "og:description", content: "BYD, MG, Hyundai, Kia, Tesla সহ সকল EV-এর দাম, রিভিউ ও তুলনা।" },
-      { property: "og:url", content: absUrl("/") },
+      { title: HOME_TITLE },
+      { name: "description", content: HOME_DESC },
+      ...ogMeta({ title: HOME_TITLE, description: HOME_DESC, path: "/", type: "website" }),
     ],
     links: localeLinks("/"),
   }),
