@@ -2,18 +2,19 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Zap } from "lucide-react";
 import { getPosts } from "@/lib/posts.functions";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
 
 const postsQO = queryOptions({ queryKey: ["posts", 50], queryFn: () => getPosts({ data: { limit: 50 } }) });
+
+const NEWS_TITLE = "EV ও অটো খবর — বাংলাদেশ | BanglaEV";
+const NEWS_DESC = "ইলেকট্রিক গাড়ি, BYD, চার্জিং, EV পলিসি — বাংলাদেশের সর্বশেষ অটো খবর ও রিভিউ।";
 
 export const Route = createFileRoute("/news/")({
   head: () => ({
     meta: [
-      { title: "EV ও অটো খবর — বাংলাদেশ | BanglaEV" },
-      { name: "description", content: "ইলেকট্রিক গাড়ি, BYD, চার্জিং, EV পলিসি — বাংলাদেশের সর্বশেষ অটো খবর ও রিভিউ।" },
-      { property: "og:title", content: "EV ও অটো খবর — BanglaEV" },
-      { property: "og:description", content: "বাংলাদেশের সর্বশেষ EV খবর ও রিভিউ।" },
-      { property: "og:url", content: absUrl("/news") },
+      { title: NEWS_TITLE },
+      { name: "description", content: NEWS_DESC },
+      ...ogMeta({ title: NEWS_TITLE, description: NEWS_DESC, path: "/news" }),
     ],
     links: localeLinks("/news"),
   }),
