@@ -4,7 +4,7 @@ import { Battery, Gauge, Zap, Shield, ArrowRight } from "lucide-react";
 import { getModelBySlug, getModelsByBrand } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
@@ -32,19 +32,32 @@ export const Route = createFileRoute("/models/$slug")({
     await context.queryClient.ensureQueryData(siblingsQO(m.brand));
     return { brand: m.brand };
   },
+  loader: async ({ params, context }) => {
+    const m = await context.queryClient.ensureQueryData(modelQO(params.slug));
+    return {
+      brand: m.brand,
+      model: m.model,
+      image_url: m.image_url ?? null,
+    };
+  },
   head: ({ params, loaderData }) => {
-    void loaderData;
     const slug = params.slug;
-    const t = `${slug.replace(/-/g, " ")} — Price in Bangladesh 2026 | BanglaEV`;
-    const d = `${slug.replace(/-/g, " ")} বাংলাদেশে — রেঞ্জ, ব্যাটারি, দাম ও সম্পূর্ণ স্পেসিফিকেশন।`;
+    const label = loaderData
+      ? `${loaderData.brand} ${loaderData.model}`
+      : slug.replace(/-/g, " ");
+    const t = `${label} — Price in Bangladesh 2026 | BanglaEV`;
+    const d = `${label} বাংলাদেশে — রেঞ্জ, ব্যাটারি, দাম ও সম্পূর্ণ স্পেসিফিকেশন।`;
     return {
       meta: [
         { title: t },
         { name: "description", content: d },
-        { property: "og:title", content: t },
-        { property: "og:description", content: d },
-        { property: "og:type", content: "product" },
-        { property: "og:url", content: absUrl(`/models/${slug}`) },
+        ...ogMeta({
+          title: t,
+          description: d,
+          path: `/models/${slug}`,
+          type: "product",
+          image: loaderData?.image_url,
+        }),
       ],
       links: localeLinks(`/models/${slug}`),
     };
