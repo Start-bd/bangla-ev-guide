@@ -4,16 +4,17 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { submitLead } from "@/lib/leads.functions";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
+
+const ABOUT_TITLE = "আমাদের সম্পর্কে — BanglaEV";
+const ABOUT_DESC = "BanglaEV বাংলাদেশের স্বাধীন EV রিসার্চ ও তথ্য প্ল্যাটফর্ম। যোগাযোগ ও বিজ্ঞাপন পার্টনারশিপের তথ্য।";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "আমাদের সম্পর্কে — BanglaEV" },
-      { name: "description", content: "BanglaEV বাংলাদেশের স্বাধীন EV রিসার্চ ও তথ্য প্ল্যাটফর্ম। যোগাযোগ ও বিজ্ঞাপন পার্টনারশিপের তথ্য।" },
-      { property: "og:title", content: "আমাদের সম্পর্কে — BanglaEV" },
-      { property: "og:description", content: "বাংলাদেশের স্বাধীন EV তথ্য প্ল্যাটফর্ম।" },
-      { property: "og:url", content: absUrl("/about") },
+      { title: ABOUT_TITLE },
+      { name: "description", content: ABOUT_DESC },
+      ...ogMeta({ title: ABOUT_TITLE, description: ABOUT_DESC, path: "/about" }),
     ],
     links: localeLinks("/about"),
   }),

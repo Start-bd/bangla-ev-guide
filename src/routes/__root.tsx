@@ -82,14 +82,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "bn_BD" },
       { property: "og:locale:alternate", content: "en_US" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "BanglaEV — বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড | BYD, MG, Hyundai" },
-      { name: "twitter:title", content: "BanglaEV — বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড | BYD, MG, Hyundai" },
-      { name: "description", content: "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD Seal, Sealion 6, Atto 3, MG 4, Hyundai Ioniq 5 — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।" },
-      { property: "og:description", content: "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD Seal, Sealion 6, Atto 3, MG 4, Hyundai Ioniq 5 — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।" },
-      { name: "twitter:description", content: "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD Seal, Sealion 6, Atto 3, MG 4, Hyundai Ioniq 5 — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।" },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fa0ce458-a12a-4188-bc40-1f4c7ce68368/id-preview-57bd2679--0bf6760b-bb82-4386-91e2-43f7a69c49c0.lovable.app-1783254666720.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fa0ce458-a12a-4188-bc40-1f4c7ce68368/id-preview-57bd2679--0bf6760b-bb82-4386-91e2-43f7a69c49c0.lovable.app-1783254666720.png" },
+      // og:image / twitter:image are set per-leaf-route via ogMeta() in src/lib/seo.ts.
+      // Setting them here would override every child page's share preview.
     ],
     links: [
       { rel: "stylesheet", href: appCss },

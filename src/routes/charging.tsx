@@ -1,15 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Zap, Home, MapPin } from "lucide-react";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
+
+const CHG_TITLE = "EV Charging Stations Bangladesh 2026 — সম্পূর্ণ গাইড | BanglaEV";
+const CHG_DESC = "বাংলাদেশে EV চার্জিং স্টেশন: ১৪+ পাবলিক স্টেশন, ২০২৬-এর লক্ষ্য ১,২০০। হোম চার্জিং, BERC ট্যারিফ ৳৭.৬৪/kWh — সম্পূর্ণ গাইড।";
 
 export const Route = createFileRoute("/charging")({
   head: () => ({
     meta: [
-      { title: "EV Charging Stations Bangladesh 2026 — সম্পূর্ণ গাইড | BanglaEV" },
-      { name: "description", content: "বাংলাদেশে EV চার্জিং স্টেশন: ১৪+ পাবলিক স্টেশন, ২০২৬-এর লক্ষ্য ১,২০০। হোম চার্জিং, BERC ট্যারিফ ৳৭.৬৪/kWh — সম্পূর্ণ গাইড।" },
-      { property: "og:title", content: "EV চার্জিং বাংলাদেশ — কোথায়, কিভাবে" },
-      { property: "og:description", content: "বাংলাদেশে EV চার্জিং স্টেশন ও হোম চার্জিং গাইড।" },
-      { property: "og:url", content: absUrl("/charging") },
+      { title: CHG_TITLE },
+      { name: "description", content: CHG_DESC },
+      ...ogMeta({ title: CHG_TITLE, description: CHG_DESC, path: "/charging" }),
     ],
     links: localeLinks("/charging"),
   }),

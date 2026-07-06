@@ -1,15 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CostCalculator } from "@/components/site/CostCalculator";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
+
+const CALC_TITLE = "EV vs Petrol Cost Calculator Bangladesh | কত টাকা সাশ্রয় হবে? | BanglaEV";
+const CALC_DESC = "ইলেকট্রিক গাড়ি বনাম পেট্রোল — আপনার দৈনিক ড্রাইভিং দিয়ে মাসিক ও বার্ষিক সাশ্রয় হিসাব করুন।";
 
 export const Route = createFileRoute("/calculator")({
   head: () => ({
     meta: [
-      { title: "EV vs Petrol Cost Calculator Bangladesh | কত টাকা সাশ্রয় হবে? | BanglaEV" },
-      { name: "description", content: "ইলেকট্রিক গাড়ি বনাম পেট্রোল — আপনার দৈনিক ড্রাইভিং দিয়ে মাসিক ও বার্ষিক সাশ্রয় হিসাব করুন।" },
-      { property: "og:title", content: "EV vs পেট্রোল কস্ট ক্যালকুলেটর — বাংলাদেশ" },
-      { property: "og:description", content: "EV-তে শিফট করলে বছরে কত টাকা সাশ্রয়?" },
-      { property: "og:url", content: absUrl("/calculator") },
+      { title: CALC_TITLE },
+      { name: "description", content: CALC_DESC },
+      ...ogMeta({ title: CALC_TITLE, description: CALC_DESC, path: "/calculator" }),
     ],
     links: localeLinks("/calculator"),
     scripts: [

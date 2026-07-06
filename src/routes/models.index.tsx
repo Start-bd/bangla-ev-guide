@@ -3,25 +3,19 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { getAllModels } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
 
 const allQO = queryOptions({ queryKey: ["models", "all"], queryFn: () => getAllModels() });
+
+const MODELS_TITLE = "All Electric Cars in Bangladesh 2026 — Price, Range, Specs | BanglaEV";
+const MODELS_DESC = "বাংলাদেশে উপলব্ধ সকল ইলেকট্রিক গাড়ির তালিকা: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr, Deepal — দাম, রেঞ্জ ও স্পেসিফিকেশন এক জায়গায়।";
 
 export const Route = createFileRoute("/models/")({
   head: () => ({
     meta: [
-      { title: "All Electric Cars in Bangladesh 2026 — Price, Range, Specs | BanglaEV" },
-      {
-        name: "description",
-        content:
-          "বাংলাদেশে উপলব্ধ সকল ইলেকট্রিক গাড়ির তালিকা: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr, Deepal — দাম, রেঞ্জ ও স্পেসিফিকেশন এক জায়গায়।",
-      },
-      { property: "og:title", content: "All EVs in Bangladesh — BanglaEV" },
-      {
-        property: "og:description",
-        content: "সকল ব্র্যান্ডের ইলেকট্রিক গাড়ি এক জায়গায়। ফিল্টার করে খুঁজুন।",
-      },
-      { property: "og:url", content: absUrl("/models") },
+      { title: MODELS_TITLE },
+      { name: "description", content: MODELS_DESC },
+      ...ogMeta({ title: MODELS_TITLE, description: MODELS_DESC, path: "/models" }),
     ],
     links: localeLinks("/models"),
   }),
