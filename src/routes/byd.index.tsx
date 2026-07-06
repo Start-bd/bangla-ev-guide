@@ -3,7 +3,7 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { MapPin, Phone, ArrowRight } from "lucide-react";
 import { getBydModels } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta } from "@/lib/seo";
 import { ssrLog } from "@/lib/ssr-logger";
 
 const bydQO = queryOptions({ queryKey: ["models", "byd"], queryFn: () => getBydModels() });
