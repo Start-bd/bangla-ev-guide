@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CostCalculator } from "@/components/site/CostCalculator";
 import { localeLinks, ogMeta } from "@/lib/seo";
 
-const CALC_TITLE = "EV vs Petrol Cost Calculator Bangladesh | কত টাকা সাশ্রয় হবে? | BanglaEV";
+const CALC_TITLE = "EV vs Petrol Cost Calculator Bangladesh | BanglaEV";
 const CALC_DESC = "ইলেকট্রিক গাড়ি বনাম পেট্রোল — আপনার দৈনিক ড্রাইভিং দিয়ে মাসিক ও বার্ষিক সাশ্রয় হিসাব করুন।";
 
 export const Route = createFileRoute("/calculator")({

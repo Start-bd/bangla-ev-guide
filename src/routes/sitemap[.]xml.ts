@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-const BASE_URL = "https://banglaev.com";
+const BASE_URL = "https://bangla-ev-guide.lovable.app";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {

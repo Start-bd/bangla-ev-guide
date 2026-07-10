@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://bangla-ev-guide.lovable.app/sitemap.xml
