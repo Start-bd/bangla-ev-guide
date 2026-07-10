@@ -33,7 +33,7 @@ export function CostCalculator({ compact = false }: Props) {
     <div className={`rounded-2xl border border-border bg-card p-6 shadow-sm ${compact ? "" : "md:p-8"}`}>
       <div className="flex items-center gap-2">
         <Calculator className="h-5 w-5 text-primary" />
-        <h3 className="font-display text-lg font-bold">EV vs পেট্রোল ক্যালকুলেটর</h3>
+        <h2 className="font-display text-lg font-bold">EV vs পেট্রোল ক্যালকুলেটর</h2>
       </div>
 
       <div className="mt-6 space-y-5">

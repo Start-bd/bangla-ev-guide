@@ -1,4 +1,4 @@
-export const SITE_URL = "https://banglaev.com";
+export const SITE_URL = "https://bangla-ev-guide.lovable.app";
 
 // Branded default social share card (1200x630) used when a route has no
 // meaningful image of its own. Uploaded via lovable-assets — served from CDN.

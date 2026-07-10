@@ -7,7 +7,7 @@ import { localeLinks, ogMeta } from "@/lib/seo";
 
 const allQO = queryOptions({ queryKey: ["models", "all"], queryFn: () => getAllModels() });
 
-const MODELS_TITLE = "All Electric Cars in Bangladesh 2026 — Price, Range, Specs | BanglaEV";
+const MODELS_TITLE = "Electric Cars in Bangladesh 2026 — Price & Specs | BanglaEV";
 const MODELS_DESC = "বাংলাদেশে উপলব্ধ সকল ইলেকট্রিক গাড়ির তালিকা: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr, Deepal — দাম, রেঞ্জ ও স্পেসিফিকেশন এক জায়গায়।";
 
 export const Route = createFileRoute("/models/")({

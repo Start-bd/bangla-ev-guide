@@ -9,7 +9,7 @@ import { Zap, X } from "lucide-react";
 
 const allQO = queryOptions({ queryKey: ["models", "all"], queryFn: () => getAllModels() });
 
-const CMP_TITLE = "Compare Electric Cars Bangladesh 2026 | BYD, MG, Hyundai, Kia, Tesla | BanglaEV";
+const CMP_TITLE = "Compare Electric Cars Bangladesh 2026 | BanglaEV";
 const CMP_DESC = "যে কোনো ব্র্যান্ডের ইলেকট্রিক গাড়ি পাশাপাশি তুলনা করুন — BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr। দাম, রেঞ্জ, ব্যাটারি ও স্পেসিফিকেশন।";
 
 export const Route = createFileRoute("/compare")({
@@ -90,10 +90,11 @@ function ComparePage() {
             <button
               key={m.slug}
               onClick={() => toggle(m.slug)}
+              aria-label={`Remove ${m.brand} ${m.model}`}
               className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground"
             >
               {m.brand} {m.model}
-              <X className="h-3 w-3" />
+              <X className="h-3 w-3" aria-hidden="true" />
             </button>
           ))}
           {selected.length > 0 && (

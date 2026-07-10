@@ -17,6 +17,25 @@ export const Route = createFileRoute("/about")({
       ...ogMeta({ title: ABOUT_TITLE, description: ABOUT_DESC, path: "/about" }),
     ],
     links: localeLinks("/about"),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "BanglaEV",
+          description: ABOUT_DESC,
+          url: "https://bangla-ev-guide.lovable.app/about",
+          email: "hello@banglaev.com",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Mymensingh",
+            addressCountry: "BD",
+          },
+          areaServed: "BD",
+        }),
+      },
+    ],
   }),
   component: AboutPage,
 });
