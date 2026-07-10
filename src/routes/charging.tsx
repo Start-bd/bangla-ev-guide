@@ -96,11 +96,7 @@ function ChargingPage() {
       <section className="container-page py-16">
         <h2 className="mb-6 text-2xl font-bold">প্রশ্ন ও উত্তর</h2>
         <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
-          {[
-            { q: "বাসায় চার্জ করা যাবে?", a: "হ্যাঁ। ৭kW ওয়ালবক্স দিয়ে সারারাতে ফুল চার্জ।" },
-            { q: "কত সময় লাগে?", a: "AC: ৬-৮ ঘণ্টা। DC ফাস্ট: ৩০-৪৫ মিনিট (৩০→৮০%)।" },
-            { q: "এক চার্জে খরচ কত?", a: "BYD Atto 3 (~৬০ kWh) ফুল চার্জে ~৳৪৬০ (BERC রেটে)।" },
-          ].map((f) => (
+          {CHG_FAQS.map((f) => (
             <details key={f.q} className="group p-6">
               <summary className="cursor-pointer font-semibold">{f.q}</summary>
               <p className="mt-3 text-muted-foreground">{f.a}</p>
