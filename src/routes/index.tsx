@@ -22,8 +22,12 @@ export const Route = createFileRoute("/")({
       { name: "description", content: HOME_DESC },
       ...ogMeta({ title: HOME_TITLE, description: HOME_DESC, path: "/", type: "website" }),
     ],
-    links: localeLinks("/"),
+    links: [
+      ...localeLinks("/"),
+      { rel: "preload", as: "image", href: heroCar, fetchpriority: "high", media: "(min-width: 768px)" },
+    ],
   }),
+
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(featuredQO);
     context.queryClient.ensureQueryData(postsQO);
