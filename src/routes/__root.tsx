@@ -98,10 +98,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@type": "WebSite",
           name: "BanglaEV",
           alternateName: "বাংলাইভি",
-          url: "https://banglaev.com",
+          url: "https://bangla-ev-guide.lovable.app",
           potentialAction: {
             "@type": "SearchAction",
-            target: "https://banglaev.com/news?q={search_term_string}",
+            target: "https://bangla-ev-guide.lovable.app/news?q={search_term_string}",
             "query-input": "required name=search_term_string",
           },
         }),

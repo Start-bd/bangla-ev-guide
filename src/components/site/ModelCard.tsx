@@ -8,12 +8,18 @@ import atto3Src from "@/assets/models/atto-3.webp?w=480;800;1280&format=webp&as=
 import dolphinSrc from "@/assets/models/dolphin.webp?w=480;800;1280&format=webp&as=srcset";
 import mg4Src from "@/assets/models/mg-4.webp?w=480;800;1280&format=webp&as=srcset";
 import ioniq5Src from "@/assets/models/ioniq-5.webp?w=480;800;1280&format=webp&as=srcset";
+import zeekrXSrc from "@/assets/models/zeekr-x.webp?w=480;800;1280&format=webp&as=srcset";
+import deepalS07Src from "@/assets/models/deepal-s07.webp?w=480;800;1280&format=webp&as=srcset";
+import dongfengNanoBoxSrc from "@/assets/models/dongfeng-nano-box.webp?w=480;800;1280&format=webp&as=srcset";
 import sealImg from "@/assets/models/seal.webp?w=800&format=webp";
 import sealion6Img from "@/assets/models/sealion-6.webp?w=800&format=webp";
 import atto3Img from "@/assets/models/atto-3.webp?w=800&format=webp";
 import dolphinImg from "@/assets/models/dolphin.webp?w=800&format=webp";
 import mg4Img from "@/assets/models/mg-4.webp?w=800&format=webp";
 import ioniq5Img from "@/assets/models/ioniq-5.webp?w=800&format=webp";
+import zeekrXImg from "@/assets/models/zeekr-x.webp?w=800&format=webp";
+import deepalS07Img from "@/assets/models/deepal-s07.webp?w=800&format=webp";
+import dongfengNanoBoxImg from "@/assets/models/dongfeng-nano-box.webp?w=800&format=webp";
 
 export const MODEL_IMAGES: Record<string, { src: string; srcSet: string }> = {
   seal: { src: sealImg, srcSet: sealSrc },
@@ -23,6 +29,9 @@ export const MODEL_IMAGES: Record<string, { src: string; srcSet: string }> = {
   "mg-4": { src: mg4Img, srcSet: mg4Src },
   "ioniq-5": { src: ioniq5Img, srcSet: ioniq5Src },
   "hyundai-ioniq-5": { src: ioniq5Img, srcSet: ioniq5Src },
+  "zeekr-x": { src: zeekrXImg, srcSet: zeekrXSrc },
+  "deepal-s07": { src: deepalS07Img, srcSet: deepalS07Src },
+  "dongfeng-nano-box": { src: dongfengNanoBoxImg, srcSet: dongfengNanoBoxSrc },
 };
 
 const WIDTH_RE = /\s\d+w(?:,|$)/;

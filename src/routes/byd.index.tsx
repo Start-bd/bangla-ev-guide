@@ -44,7 +44,7 @@ export const Route = createFileRoute("/byd/")({
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "BYD Bangladesh",
-          url: "https://banglaev.com/byd",
+          url: "https://bangla-ev-guide.lovable.app/byd",
           description: "BYD Bangladesh authorised distributor CG Runner BD Ltd",
           address: showrooms.map((s) => ({
             "@type": "PostalAddress",
