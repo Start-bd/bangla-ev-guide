@@ -2,8 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Zap, Home, MapPin } from "lucide-react";
 import { localeLinks, ogMeta } from "@/lib/seo";
 
-const CHG_TITLE = "EV Charging Stations Bangladesh 2026 — সম্পূর্ণ গাইড | BanglaEV";
+const CHG_TITLE = "EV Charging Stations in Bangladesh 2026 | BanglaEV";
 const CHG_DESC = "বাংলাদেশে EV চার্জিং স্টেশন: ১৪+ পাবলিক স্টেশন, ২০২৬-এর লক্ষ্য ১,২০০। হোম চার্জিং, BERC ট্যারিফ ৳৭.৬৪/kWh — সম্পূর্ণ গাইড।";
+
+const CHG_FAQS = [
+  { q: "বাসায় চার্জ করা যাবে?", a: "হ্যাঁ। ৭kW ওয়ালবক্স দিয়ে সারারাতে ফুল চার্জ।" },
+  { q: "কত সময় লাগে?", a: "AC: ৬-৮ ঘণ্টা। DC ফাস্ট: ৩০-৪৫ মিনিট (৩০→৮০%)।" },
+  { q: "এক চার্জে খরচ কত?", a: "BYD Atto 3 (~৬০ kWh) ফুল চার্জে ~৳৪৬০ (BERC রেটে)।" },
+];
 
 export const Route = createFileRoute("/charging")({
   head: () => ({
@@ -13,6 +19,20 @@ export const Route = createFileRoute("/charging")({
       ...ogMeta({ title: CHG_TITLE, description: CHG_DESC, path: "/charging" }),
     ],
     links: localeLinks("/charging"),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: CHG_FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+    ],
   }),
   component: ChargingPage,
 });
