@@ -25,6 +25,7 @@ export type Database = {
           id: string
           image_url: string | null
           is_featured: boolean | null
+          last_price_update: string | null
           model: string
           price_bdt: number | null
           pros: string[] | null
@@ -44,6 +45,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_featured?: boolean | null
+          last_price_update?: string | null
           model: string
           price_bdt?: number | null
           pros?: string[] | null
@@ -63,6 +65,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_featured?: boolean | null
+          last_price_update?: string | null
           model?: string
           price_bdt?: number | null
           pros?: string[] | null
