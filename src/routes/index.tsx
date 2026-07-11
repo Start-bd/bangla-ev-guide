@@ -7,6 +7,12 @@ import { ModelCard } from "@/components/site/ModelCard";
 import { CostCalculator } from "@/components/site/CostCalculator";
 import { localeLinks, ogMeta } from "@/lib/seo";
 import heroCar from "@/assets/hero-car.jpg";
+import whyEv from "@/assets/why-ev.jpg";
+import news1 from "@/assets/news/news-1.jpg";
+import news2 from "@/assets/news/news-2.jpg";
+import news3 from "@/assets/news/news-3.jpg";
+import news4 from "@/assets/news/news-4.jpg";
+const NEWS_FALLBACKS = [news1, news2, news3, news4];
 
 
 const featuredQO = queryOptions({ queryKey: ["models", "featured"], queryFn: () => getFeaturedModels() });
@@ -157,22 +163,35 @@ function HomePage() {
               পেট্রোলের চেয়ে ৫ গুণ সস্তা, ৭৭% কম কার্বন, ৫০% কম রক্ষণাবেক্ষণ
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              { icon: Zap, t: "জ্বালানি সাশ্রয়", v: "৳৩/কিমি", s: "পেট্রোলে ৳১৫/কিমি — মাসে হাজার টাকা সাশ্রয়" },
-              { icon: Leaf, t: "পরিবেশ বান্ধব", v: "৭৭% কম কার্বন", s: "শূন্য টেইলপাইপ ইমিশন, পরিচ্ছন্ন বাতাস" },
-              { icon: Wrench, t: "কম রক্ষণাবেক্ষণ", v: "৫০% সাশ্রয়", s: "ইঞ্জিন অয়েল, স্পার্ক প্লাগ — কিছুই লাগে না" },
-            ].map((c) => (
-              <div key={c.t} className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-                <div className="mb-4 grid h-12 w-12 place-items-center rounded-xl bg-primary text-primary-foreground">
-                  <c.icon className="h-6 w-6" />
+          <div className="grid gap-10 md:grid-cols-[1.1fr,1fr] md:items-center">
+            <img
+              src={whyEv}
+              alt="Red electric car beside green Bangladesh landscape with wind turbines"
+              width={1400}
+              height={900}
+              loading="lazy"
+              className="rounded-2xl shadow-xl ring-1 ring-border"
+            />
+            <div className="grid gap-4">
+              {[
+                { icon: Zap, t: "জ্বালানি সাশ্রয়", v: "৳৩/কিমি", s: "পেট্রোলে ৳১৫/কিমি — মাসে হাজার টাকা সাশ্রয়" },
+                { icon: Leaf, t: "পরিবেশ বান্ধব", v: "৭৭% কম কার্বন", s: "শূন্য টেইলপাইপ ইমিশন, পরিচ্ছন্ন বাতাস" },
+                { icon: Wrench, t: "কম রক্ষণাবেক্ষণ", v: "৫০% সাশ্রয়", s: "ইঞ্জিন অয়েল, স্পার্ক প্লাগ — কিছুই লাগে না" },
+              ].map((c) => (
+                <div key={c.t} className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
+                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground">
+                    <c.icon className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold">{c.t}</h3>
+                    <p className="text-xl font-extrabold text-primary">{c.v}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{c.s}</p>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold">{c.t}</h3>
-                <p className="mt-1 text-2xl font-extrabold text-primary">{c.v}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{c.s}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
         </div>
       </section>
 
@@ -204,12 +223,19 @@ function HomePage() {
             <Link to="/news" className="text-sm font-semibold text-primary hover:underline">সব দেখুন →</Link>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {posts.map((p) => (
+            {posts.map((p, i) => {
+              const cover = p.cover_url || NEWS_FALLBACKS[i % NEWS_FALLBACKS.length];
+              return (
               <Link key={p.id} to="/news/$slug" params={{ slug: p.slug }} className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-lg">
-                <div className="aspect-[16/10] bg-gradient-to-br from-[var(--color-navy)] to-primary/50">
-                  <div className="grid h-full place-items-center">
-                    <Zap className="h-12 w-12 text-white/30" />
-                  </div>
+                <div className="aspect-[16/10] overflow-hidden bg-muted">
+                  <img
+                    src={cover}
+                    alt={p.title_bn}
+                    width={1280}
+                    height={800}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <span className="text-xs font-semibold uppercase text-primary">{p.category}</span>
@@ -217,7 +243,8 @@ function HomePage() {
                   <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{p.excerpt_bn}</p>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
