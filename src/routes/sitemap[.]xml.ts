@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-const BASE_URL = "https://bangla-ev-guide.lovable.app";
+const BASE_URL = "https://banglaev.com";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -28,6 +28,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/charging", changefreq: "monthly", priority: "0.7" },
           { path: "/news", changefreq: "daily", priority: "0.8" },
           { path: "/about", changefreq: "yearly", priority: "0.4" },
+          { path: "/privacy", changefreq: "yearly", priority: "0.2" },
+          { path: "/terms", changefreq: "yearly", priority: "0.2" },
         ];
 
         const bydPaths = (models ?? [])

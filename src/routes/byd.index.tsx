@@ -3,7 +3,7 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { MapPin, Phone, ArrowRight } from "lucide-react";
 import { getBydModels } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import { ssrLog } from "@/lib/ssr-logger";
 
 const bydQO = queryOptions({ queryKey: ["models", "byd"], queryFn: () => getBydModels() });
@@ -44,7 +44,7 @@ export const Route = createFileRoute("/byd/")({
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "BYD Bangladesh",
-          url: "https://bangla-ev-guide.lovable.app/byd",
+          url: "https://banglaev.com/byd",
           description: "BYD Bangladesh authorised distributor CG Runner BD Ltd",
           address: showrooms.map((s) => ({
             "@type": "PostalAddress",
@@ -65,6 +65,10 @@ export const Route = createFileRoute("/byd/")({
           })),
         }),
       },
+      breadcrumbLd([
+        { name: "হোম", path: "/" },
+        { name: "BYD", path: "/byd" },
+      ]),
     ],
   }),
   loader: async ({ context }) => {

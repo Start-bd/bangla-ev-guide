@@ -2,9 +2,9 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Battery, Gauge, Zap, Shield, Palette, ArrowRight, Award } from "lucide-react";
 import { getModelBySlug, getBydModels } from "@/lib/models.functions";
-import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
+import { formatBDTLakh, formatKm, toBnDigits, formatBnDate } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd, absUrl } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
@@ -48,6 +48,7 @@ export const Route = createFileRoute("/byd/$slug")({
       },
     };
     const meta = titles[slug] ?? { t: `${slug} | BanglaEV`, d: "EV মডেল বিস্তারিত।" };
+    const modelName = meta.t.split(" —")[0].split(" Price")[0].trim();
     return {
       meta: [
         { title: meta.t },
@@ -58,9 +59,17 @@ export const Route = createFileRoute("/byd/$slug")({
           path: `/byd/${slug}`,
           type: "product",
           image: loaderData?.image_url,
+          imageAlt: `${modelName} — BanglaEV`,
         }),
       ],
       links: localeLinks(`/byd/${slug}`),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: "BYD", path: "/byd" },
+          { name: modelName, path: `/byd/${slug}` },
+        ]),
+      ],
     };
   },
   component: ModelPage,
@@ -108,6 +117,8 @@ function ModelPage() {
             name: `${m.brand} ${m.model}`,
             brand: { "@type": "Brand", name: m.brand },
             description: `${m.brand} ${m.model} — ${m.type} with ${m.range_km} km range.`,
+            image: m.image_url ?? undefined,
+            ...(m.last_price_update ? { releaseDate: m.last_price_update } : {}),
             ...(m.price_bdt
               ? {
                   offers: {
@@ -115,7 +126,8 @@ function ModelPage() {
                     priceCurrency: "BDT",
                     price: m.price_bdt,
                     availability: "https://schema.org/InStock",
-                    url: `https://bangla-ev-guide.lovable.app/byd/${m.slug}`,
+                    url: absUrl(`/byd/${m.slug}`),
+                    ...(m.last_price_update ? { priceValidUntil: m.last_price_update } : {}),
                   },
                 }
               : {}),
@@ -137,6 +149,9 @@ function ModelPage() {
                 </span>
               )}
             </div>
+            {m.last_price_update && (
+              <p className="mt-3 text-xs text-white/70">সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}</p>
+            )}
             {slug === "sealion-6" && (
               <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-2 text-sm font-bold text-yellow-950">
                 <Award className="h-4 w-4" /> বাংলাদেশের #১ প্লাগ-ইন হাইব্রিড

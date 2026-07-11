@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getPostBySlug } from "@/lib/posts.functions";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd, absUrl } from "@/lib/seo";
 
 const postQO = (slug: string) =>
   queryOptions({
@@ -32,9 +32,17 @@ export const Route = createFileRoute("/news/$slug")({
           path: `/news/${params.slug}`,
           type: "article",
           image: loaderData?.cover_url ?? null,
+          imageAlt: title,
         }),
       ],
       links: localeLinks(`/news/${params.slug}`),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: "খবর", path: "/news" },
+          { name: title, path: `/news/${params.slug}` },
+        ]),
+      ],
     };
   },
   notFoundComponent: () => (
@@ -67,7 +75,10 @@ function PostPage() {
             "@type": "Article",
             headline: p.title_bn,
             datePublished: p.published_at,
+            dateModified: p.published_at,
             author: { "@type": "Organization", name: p.author ?? "BanglaEV" },
+            image: p.cover_url ?? undefined,
+            mainEntityOfPage: absUrl(`/news/${p.slug}`),
             inLanguage: "bn",
           }),
         }}

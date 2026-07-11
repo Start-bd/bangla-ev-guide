@@ -2,9 +2,9 @@ import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-route
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Battery, Gauge, Zap, Shield, ArrowRight } from "lucide-react";
 import { getModelBySlug, getModelsByBrand } from "@/lib/models.functions";
-import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
+import { formatBDTLakh, formatKm, toBnDigits, formatBnDate } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd, absUrl } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
@@ -57,9 +57,17 @@ export const Route = createFileRoute("/models/$slug")({
           path: `/models/${slug}`,
           type: "product",
           image: loaderData?.image_url,
+          imageAlt: `${label} — BanglaEV`,
         }),
       ],
       links: localeLinks(`/models/${slug}`),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: loaderData?.brand ?? "মডেল", path: `/brands/${(loaderData?.brand ?? "").toLowerCase()}` },
+          { name: label, path: `/models/${slug}` },
+        ]),
+      ],
     };
   },
   component: ModelDetail,
@@ -103,6 +111,8 @@ function ModelDetail() {
             name: `${m.brand} ${m.model}`,
             brand: { "@type": "Brand", name: m.brand },
             description: `${m.brand} ${m.model} — ${m.type ?? "EV"} with ${m.range_km ?? "—"} km range.`,
+            image: m.image_url ?? undefined,
+            ...(m.last_price_update ? { releaseDate: m.last_price_update } : {}),
             ...(m.price_bdt
               ? {
                   offers: {
@@ -110,7 +120,8 @@ function ModelDetail() {
                     priceCurrency: "BDT",
                     price: m.price_bdt,
                     availability: "https://schema.org/InStock",
-                    url: `https://bangla-ev-guide.lovable.app/models/${m.slug}`,
+                    url: absUrl(`/models/${m.slug}`),
+                    ...(m.last_price_update ? { priceValidUntil: m.last_price_update } : {}),
                   },
                 }
               : {}),
@@ -140,6 +151,9 @@ function ModelDetail() {
                 </span>
               )}
             </div>
+            {m.last_price_update && (
+              <p className="mt-3 text-xs text-white/70">সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}</p>
+            )}
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 to="/brands/$brand"

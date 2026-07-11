@@ -17,7 +17,7 @@
 import { spawn, type ChildProcess } from "node:child_process";
 import { setTimeout as sleep } from "node:timers/promises";
 
-const SITE_URL = "https://bangla-ev-guide.lovable.app";
+const SITE_URL = "https://banglaev.com";
 
 type Failure = { route: string; problem: string };
 const failures: Failure[] = [];
