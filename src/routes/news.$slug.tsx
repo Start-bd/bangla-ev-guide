@@ -32,9 +32,17 @@ export const Route = createFileRoute("/news/$slug")({
           path: `/news/${params.slug}`,
           type: "article",
           image: loaderData?.cover_url ?? null,
+          imageAlt: title,
         }),
       ],
       links: localeLinks(`/news/${params.slug}`),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: "খবর", path: "/news" },
+          { name: title, path: `/news/${params.slug}` },
+        ]),
+      ],
     };
   },
   notFoundComponent: () => (
