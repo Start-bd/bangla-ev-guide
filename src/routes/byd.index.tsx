@@ -65,6 +65,10 @@ export const Route = createFileRoute("/byd/")({
           })),
         }),
       },
+      breadcrumbLd([
+        { name: "হোম", path: "/" },
+        { name: "BYD", path: "/byd" },
+      ]),
     ],
   }),
   loader: async ({ context }) => {
