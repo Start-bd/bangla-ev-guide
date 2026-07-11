@@ -57,9 +57,17 @@ export const Route = createFileRoute("/models/$slug")({
           path: `/models/${slug}`,
           type: "product",
           image: loaderData?.image_url,
+          imageAlt: `${label} — BanglaEV`,
         }),
       ],
       links: localeLinks(`/models/${slug}`),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: loaderData?.brand ?? "মডেল", path: `/brands/${(loaderData?.brand ?? "").toLowerCase()}` },
+          { name: label, path: `/models/${slug}` },
+        ]),
+      ],
     };
   },
   component: ModelDetail,
