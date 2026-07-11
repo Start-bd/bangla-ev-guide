@@ -2,9 +2,9 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Battery, Gauge, Zap, Shield, Palette, ArrowRight, Award } from "lucide-react";
 import { getModelBySlug, getBydModels } from "@/lib/models.functions";
-import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
+import { formatBDTLakh, formatKm, toBnDigits, formatBnDate } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd, absUrl } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
