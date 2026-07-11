@@ -75,7 +75,10 @@ function PostPage() {
             "@type": "Article",
             headline: p.title_bn,
             datePublished: p.published_at,
+            dateModified: p.published_at,
             author: { "@type": "Organization", name: p.author ?? "BanglaEV" },
+            image: p.cover_url ?? undefined,
+            mainEntityOfPage: absUrl(`/news/${p.slug}`),
             inLanguage: "bn",
           }),
         }}
