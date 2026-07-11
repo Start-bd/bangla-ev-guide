@@ -60,8 +60,8 @@ export function Footer() {
         <div className="container-page flex flex-col items-center justify-between gap-2 py-5 text-xs opacity-80 md:flex-row">
           <p>© 2026 BanglaEV · বাংলাদেশে তৈরি 🇧🇩</p>
           <p className="flex gap-4">
-            <Link to="/about" className="hover:text-primary">Privacy</Link>
-            <Link to="/about" className="hover:text-primary">Terms</Link>
+            <Link to="/privacy" className="hover:text-primary">Privacy</Link>
+            <Link to="/terms" className="hover:text-primary">Terms</Link>
           </p>
         </div>
       </div>
