@@ -7,6 +7,12 @@ import { ModelCard } from "@/components/site/ModelCard";
 import { CostCalculator } from "@/components/site/CostCalculator";
 import { localeLinks, ogMeta } from "@/lib/seo";
 import heroCar from "@/assets/hero-car.jpg";
+import whyEv from "@/assets/why-ev.jpg";
+import news1 from "@/assets/news/news-1.jpg";
+import news2 from "@/assets/news/news-2.jpg";
+import news3 from "@/assets/news/news-3.jpg";
+import news4 from "@/assets/news/news-4.jpg";
+const NEWS_FALLBACKS = [news1, news2, news3, news4];
 
 
 const featuredQO = queryOptions({ queryKey: ["models", "featured"], queryFn: () => getFeaturedModels() });
