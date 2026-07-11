@@ -151,6 +151,9 @@ function ModelDetail() {
                 </span>
               )}
             </div>
+            {m.last_price_update && (
+              <p className="mt-3 text-xs text-white/70">সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}</p>
+            )}
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 to="/brands/$brand"
