@@ -25,7 +25,7 @@ export const Route = createFileRoute("/about")({
           "@type": "LocalBusiness",
           name: "BanglaEV",
           description: ABOUT_DESC,
-          url: "https://bangla-ev-guide.lovable.app/about",
+          url: "https://banglaev.com/about",
           email: "hello@banglaev.com",
           address: {
             "@type": "PostalAddress",

@@ -110,7 +110,7 @@ function ModelDetail() {
                     priceCurrency: "BDT",
                     price: m.price_bdt,
                     availability: "https://schema.org/InStock",
-                    url: `https://bangla-ev-guide.lovable.app/models/${m.slug}`,
+                    url: `https://banglaev.com/models/${m.slug}`,
                   },
                 }
               : {}),
