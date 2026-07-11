@@ -48,10 +48,12 @@ export function ogMeta(opts: {
   description: string;
   path: string;
   image?: string | null;
+  imageAlt?: string;
   type?: string; // "website" | "article" | "product" | ...
 }) {
   const url = absUrl(opts.path);
   const image = ogImage(opts.image);
+  const imageAlt = opts.imageAlt ?? opts.title;
   const type = opts.type ?? "website";
   return [
     { property: "og:title", content: opts.title },
@@ -59,11 +61,34 @@ export function ogMeta(opts: {
     { property: "og:type", content: type },
     { property: "og:url", content: url },
     { property: "og:image", content: image },
+    { property: "og:image:alt", content: imageAlt },
     { property: "og:image:width", content: "1200" },
     { property: "og:image:height", content: "630" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: opts.title },
     { name: "twitter:description", content: opts.description },
     { name: "twitter:image", content: image },
+    { name: "twitter:image:alt", content: imageAlt },
   ];
+}
+
+/**
+ * BreadcrumbList JSON-LD helper. Pass ordered crumbs — the last item is the
+ * current page. Paths are joined to SITE_URL. Returns an object suitable for
+ * inclusion in a route's head().scripts array.
+ */
+export function breadcrumbLd(items: Array<{ name: string; path: string }>) {
+  return {
+    type: "application/ld+json" as const,
+    children: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: items.map((it, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: it.name,
+        item: absUrl(it.path),
+      })),
+    }),
+  };
 }
