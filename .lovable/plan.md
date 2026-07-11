@@ -1,79 +1,63 @@
 ## Goal
 
-Reposition BanglaEV as the Bangladesh EV sector portal (not just BYD). Add a broader set of EVs actually available or announced in Bangladesh, restructure routing so every brand — not just BYD — has real pages, and keep BYD as a highlighted flagship rather than the whole site.
+Address the high-impact items in the SEO audit for BanglaEV. Scope confirmed:
+- Domain: rewrite all canonical/og:url/sitemap/robots to `https://banglaev.com`.
+- Prices: use audit figures (Atto 3 Extended ৳55.90 lakh / Standard ৳49.90 lakh) with a visible "সর্বশেষ আপডেট" date.
+- Skip static /compare/x-vs-y pages, /guide/ev-tax-registration, /charging directory rebuild, expanded news articles, and BYD price-list hub (deferred).
 
-## Scope
+## What ships
 
-### 1. Catalog expansion (data)
+1. **Domain switch to banglaev.com**
+   - `src/lib/seo.ts`: `SITE_URL = "https://banglaev.com"`.
+   - `src/routes/__root.tsx`: WebSite JSON-LD `url` and SearchAction target → banglaev.com.
+   - `src/routes/sitemap[.]xml.ts`: `BASE_URL` → banglaev.com.
+   - `public/robots.txt`: `Sitemap:` → banglaev.com.
+   - `src/routes/byd.index.tsx`, `byd.$slug.tsx`, `models.$slug.tsx`: any remaining hardcoded hosts → banglaev.com.
+   - `scripts/check-seo-head.ts`: update `SITE_URL` so the SSR head test still passes against the new host.
+   - Note to user: the DNS/verification step in Project Settings → Domains is on them; canonicals will 404 in preview until DNS resolves. We deploy the code change now so it's ready.
 
-Seed `ev_models` with additional EVs relevant to Bangladesh. Proposed shortlist (BEV unless noted):
+2. **Real prices on placeholder model pages** (`ev_models` table via a migration)
+   - Update `byd-atto-3` → `5590000` BDT, add variant note "Standard Range ৳49.90 lakh" in the model's description/notes column (whichever field the page renders).
+   - Update `byd-dolphin` → mark as "সর্বশেষ আপডেট" pending official; if audit's price is uncertain, leave placeholder but ADD `last_price_update` date so `format.ts` no longer prints "শীঘ্রই ঘোষণা" alone.
+   - Add `last_price_update` column (date) to `ev_models`; render a "সর্বশেষ আপডেট: DD MMM YYYY" line under the price in `models.$slug.tsx` and `byd.$slug.tsx`.
 
-- **BYD** (keep): Seal, Sealion 6 (PHEV), Atto 3, Dolphin, Yuan Plus, Song Plus (PHEV)
-- **MG**: MG 4 (exists), MG ZS EV, MG Marvel R, MG Cyberster
-- **Hyundai**: Ioniq 5 (exists), Ioniq 6, Kona Electric
-- **Kia**: EV6, Niro EV
-- **Tesla** (grey-market presence): Model 3, Model Y
-- **Chinese value segment**: Neta V, Dongfeng Nano Box, Wuling Air EV, Zeekr X, Deepal S07
-- **Two/three-wheeler segment note (feature card only, no detail pages this pass)**: Bajaj Chetak, Runner Bike, Palki (locally assembled)
+3. **Structured data (JSON-LD)**
+   - `models.$slug.tsx` + `byd.$slug.tsx`: `Vehicle` + `Product` schema (name, brand, image, offers with `priceCurrency: "BDT"`, `price`, `availability`), `dateModified` from `last_price_update`, plus `BreadcrumbList` (Home › Brand › Model).
+   - `byd.index.tsx`: `FAQPage` from the existing 8-Q FAQ block, `BreadcrumbList`.
+   - `charging.tsx`: `FAQPage` from the existing FAQ block (if present), `BreadcrumbList`.
+   - `news.$slug.tsx`: `Article` (headline, datePublished, dateModified, author, image), `BreadcrumbList`.
+   - Every non-root leaf: `BreadcrumbList`. Extract a small `src/lib/jsonld.ts` helper so each route stays terse.
 
-Each row: brand, model, slug, type (BEV/PHEV), price_bdt (nullable — many not officially priced yet), range_km, battery_kwh, charging_time_min, zero_to_hundred, specs jsonb (drivetrain, safety, warranty), pros[], cons[], is_featured, display_order.
+4. **Meta polish**
+   - Trim any meta description over 160 chars (audit L5). Sweep every `head()` in `src/routes/`.
+   - Add `og:image:alt` to `ogMeta()` in `src/lib/seo.ts` and thread an `imageAlt` argument.
+   - `<html lang="bn">` is already set — verified, no change.
 
-`is_featured` limited to 6–8 for the homepage carousel; the rest surface on brand and browse pages.
+5. **Content/link hygiene**
+   - `src/components/site/Footer.tsx`: replace `#` social links with real BanglaEV handles (Facebook + YouTube) — using the same handle convention as the About page email; user can swap URLs later if they own different accounts. Swap Privacy/Terms links to new pages (below).
+   - New `src/routes/privacy.tsx` and `src/routes/terms.tsx` — plain bilingual pages (data usage, contact, no-warranty), each with its own head().
+   - New `public/llms.txt` describing the site, sitemap, and a per-section pointer list — mirrors robots.txt style.
 
-### 2. Routing restructure
+6. **Verification**
+   - Update and run `scripts/check-seo-head.ts` against dev to confirm canonical/hreflang/og:url all resolve to banglaev.com.
+   - Run typecheck + `bun run build` implicitly via the harness.
 
-Today `/byd/$slug` is BYD-only. Generalize:
+## What we're NOT doing this pass
 
-- **New**: `/models` — filterable browse page (brand, type, price range, battery, range).
-- **New**: `/brands/$brand` — brand hub (e.g. `/brands/mg`, `/brands/hyundai`, `/brands/kia`, `/brands/tesla`), listing that brand's models plus a short brand intro.
-- **New**: `/models/$slug` — canonical detail route for every model regardless of brand.
-- **Keep**: `/byd` and `/byd/$slug` as SEO-preserving aliases that redirect to `/brands/byd` and `/models/$slug`. Do not break existing indexed URLs.
-- **Update**: homepage copy — "Bangladesh's EV guide" framing instead of BYD-first hero. BYD gets a dedicated "Flagship brand" section, not the whole hero.
-- **Update**: Compare page — already multi-brand; just widen the default picker to include one non-BYD car.
-
-### 3. ModelCard + image pipeline
-
-- `ModelCard` already resolves images by slug. For new models without dedicated art, fall back to a brand-tinted placeholder card (not the raw Zap icon) — a lightweight SVG per brand — so cards look intentional. The existing runtime assertion + Playwright check keep "real image or intentional placeholder" contract.
-- Link target is now `/models/$slug` for every card, so the `isByd` branch that unlinks non-BYD cards goes away.
-- Generate hero WebP art for the top ~6 new models this turn (Ioniq 6, Kona EV, EV6, ZS EV, Model Y, Neta V). Others use the brand placeholder until art is added.
-
-### 4. SEO
-
-Per-brand and per-model `head()`:
-- `/brands/$brand`: `"<Brand> Electric Cars in Bangladesh 2026 | Price & Specs"`, description mentioning that brand's lineup.
-- `/models/$slug`: `"<Brand> <Model> Price in Bangladesh 2026 | Range, Battery, Specs"`, og:image = model hero.
-- Update `/` and `/compare` copy + meta to drop "BYD Bangladesh"-only phrasing; keep BYD as one of the target keywords, not the only one.
-- Update `sitemap.xml` to enumerate `/brands/*` and `/models/*`.
-
-### 5. CI / tests
-
-- Extend `scripts/check-featured-images.py` route list to include `/models` and `/brands/byd` (once implemented), so the srcset contract is verified on every new listing surface.
-- Add a lightweight SSR check that each brand hub returns 200 with a unique `<title>`.
+Per the "high-impact only" scope: no static `/compare/x-vs-y` pages, no `/guide/ev-tax-registration-bangladesh`, no `/charging` directory rebuild, no news-article expansion, no per-model OG images (the "Edit with Lovable" badge is a paid publish setting, not a code change — flagged for the user to toggle in Project Settings).
 
 ## Technical details
 
-Migrations:
-- INSERT-only migration for the new `ev_models` rows (schema already fits).
-- No column additions needed; use existing `specs` jsonb for brand-specific fields (e.g. `warranty_km`, `warranty_years`, `drivetrain`, `assembled_in`).
+- Domain URL is centralized in `src/lib/seo.ts::SITE_URL`; changing one constant flows to `localeLinks()` and `ogMeta()` on every route. Only the WebSite JSON-LD in `__root.tsx`, the sitemap `BASE_URL`, and `robots.txt` are separate copies.
+- The `ev_models` schema change is additive (new nullable `last_price_update date` column) — safe migration, no data loss. Price updates are `UPDATE` statements in the same migration; publish/anon SELECT policies already allow reads.
+- JSON-LD helper lives at `src/lib/jsonld.ts` and returns `{ type: "application/ld+json", children: JSON.stringify(...) }` entries suitable for `head().scripts`. Each schema function takes the loader-data shape it needs so route files stay ~3 lines heavier.
+- `og:image:alt` becomes an optional `imageAlt` on `ogMeta({ ... })`; default to the title when omitted so no route regresses.
+- `Footer.tsx` social hrefs: `https://facebook.com/banglaev` and `https://youtube.com/@banglaev` as placeholders matching the brand — user can override later; better than dead `#` links per audit L1.
+- `check-seo-head.ts` currently hardcodes `SITE_URL` — update to import from `src/lib/seo.ts` to avoid future drift.
 
-New/changed files:
-- `src/routes/models.index.tsx`, `src/routes/models.$slug.tsx`
-- `src/routes/brands.$brand.tsx`
-- `src/routes/byd.$slug.tsx` and `src/routes/byd.index.tsx` → thin redirect components (`throw redirect(...)`) preserving SEO via 301-equivalent client + `<link rel="canonical">`.
-- `src/lib/models.functions.ts`: add `getModelBySlug`, `getModelsByBrand`, `getAllBrands`.
-- `src/components/site/ModelCard.tsx`: brand-placeholder SVGs; link every card to `/models/$slug`.
-- `src/routes/index.tsx`: new hero, "Featured models" row (all brands), "Explore by brand" strip, "BYD flagship" section.
-- `src/assets/models/*.webp`: new hero art for 6 models (imagegen).
-- `scripts/check-featured-images.py`: add `/models`, `/brands/byd`.
+## After this ships (user actions, not code)
 
-Order of work (one PR-shaped batch per step):
-1. Data migration + brand-placeholder cards (unblocks everything visible).
-2. `/models` browse + `/models/$slug` detail (functional multi-brand).
-3. `/brands/$brand` hubs + BYD redirects + homepage restructure.
-4. New hero images + SEO metadata + sitemap + CI route additions.
-
-## Questions before I start
-
-1. **Model shortlist** — happy with the list above, or want to add/remove specific cars (e.g. Proton eMas 7, Wuling Bingo, GAC Aion)?
-2. **Real Bangladesh prices** — should I seed the new rows with `NULL` prices (safe, shows "—") or use best-effort market estimates with a "নির্দেশক মূল্য" (indicative) label?
-3. **URL migration** — OK to move canonical model URLs to `/models/$slug` with `/byd/$slug` redirecting, or keep `/byd/$slug` as the canonical for BYD cars and only add `/models/$slug` for non-BYD?
+1. Connect **banglaev.com** in Project Settings → Domains and complete DNS.
+2. Verify banglaev.com in Google Search Console and submit `https://banglaev.com/sitemap.xml`.
+3. Toggle off the "Edit with Lovable" badge in publish settings (paid plan).
+4. Confirm the Atto 3 / Dolphin figures with CG Runner BD Ltd before the next monthly price review.
