@@ -32,6 +32,10 @@ export const Route = createFileRoute("/charging")({
           })),
         }),
       },
+      breadcrumbLd([
+        { name: "হোম", path: "/" },
+        { name: "চার্জিং গাইড", path: "/charging" },
+      ]),
     ],
   }),
   component: ChargingPage,
