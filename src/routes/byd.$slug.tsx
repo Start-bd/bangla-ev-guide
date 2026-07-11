@@ -149,6 +149,9 @@ function ModelPage() {
                 </span>
               )}
             </div>
+            {m.last_price_update && (
+              <p className="mt-3 text-xs text-white/70">সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}</p>
+            )}
             {slug === "sealion-6" && (
               <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-2 text-sm font-bold text-yellow-950">
                 <Award className="h-4 w-4" /> বাংলাদেশের #১ প্লাগ-ইন হাইব্রিড
