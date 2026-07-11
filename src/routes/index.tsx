@@ -163,22 +163,35 @@ function HomePage() {
               পেট্রোলের চেয়ে ৫ গুণ সস্তা, ৭৭% কম কার্বন, ৫০% কম রক্ষণাবেক্ষণ
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              { icon: Zap, t: "জ্বালানি সাশ্রয়", v: "৳৩/কিমি", s: "পেট্রোলে ৳১৫/কিমি — মাসে হাজার টাকা সাশ্রয়" },
-              { icon: Leaf, t: "পরিবেশ বান্ধব", v: "৭৭% কম কার্বন", s: "শূন্য টেইলপাইপ ইমিশন, পরিচ্ছন্ন বাতাস" },
-              { icon: Wrench, t: "কম রক্ষণাবেক্ষণ", v: "৫০% সাশ্রয়", s: "ইঞ্জিন অয়েল, স্পার্ক প্লাগ — কিছুই লাগে না" },
-            ].map((c) => (
-              <div key={c.t} className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-                <div className="mb-4 grid h-12 w-12 place-items-center rounded-xl bg-primary text-primary-foreground">
-                  <c.icon className="h-6 w-6" />
+          <div className="grid gap-10 md:grid-cols-[1.1fr,1fr] md:items-center">
+            <img
+              src={whyEv}
+              alt="Red electric car beside green Bangladesh landscape with wind turbines"
+              width={1400}
+              height={900}
+              loading="lazy"
+              className="rounded-2xl shadow-xl ring-1 ring-border"
+            />
+            <div className="grid gap-4">
+              {[
+                { icon: Zap, t: "জ্বালানি সাশ্রয়", v: "৳৩/কিমি", s: "পেট্রোলে ৳১৫/কিমি — মাসে হাজার টাকা সাশ্রয়" },
+                { icon: Leaf, t: "পরিবেশ বান্ধব", v: "৭৭% কম কার্বন", s: "শূন্য টেইলপাইপ ইমিশন, পরিচ্ছন্ন বাতাস" },
+                { icon: Wrench, t: "কম রক্ষণাবেক্ষণ", v: "৫০% সাশ্রয়", s: "ইঞ্জিন অয়েল, স্পার্ক প্লাগ — কিছুই লাগে না" },
+              ].map((c) => (
+                <div key={c.t} className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
+                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground">
+                    <c.icon className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold">{c.t}</h3>
+                    <p className="text-xl font-extrabold text-primary">{c.v}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{c.s}</p>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold">{c.t}</h3>
-                <p className="mt-1 text-2xl font-extrabold text-primary">{c.v}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{c.s}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
         </div>
       </section>
 
