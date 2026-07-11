@@ -48,6 +48,7 @@ export const Route = createFileRoute("/byd/$slug")({
       },
     };
     const meta = titles[slug] ?? { t: `${slug} | BanglaEV`, d: "EV মডেল বিস্তারিত।" };
+    const modelName = meta.t.split(" —")[0].split(" Price")[0].trim();
     return {
       meta: [
         { title: meta.t },
@@ -58,9 +59,17 @@ export const Route = createFileRoute("/byd/$slug")({
           path: `/byd/${slug}`,
           type: "product",
           image: loaderData?.image_url,
+          imageAlt: `${modelName} — BanglaEV`,
         }),
       ],
       links: localeLinks(`/byd/${slug}`),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: "BYD", path: "/byd" },
+          { name: modelName, path: `/byd/${slug}` },
+        ]),
+      ],
     };
   },
   component: ModelPage,
