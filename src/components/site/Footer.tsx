@@ -16,9 +16,9 @@ export function Footer() {
             বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড। BYD, MG, Hyundai — সব EV এক জায়গায়।
           </p>
           <div className="mt-4 flex gap-3">
-            <a aria-label="Facebook" href="#" className="rounded-full bg-white/10 p-2 hover:bg-primary"><Facebook className="h-4 w-4" /></a>
-            <a aria-label="YouTube" href="#" className="rounded-full bg-white/10 p-2 hover:bg-primary"><Youtube className="h-4 w-4" /></a>
-            <a aria-label="Instagram" href="#" className="rounded-full bg-white/10 p-2 hover:bg-primary"><Instagram className="h-4 w-4" /></a>
+            <a aria-label="Facebook" href="https://www.facebook.com/banglaev" target="_blank" rel="noopener" className="rounded-full bg-white/10 p-2 hover:bg-primary"><Facebook className="h-4 w-4" /></a>
+            <a aria-label="YouTube" href="https://www.youtube.com/@banglaev" target="_blank" rel="noopener" className="rounded-full bg-white/10 p-2 hover:bg-primary"><Youtube className="h-4 w-4" /></a>
+            <a aria-label="Instagram" href="https://www.instagram.com/banglaev" target="_blank" rel="noopener" className="rounded-full bg-white/10 p-2 hover:bg-primary"><Instagram className="h-4 w-4" /></a>
           </div>
         </div>
 
