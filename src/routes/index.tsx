@@ -223,12 +223,19 @@ function HomePage() {
             <Link to="/news" className="text-sm font-semibold text-primary hover:underline">সব দেখুন →</Link>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {posts.map((p) => (
+            {posts.map((p, i) => {
+              const cover = p.cover_url || NEWS_FALLBACKS[i % NEWS_FALLBACKS.length];
+              return (
               <Link key={p.id} to="/news/$slug" params={{ slug: p.slug }} className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-lg">
-                <div className="aspect-[16/10] bg-gradient-to-br from-[var(--color-navy)] to-primary/50">
-                  <div className="grid h-full place-items-center">
-                    <Zap className="h-12 w-12 text-white/30" />
-                  </div>
+                <div className="aspect-[16/10] overflow-hidden bg-muted">
+                  <img
+                    src={cover}
+                    alt={p.title_bn}
+                    width={1280}
+                    height={800}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <span className="text-xs font-semibold uppercase text-primary">{p.category}</span>
@@ -236,7 +243,8 @@ function HomePage() {
                   <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{p.excerpt_bn}</p>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
