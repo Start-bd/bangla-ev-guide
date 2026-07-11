@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NewsRouteImport } from './routes/news'
@@ -27,6 +28,11 @@ import { Route as ModelsSlugRouteImport } from './routes/models.$slug'
 import { Route as BydSlugRouteImport } from './routes/byd.$slug'
 import { Route as BrandsBrandRouteImport } from './routes/brands.$brand'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/news': typeof NewsRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
   '/models/$slug': typeof ModelsSlugRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/compare': typeof CompareRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
   '/models/$slug': typeof ModelsSlugRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/news': typeof NewsRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
   '/models/$slug': typeof ModelsSlugRoute
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/privacy'
     | '/sitemap.xml'
+    | '/terms'
     | '/brands/$brand'
     | '/byd/$slug'
     | '/models/$slug'
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/privacy'
     | '/sitemap.xml'
+    | '/terms'
     | '/brands/$brand'
     | '/byd/$slug'
     | '/models/$slug'
@@ -216,6 +227,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/privacy'
     | '/sitemap.xml'
+    | '/terms'
     | '/brands/$brand'
     | '/byd/$slug'
     | '/models/$slug'
@@ -236,11 +248,19 @@ export interface RootRouteChildren {
   NewsRoute: typeof NewsRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
   BrandsBrandRoute: typeof BrandsBrandRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -411,6 +431,7 @@ const rootRouteChildren: RootRouteChildren = {
   NewsRoute: NewsRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
   BrandsBrandRoute: BrandsBrandRoute,
 }
 export const routeTree = rootRouteImport

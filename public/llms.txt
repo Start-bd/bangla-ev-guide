@@ -1,14 +1,26 @@
-# BanglaEV
+# BanglaEV — বাংলাদেশের সেরা EV গাইড
 
-> BanglaEV is Bangladesh's independent electric-vehicle guide — prices, specs, reviews, comparisons, charging information and news for BYD, MG, Hyundai, Kia, Tesla, Neta and Zeekr EVs available locally. Content is published in Bengali (default) with English alternates.
+> Bilingual (Bengali + English) editorial hub for electric vehicles in Bangladesh.
+> Prices, specs, comparisons, and news for BYD, MG, Hyundai and other EVs available
+> through authorised distributors like CG Runner BD Ltd.
 
-## Pages
+Website: https://banglaev.com
+Sitemap: https://banglaev.com/sitemap.xml
 
-- [Home](/): Overview of EVs available in Bangladesh with featured models and latest news.
-- [All Models](/models): Browse every EV on sale in Bangladesh with price, range and specs.
-- [BYD](/byd): Full BYD lineup in Bangladesh — Atto 3, Seal, Sealion, Dolphin and more.
-- [Compare](/compare): Side-by-side comparison of up to three EVs across brands.
-- [Cost Calculator](/calculator): Estimate monthly and five-year savings of an EV vs petrol.
-- [Charging](/charging): Guide to home and public EV charging in Bangladesh, including BERC tariff.
-- [News](/news): Latest EV, policy and charging news from Bangladesh.
-- [About](/about): About BanglaEV and partnership contact.
+## Key pages
+
+- [Home](https://banglaev.com/): featured EVs, latest news, cost calculator.
+- [BYD Bangladesh hub](https://banglaev.com/byd): every BYD model, showroom addresses, FAQ.
+- [All models](https://banglaev.com/models): full catalogue with prices and specs.
+- [Compare](https://banglaev.com/compare): side-by-side EV comparison tool.
+- [Charging guide](https://banglaev.com/charging): public DC stations and home charging.
+- [Cost calculator](https://banglaev.com/calculator): EV vs petrol running cost.
+- [News](https://banglaev.com/news): reviews, launches, policy updates.
+- [About](https://banglaev.com/about): mission, contact, partnerships.
+
+## Content policy
+
+- Prices are quoted in BDT and dated with "সর্বশেষ আপডেট". Verify with the authorised
+  distributor before purchase.
+- Editorial content is produced by BanglaEV; brand names are trademarks of their owners.
+- No login required; all editorial pages are public.
