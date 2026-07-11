@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as ModelsRouteImport } from './routes/models'
 import { Route as CompareRouteImport } from './routes/compare'
@@ -29,6 +30,11 @@ import { Route as BrandsBrandRouteImport } from './routes/brands.$brand'
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsRoute = NewsRouteImport.update({
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/compare': typeof CompareRoute
   '/models': typeof ModelsRouteWithChildren
   '/news': typeof NewsRouteWithChildren
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/calculator': typeof CalculatorRoute
   '/charging': typeof ChargingRoute
   '/compare': typeof CompareRoute
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/compare': typeof CompareRoute
   '/models': typeof ModelsRouteWithChildren
   '/news': typeof NewsRouteWithChildren
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/models'
     | '/news'
+    | '/privacy'
     | '/sitemap.xml'
     | '/brands/$brand'
     | '/byd/$slug'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/calculator'
     | '/charging'
     | '/compare'
+    | '/privacy'
     | '/sitemap.xml'
     | '/brands/$brand'
     | '/byd/$slug'
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/models'
     | '/news'
+    | '/privacy'
     | '/sitemap.xml'
     | '/brands/$brand'
     | '/byd/$slug'
@@ -222,6 +234,7 @@ export interface RootRouteChildren {
   CompareRoute: typeof CompareRoute
   ModelsRoute: typeof ModelsRouteWithChildren
   NewsRoute: typeof NewsRouteWithChildren
+  PrivacyRoute: typeof PrivacyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   BrandsBrandRoute: typeof BrandsBrandRoute
 }
@@ -233,6 +246,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/news': {
@@ -389,6 +409,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompareRoute: CompareRoute,
   ModelsRoute: ModelsRouteWithChildren,
   NewsRoute: NewsRouteWithChildren,
+  PrivacyRoute: PrivacyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   BrandsBrandRoute: BrandsBrandRoute,
 }
