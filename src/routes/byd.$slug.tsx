@@ -117,6 +117,8 @@ function ModelPage() {
             name: `${m.brand} ${m.model}`,
             brand: { "@type": "Brand", name: m.brand },
             description: `${m.brand} ${m.model} — ${m.type} with ${m.range_km} km range.`,
+            image: m.image_url ?? undefined,
+            ...(m.last_price_update ? { releaseDate: m.last_price_update } : {}),
             ...(m.price_bdt
               ? {
                   offers: {
@@ -124,7 +126,8 @@ function ModelPage() {
                     priceCurrency: "BDT",
                     price: m.price_bdt,
                     availability: "https://schema.org/InStock",
-                    url: `https://banglaev.com/byd/${m.slug}`,
+                    url: absUrl(`/byd/${m.slug}`),
+                    ...(m.last_price_update ? { priceValidUntil: m.last_price_update } : {}),
                   },
                 }
               : {}),
