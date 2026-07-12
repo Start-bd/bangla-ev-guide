@@ -4,7 +4,7 @@ import { Battery, Gauge, Zap, Shield, ArrowRight } from "lucide-react";
 import { getModelBySlug, getModelsByBrand } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits, formatBnDate } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, ogMeta, breadcrumbLd, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd, absUrl, ogImage } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
