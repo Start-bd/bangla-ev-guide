@@ -39,21 +39,24 @@ export const Route = createFileRoute("/byd/")({
     ],
     links: localeLinks("/byd"),
     scripts: [
-      {
-        type: "application/ld+json",
+      ...showrooms.map((s) => ({
+        type: "application/ld+json" as const,
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "BYD Bangladesh",
-          url: "https://banglaev.com/byd",
-          description: "BYD Bangladesh authorised distributor CG Runner BD Ltd",
-          address: showrooms.map((s) => ({
+          "@type": "AutoDealer",
+          name: s.name,
+          url: "https://banglaev.com/byd#showrooms",
+          address: {
             "@type": "PostalAddress",
             streetAddress: s.addr,
+            addressLocality: s.locality,
             addressCountry: "BD",
-          })),
+          },
+          areaServed: { "@type": "Country", name: "Bangladesh" },
+          brand: { "@type": "Brand", name: "BYD" },
+          parentOrganization: { "@type": "Organization", name: "CG Runner BD Ltd" },
         }),
-      },
+      })),
       {
         type: "application/ld+json",
         children: JSON.stringify({
