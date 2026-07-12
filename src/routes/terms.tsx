@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { localeLinks, ogMeta } from "@/lib/seo";
+import termsHero from "@/assets/pages/terms-hero.jpg";
 
 export const Route = createFileRoute("/terms")({
   head: () => {
@@ -20,6 +21,15 @@ export const Route = createFileRoute("/terms")({
 function TermsPage() {
   return (
     <article className="container-page max-w-3xl py-16 prose-bn">
+      <img
+        src={termsHero}
+        alt="ব্যবহারের শর্তাবলি"
+        width={1600}
+        height={600}
+        loading="lazy"
+        decoding="async"
+        className="mb-8 w-full rounded-2xl object-cover shadow-sm"
+      />
       <h1 className="text-4xl font-extrabold">Terms of Use</h1>
       <p className="mt-2 text-sm text-muted-foreground">সর্বশেষ আপডেট: জুলাই ২০২৬</p>
 
