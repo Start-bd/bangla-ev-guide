@@ -78,6 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "BanglaEV" },
       { name: "theme-color", content: "#00A651" },
+      { name: "google-site-verification", content: "aYtVVCKYq_a0JYv7vCMiSRjULEP1APY3qIYqtmg-ofI" },
       { property: "og:site_name", content: "BanglaEV" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "bn_BD" },
