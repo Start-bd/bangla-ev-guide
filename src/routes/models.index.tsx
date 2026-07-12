@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { getAllModels } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
 import { localeLinks, ogMeta } from "@/lib/seo";
+import modelsHero from "@/assets/pages/models-hero.jpg";
 
 const allQO = queryOptions({ queryKey: ["models", "all"], queryFn: () => getAllModels() });
 
@@ -57,6 +58,18 @@ function ModelsBrowse() {
             ব্র্যান্ড বা টাইপ অনুযায়ী ফিল্টার করুন।
           </p>
         </div>
+      </section>
+
+      <section className="container-page pt-10">
+        <img
+          src={modelsHero}
+          alt="বাংলাদেশে উপলব্ধ ইলেকট্রিক গাড়ির লাইনআপ"
+          width={1600}
+          height={700}
+          loading="lazy"
+          decoding="async"
+          className="w-full rounded-2xl object-cover shadow-md"
+        />
       </section>
 
       <section className="container-page py-10">

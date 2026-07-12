@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { submitLead } from "@/lib/leads.functions";
 import { localeLinks, ogMeta } from "@/lib/seo";
+import aboutHero from "@/assets/pages/about-hero.jpg";
 
 const ABOUT_TITLE = "আমাদের সম্পর্কে — BanglaEV";
 const ABOUT_DESC = "BanglaEV বাংলাদেশের স্বাধীন EV রিসার্চ ও তথ্য প্ল্যাটফর্ম। যোগাযোগ ও বিজ্ঞাপন পার্টনারশিপের তথ্য।";
@@ -50,6 +51,18 @@ function AboutPage() {
             BanglaEV বাংলাদেশের স্বাধীন EV রিসার্চ ও তথ্য প্ল্যাটফর্ম।
           </p>
         </div>
+      </section>
+
+      <section className="container-page pt-10">
+        <img
+          src={aboutHero}
+          alt="BanglaEV টিম"
+          width={1600}
+          height={700}
+          loading="lazy"
+          decoding="async"
+          className="w-full rounded-2xl object-cover shadow-md"
+        />
       </section>
 
       <section className="container-page grid gap-12 py-16 md:grid-cols-2">

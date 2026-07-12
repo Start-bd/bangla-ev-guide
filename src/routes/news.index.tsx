@@ -3,6 +3,7 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Zap } from "lucide-react";
 import { getPosts } from "@/lib/posts.functions";
 import { localeLinks, ogMeta } from "@/lib/seo";
+import newsHero from "@/assets/pages/news-hero.jpg";
 
 const postsQO = queryOptions({ queryKey: ["posts", 50], queryFn: () => getPosts({ data: { limit: 50 } }) });
 
@@ -31,6 +32,18 @@ function NewsPage() {
           <h1 className="text-4xl font-extrabold md:text-5xl">EV ও অটো খবর</h1>
           <p className="mt-3 max-w-2xl text-white/80">বাংলাদেশের EV ইকোসিস্টেম, রিভিউ ও পলিসি আপডেট।</p>
         </div>
+      </section>
+
+      <section className="container-page pt-10">
+        <img
+          src={newsHero}
+          alt="EV ও অটো খবর"
+          width={1600}
+          height={700}
+          loading="lazy"
+          decoding="async"
+          className="w-full rounded-2xl object-cover shadow-md"
+        />
       </section>
 
       <section className="container-page py-16">

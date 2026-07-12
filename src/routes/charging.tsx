@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Zap, Home, MapPin } from "lucide-react";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
+import chargingHero from "@/assets/pages/charging-hero.jpg";
 
 const CHG_TITLE = "EV Charging Stations in Bangladesh 2026 | BanglaEV";
 const CHG_DESC = "বাংলাদেশে EV চার্জিং স্টেশন: ১৪+ পাবলিক স্টেশন, ২০২৬-এর লক্ষ্য ১,২০০। হোম চার্জিং, BERC ট্যারিফ ৳৭.৬৪/kWh — সম্পূর্ণ গাইড।";
@@ -62,6 +63,18 @@ function ChargingPage() {
             ২০২৫-এ ১৪+ পাবলিক স্টেশন। ২০২৬-এর সরকারি লক্ষ্য: ১,২০০ স্টেশন।
           </p>
         </div>
+      </section>
+
+      <section className="container-page pt-10">
+        <img
+          src={chargingHero}
+          alt="বাংলাদেশে EV চার্জিং স্টেশন"
+          width={1600}
+          height={700}
+          loading="lazy"
+          decoding="async"
+          className="w-full rounded-2xl object-cover shadow-md"
+        />
       </section>
 
       <section className="container-page grid gap-10 py-16 md:grid-cols-2">
