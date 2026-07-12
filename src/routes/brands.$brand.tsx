@@ -14,6 +14,19 @@ const brandQO = (brand: string) =>
     },
   });
 
+const BRAND_NAMES: Record<string, string> = {
+  mg: "MG",
+  byd: "BYD",
+  hyundai: "Hyundai",
+  kia: "Kia",
+  tesla: "Tesla",
+  zeekr: "Zeekr",
+  neta: "Neta",
+  wuling: "Wuling",
+  deepal: "Deepal",
+  dongfeng: "Dongfeng",
+};
+
 const BRAND_BLURBS: Record<string, string> = {
   mg: "MG Motor — ব্রিটিশ ঐতিহ্যের চীনা EV ব্র্যান্ড। MG 4, ZS EV, Marvel R ও Cyberster বাংলাদেশে জনপ্রিয়।",
   hyundai:
@@ -38,7 +51,7 @@ export const Route = createFileRoute("/brands/$brand")({
     context.queryClient.ensureQueryData(brandQO(params.brand)),
   head: ({ params, loaderData }) => {
     const b = params.brand;
-    const display = b.charAt(0).toUpperCase() + b.slice(1);
+    const display = BRAND_NAMES[b.toLowerCase()] ?? (b.charAt(0).toUpperCase() + b.slice(1));
     const t = `${display} Electric Cars in Bangladesh 2026 | Price & Specs — BanglaEV`;
     const d = `${display} EV লাইনআপ বাংলাদেশে — সকল মডেলের দাম, রেঞ্জ, ব্যাটারি ও স্পেসিফিকেশন।`;
     const firstImage = loaderData?.find((m) => m.image_url)?.image_url ?? null;
