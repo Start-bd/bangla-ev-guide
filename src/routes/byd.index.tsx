@@ -5,6 +5,7 @@ import { getBydModels } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import { ssrLog } from "@/lib/ssr-logger";
+import bydHero from "@/assets/pages/byd-hero.jpg";
 
 const bydQO = queryOptions({ queryKey: ["models", "byd"], queryFn: () => getBydModels() });
 
@@ -100,6 +101,18 @@ function BydHub() {
             পরবর্তী প্রজন্মের ইলেকট্রিক গাড়ি।
           </p>
         </div>
+      </section>
+
+      <section className="container-page pt-10">
+        <img
+          src={bydHero}
+          alt="BYD Seal বাংলাদেশ"
+          width={1600}
+          height={700}
+          loading="lazy"
+          decoding="async"
+          className="w-full rounded-2xl object-cover shadow-md"
+        />
       </section>
 
       <section className="container-page py-16">
