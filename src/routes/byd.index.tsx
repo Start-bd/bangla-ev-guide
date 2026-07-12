@@ -10,9 +10,9 @@ import bydHero from "@/assets/pages/byd-hero.jpg";
 const bydQO = queryOptions({ queryKey: ["models", "byd"], queryFn: () => getBydModels() });
 
 const showrooms = [
-  { name: "BYD Tejgaon Flagship", addr: "Aristo Tower, Tejgaon, Dhaka", note: "৬,০০০ স্কয়ার ফিট ফ্ল্যাগশিপ শোরুম" },
-  { name: "Noor Autos — Uttara", addr: "House 8, Road 9C, Sector 15, Uttara, Dhaka", note: "অনুমোদিত ডিলার" },
-  { name: "Otto Fix Ltd — Madani Avenue", addr: "Vatara, Dhaka", note: "অনুমোদিত ডিলার" },
+  { name: "CG Runner BD Ltd — Tejgaon", addr: "Aristo Tower, Tejgaon, Dhaka", locality: "Dhaka", note: "৬,০০০ স্কয়ার ফিট ফ্ল্যাগশিপ শোরুম" },
+  { name: "Noor Autos — Uttara", addr: "House 8, Road 9C, Sector 15, Uttara, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার" },
+  { name: "Otto Fix Ltd — Madani Avenue", addr: "Vatara, Madani Avenue, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার" },
 ];
 
 const faqs = [
@@ -39,21 +39,24 @@ export const Route = createFileRoute("/byd/")({
     ],
     links: localeLinks("/byd"),
     scripts: [
-      {
-        type: "application/ld+json",
+      ...showrooms.map((s) => ({
+        type: "application/ld+json" as const,
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "BYD Bangladesh",
-          url: "https://banglaev.com/byd",
-          description: "BYD Bangladesh authorised distributor CG Runner BD Ltd",
-          address: showrooms.map((s) => ({
+          "@type": "AutoDealer",
+          name: s.name,
+          url: "https://banglaev.com/byd#showrooms",
+          address: {
             "@type": "PostalAddress",
             streetAddress: s.addr,
+            addressLocality: s.locality,
             addressCountry: "BD",
-          })),
+          },
+          areaServed: { "@type": "Country", name: "Bangladesh" },
+          brand: { "@type": "Brand", name: "BYD" },
+          parentOrganization: { "@type": "Organization", name: "CG Runner BD Ltd" },
         }),
-      },
+      })),
       {
         type: "application/ld+json",
         children: JSON.stringify({
