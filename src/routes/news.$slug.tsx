@@ -72,12 +72,17 @@ function PostPage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
+            "@type": "NewsArticle",
             headline: p.title_bn,
-            datePublished: p.published_at,
-            dateModified: p.published_at,
-            author: { "@type": "Organization", name: p.author ?? "BanglaEV" },
-            image: p.cover_url ?? undefined,
+            datePublished: p.published_at ? new Date(p.published_at).toISOString() : undefined,
+            dateModified: p.published_at ? new Date(p.published_at).toISOString() : undefined,
+            author: { "@type": "Organization", name: "BanglaEV" },
+            publisher: {
+              "@type": "Organization",
+              name: "BanglaEV",
+              logo: { "@type": "ImageObject", url: "https://banglaev.com/favicon.png" },
+            },
+            image: p.cover_url ? [ogImage(p.cover_url)] : undefined,
             mainEntityOfPage: absUrl(`/news/${p.slug}`),
             inLanguage: "bn",
           }),
