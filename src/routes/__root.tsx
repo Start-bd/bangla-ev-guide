@@ -133,6 +133,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           knowsLanguage: ["bn", "en"],
         }),
       },
+      {
+        src: "https://www.googletagmanager.com/gtag/js?id=G-HQRD29M3GS",
+        async: true,
+      },
+      {
+        children:
+          "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-HQRD29M3GS');",
+      },
     ],
   }),
   shellComponent: RootShell,
