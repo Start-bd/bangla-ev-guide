@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getPostBySlug } from "@/lib/posts.functions";
-import { localeLinks, ogMeta, breadcrumbLd, absUrl } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd, absUrl, ogImage } from "@/lib/seo";
 
 const postQO = (slug: string) =>
   queryOptions({
