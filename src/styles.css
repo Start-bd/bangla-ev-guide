@@ -118,7 +118,7 @@
     font-weight: 700;
   }
   :lang(bn), [lang="bn"] {
-    font-family: "Hind Siliguri", "Inter", sans-serif;
+    font-family: "Noto Sans Bengali", "Inter", sans-serif;
   }
 }
 
