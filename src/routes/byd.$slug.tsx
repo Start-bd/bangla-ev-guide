@@ -121,7 +121,7 @@ function ModelPage() {
             vehicleModelDate: m.last_price_update ?? undefined,
             bodyType: m.type ?? undefined,
             fuelType: "Electric",
-            description: `${m.brand} ${m.model} — ${m.type} with ${m.range_km} km range.`,
+            description: `${m.brand} ${m.model} — ${m.type ?? "EV"}${m.range_km ? ` with ${m.range_km} km range` : ""}.`,
             image: m.image_url ? ogImage(m.image_url) : undefined,
             url: absUrl(`/byd/${m.slug}`),
             ...(m.battery_kwh
