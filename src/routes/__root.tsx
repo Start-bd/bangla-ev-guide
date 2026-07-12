@@ -117,7 +117,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           name: "BanglaEV",
           alternateName: "বাংলাইভি",
           url: "https://banglaev.com",
-          logo: "https://banglaev.com/favicon.png",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://banglaev.com/favicon.png",
+          },
+          sameAs: [
+            "https://facebook.com/banglaev",
+            "https://youtube.com/@banglaev",
+            "https://instagram.com/banglaev",
+          ],
           description:
             "Bangladesh's guide to electric vehicles — BYD, MG, Hyundai prices, reviews, comparisons, charging and cost calculators.",
           areaServed: { "@type": "Country", name: "Bangladesh" },
