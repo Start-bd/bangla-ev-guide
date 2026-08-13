@@ -17,6 +17,7 @@ Sitemap: https://banglaev.com/sitemap.xml
 - [Cost calculator](https://banglaev.com/calculator): EV vs petrol running cost.
 - [News](https://banglaev.com/news): reviews, launches, policy updates.
 - [About](https://banglaev.com/about): mission, contact, partnerships.
+- [Best electric bikes guide](https://banglaev.com/guide/best-electric-bikes-bangladesh): buyer's guide, top picks, costs and FAQ.
 
 ## Content policy
 

@@ -25,6 +25,7 @@ import { Route as ModelsIndexRouteImport } from './routes/models.index'
 import { Route as BydIndexRouteImport } from './routes/byd.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as ModelsSlugRouteImport } from './routes/models.$slug'
+import { Route as GuideBestElectricBikesBangladeshRouteImport } from './routes/guide.best-electric-bikes-bangladesh'
 import { Route as BydSlugRouteImport } from './routes/byd.$slug'
 import { Route as BrandsBrandRouteImport } from './routes/brands.$brand'
 
@@ -108,6 +109,12 @@ const ModelsSlugRoute = ModelsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ModelsRoute,
 } as any)
+const GuideBestElectricBikesBangladeshRoute =
+  GuideBestElectricBikesBangladeshRouteImport.update({
+    id: '/guide/best-electric-bikes-bangladesh',
+    path: '/guide/best-electric-bikes-bangladesh',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BydSlugRoute = BydSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -133,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
+  '/guide/best-electric-bikes-bangladesh': typeof GuideBestElectricBikesBangladeshRoute
   '/models/$slug': typeof ModelsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/byd/': typeof BydIndexRoute
@@ -150,6 +158,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
+  '/guide/best-electric-bikes-bangladesh': typeof GuideBestElectricBikesBangladeshRoute
   '/models/$slug': typeof ModelsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/byd': typeof BydIndexRoute
@@ -171,6 +180,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
+  '/guide/best-electric-bikes-bangladesh': typeof GuideBestElectricBikesBangladeshRoute
   '/models/$slug': typeof ModelsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/byd/': typeof BydIndexRoute
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/brands/$brand'
     | '/byd/$slug'
+    | '/guide/best-electric-bikes-bangladesh'
     | '/models/$slug'
     | '/news/$slug'
     | '/byd/'
@@ -210,6 +221,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/brands/$brand'
     | '/byd/$slug'
+    | '/guide/best-electric-bikes-bangladesh'
     | '/models/$slug'
     | '/news/$slug'
     | '/byd'
@@ -230,6 +242,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/brands/$brand'
     | '/byd/$slug'
+    | '/guide/best-electric-bikes-bangladesh'
     | '/models/$slug'
     | '/news/$slug'
     | '/byd/'
@@ -250,6 +263,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   BrandsBrandRoute: typeof BrandsBrandRoute
+  GuideBestElectricBikesBangladeshRoute: typeof GuideBestElectricBikesBangladeshRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -366,6 +380,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModelsSlugRouteImport
       parentRoute: typeof ModelsRoute
     }
+    '/guide/best-electric-bikes-bangladesh': {
+      id: '/guide/best-electric-bikes-bangladesh'
+      path: '/guide/best-electric-bikes-bangladesh'
+      fullPath: '/guide/best-electric-bikes-bangladesh'
+      preLoaderRoute: typeof GuideBestElectricBikesBangladeshRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/byd/$slug': {
       id: '/byd/$slug'
       path: '/$slug'
@@ -433,6 +454,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   BrandsBrandRoute: BrandsBrandRoute,
+  GuideBestElectricBikesBangladeshRoute: GuideBestElectricBikesBangladeshRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
