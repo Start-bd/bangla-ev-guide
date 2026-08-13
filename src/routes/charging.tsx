@@ -1,7 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Zap, Home, MapPin } from "lucide-react";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import chargingHero from "@/assets/pages/charging-hero.jpg";
+import bikesGuide from "@/assets/guides/electric-bikes-bangladesh.jpg";
 
 const CHG_TITLE = "EV Charging Stations in Bangladesh 2026 | BanglaEV";
 const CHG_DESC = "বাংলাদেশে EV চার্জিং স্টেশন: ১৪+ পাবলিক স্টেশন, ২০২৬-এর লক্ষ্য ১,২০০। হোম চার্জিং, BERC ট্যারিফ ৳৭.৬৪/kWh — সম্পূর্ণ গাইড।";
@@ -121,6 +122,36 @@ function ChargingPage() {
           ))}
         </div>
       </section>
+
+      <section className="container-page pb-16">
+        <h2 className="mb-6 text-2xl font-bold">সম্পর্কিত গাইড</h2>
+        <Link
+          to="/guide/best-electric-bikes-bangladesh"
+          className="group grid gap-6 overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-lg sm:grid-cols-[280px_1fr]"
+        >
+          <div className="aspect-[16/10] overflow-hidden bg-muted sm:aspect-auto">
+            <img
+              src={bikesGuide}
+              alt="বাংলাদেশে সেরা ইলেকট্রিক বাইক গাইড"
+              width={1400}
+              height={800}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+          <div className="flex flex-col justify-center p-6">
+            <span className="text-xs font-semibold uppercase tracking-wider text-primary">গাইড</span>
+            <h3 className="mt-2 font-display text-xl font-bold group-hover:text-primary">
+              বাংলাদেশে সেরা ইলেকট্রিক বাইক (২০২৬) — ক্রয়ের গাইড
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              দাম, রেঞ্জ, ব্যাটারি ও চার্জিং খরচ — কেনার আগে যা জানা দরকার।
+            </p>
+          </div>
+        </Link>
+      </section>
     </>
+
   );
 }
