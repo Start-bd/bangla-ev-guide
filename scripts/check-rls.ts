@@ -10,7 +10,7 @@
  * Env:   VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY (falls back to .env)
  */
 
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'node:fs'
 
 function loadEnvFile(path: string): Record<string, string> {
   if (!existsSync(path)) return {}
