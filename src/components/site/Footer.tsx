@@ -39,6 +39,7 @@ export function Footer() {
             <li><Link to="/news" className="hover:text-primary">খবর ও রিভিউ</Link></li>
             <li><Link to="/calculator" className="hover:text-primary">EV কস্ট ক্যালকুলেটর</Link></li>
             <li><Link to="/charging" className="hover:text-primary">চার্জিং গাইড</Link></li>
+            <li><Link to="/guide/best-electric-bikes-bangladesh" className="hover:text-primary">সেরা ইলেকট্রিক বাইক গাইড</Link></li>
           </ul>
         </div>
 
