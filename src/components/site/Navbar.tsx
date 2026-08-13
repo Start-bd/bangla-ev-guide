@@ -102,6 +102,20 @@ export function Navbar() {
             >
               শোরুম খুঁজুন
             </Link>
+            {!loading &&
+              (user ? (
+                <Link
+                  to="/saved"
+                  onClick={() => setOpen(false)}
+                  className="mt-2 rounded-full border border-input px-4 py-3 text-center text-sm font-semibold"
+                >
+                  সেভ করা EV
+                </Link>
+              ) : (
+                <div className="mt-3">
+                  <GoogleSignInButton redirectPath="/saved" label="Google দিয়ে সাইন ইন" />
+                </div>
+              ))}
           </nav>
         </div>
       )}
