@@ -18,6 +18,7 @@ import { Route as CompareRouteImport } from './routes/compare'
 import { Route as ChargingRouteImport } from './routes/charging'
 import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as BydRouteImport } from './routes/byd'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
@@ -72,6 +73,11 @@ const CalculatorRoute = CalculatorRouteImport.update({
 const BydRoute = BydRouteImport.update({
   id: '/byd',
   path: '/byd',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -129,6 +135,7 @@ const BrandsBrandRoute = BrandsBrandRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/byd': typeof BydRouteWithChildren
   '/calculator': typeof CalculatorRoute
   '/charging': typeof ChargingRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/calculator': typeof CalculatorRoute
   '/charging': typeof ChargingRoute
   '/compare': typeof CompareRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/byd': typeof BydRouteWithChildren
   '/calculator': typeof CalculatorRoute
   '/charging': typeof ChargingRoute
@@ -192,6 +201,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/auth'
     | '/byd'
     | '/calculator'
     | '/charging'
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/auth'
     | '/calculator'
     | '/charging'
     | '/compare'
@@ -231,6 +242,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/auth'
     | '/byd'
     | '/calculator'
     | '/charging'
@@ -253,6 +265,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
   BydRoute: typeof BydRouteWithChildren
   CalculatorRoute: typeof CalculatorRoute
   ChargingRoute: typeof ChargingRoute
@@ -329,6 +342,13 @@ declare module '@tanstack/react-router' {
       path: '/byd'
       fullPath: '/byd'
       preLoaderRoute: typeof BydRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -444,6 +464,7 @@ const NewsRouteWithChildren = NewsRoute._addFileChildren(NewsRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
   BydRoute: BydRouteWithChildren,
   CalculatorRoute: CalculatorRoute,
   ChargingRoute: ChargingRoute,
