@@ -231,6 +231,7 @@ function ModelPage() {
               <Link to="/compare" className="inline-flex rounded-full border border-white/30 bg-white/5 px-5 py-3 font-semibold backdrop-blur hover:bg-white/15">
                 অন্য গাড়ির সাথে তুলনা
               </Link>
+              <SaveModelButton slug={m.slug} />
             </div>
           </div>
 
