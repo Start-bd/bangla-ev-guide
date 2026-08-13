@@ -12,6 +12,7 @@ import news1 from "@/assets/news/news-1.jpg";
 import news2 from "@/assets/news/news-2.jpg";
 import news3 from "@/assets/news/news-3.jpg";
 import news4 from "@/assets/news/news-4.jpg";
+import bikesGuide from "@/assets/guides/electric-bikes-bangladesh.jpg";
 const NEWS_FALLBACKS = [news1, news2, news3, news4];
 
 
