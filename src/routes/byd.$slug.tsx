@@ -25,8 +25,19 @@ export const Route = createFileRoute("/byd/$slug")({
     ]);
     // Return a slim, serialisable snapshot for head() — full model still comes
     // from the query cache in the component via useSuspenseQuery.
-    return { image_url: model.image_url ?? null };
+    return {
+      image_url: model.image_url ?? null,
+      brand: model.brand,
+      model: model.model,
+      type: model.type ?? null,
+      range_km: model.range_km ?? null,
+      battery_kwh: model.battery_kwh ?? null,
+      zero_to_hundred: model.zero_to_hundred ?? null,
+      charging_time_min: model.charging_time_min ?? null,
+      price_bdt: model.price_bdt ?? null,
+    };
   },
+
   head: ({ params, loaderData }) => {
     const slug = params.slug;
     const titles: Record<string, { t: string; d: string }> = {
@@ -47,8 +58,27 @@ export const Route = createFileRoute("/byd/$slug")({
         d: "BYD Dolphin — কম্প্যাক্ট হ্যাচব্যাক ইলেকট্রিক গাড়ি। শহরের জন্য আদর্শ, সাশ্রয়ী দাম।",
       },
     };
-    const meta = titles[slug] ?? { t: `${slug} | BanglaEV`, d: "EV মডেল বিস্তারিত।" };
-    const modelName = meta.t.split(" —")[0].split(" Price")[0].trim();
+    // Spec-derived fallback so every BYD model gets a unique, factual description.
+    const name = loaderData ? `${loaderData.brand} ${loaderData.model}` : slug.replace(/-/g, " ");
+    const kind = loaderData?.type === "PHEV" ? "প্লাগ-ইন হাইব্রিড" : "ইলেকট্রিক";
+    const bits: string[] = [];
+    if (loaderData?.range_km) bits.push(`রেঞ্জ ${toBnDigits(loaderData.range_km)} কিমি`);
+    if (loaderData?.battery_kwh) bits.push(`${toBnDigits(String(loaderData.battery_kwh))} kWh ব্যাটারি`);
+    if (loaderData?.zero_to_hundred)
+      bits.push(`০-১০০ কিমি/ঘণ্টা ${toBnDigits(String(loaderData.zero_to_hundred))} সেকেন্ড`);
+    if (loaderData?.charging_time_min)
+      bits.push(`${toBnDigits(loaderData.charging_time_min)} মিনিটে দ্রুত চার্জ`);
+    const generated = {
+      t: `${name} Price in Bangladesh 2026 — স্পেক্স ও রিভিউ | BanglaEV`,
+      d: `${name} ${kind} ${loaderData?.type === "PHEV" ? "SUV" : "গাড়ি"} বাংলাদেশে — ${bits.join(", ")}। ${
+        loaderData?.price_bdt ? `দাম ${formatBDTLakh(loaderData.price_bdt)}।` : "দাম শীঘ্রই ঘোষণা।"
+      } সম্পূর্ণ স্পেসিফিকেশন ও কেনার গাইড।`,
+    };
+    const meta = titles[slug] ?? generated;
+    const modelName = loaderData
+      ? name
+      : meta.t.split(" —")[0].split(" Price")[0].trim();
+
     return {
       meta: [
         { title: meta.t },
