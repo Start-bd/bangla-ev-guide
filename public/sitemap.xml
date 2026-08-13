@@ -423,4 +423,13 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://banglaev.com/guide/best-electric-bikes-bangladesh</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://banglaev.com/guide/best-electric-bikes-bangladesh"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://banglaev.com/guide/best-electric-bikes-bangladesh?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://banglaev.com/guide/best-electric-bikes-bangladesh"/>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
