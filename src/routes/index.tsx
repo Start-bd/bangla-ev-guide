@@ -249,6 +249,37 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* GUIDE TEASER */}
+      <section className="container-page py-16">
+        <Link
+          to="/guide/best-electric-bikes-bangladesh"
+          className="group grid gap-6 overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-lg sm:grid-cols-[320px_1fr]"
+        >
+          <div className="aspect-[16/10] overflow-hidden bg-muted sm:aspect-auto">
+            <img
+              src={bikesGuide}
+              alt="বাংলাদেশে সেরা ইলেকট্রিক বাইক গাইড"
+              width={1400}
+              height={800}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+          <div className="flex flex-col justify-center p-6">
+            <span className="text-xs font-semibold uppercase tracking-wider text-primary">নতুন গাইড</span>
+            <h2 className="mt-2 font-display text-2xl font-bold group-hover:text-primary">
+              বাংলাদেশে সেরা ইলেকট্রিক বাইক (২০২৬)
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              দাম, রেঞ্জ, ব্যাটারি ও চার্জিং খরচ — কেনার আগে যা জানা দরকার, এক গাইডে।
+            </p>
+            <span className="mt-4 text-sm font-semibold text-primary">গাইড পড়ুন →</span>
+          </div>
+        </Link>
+      </section>
     </>
+
   );
 }
