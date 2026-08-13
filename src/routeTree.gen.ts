@@ -20,6 +20,7 @@ import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as BydRouteImport } from './routes/byd'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as ModelsIndexRouteImport } from './routes/models.index'
@@ -29,6 +30,7 @@ import { Route as ModelsSlugRouteImport } from './routes/models.$slug'
 import { Route as GuideBestElectricBikesBangladeshRouteImport } from './routes/guide.best-electric-bikes-bangladesh'
 import { Route as BydSlugRouteImport } from './routes/byd.$slug'
 import { Route as BrandsBrandRouteImport } from './routes/brands.$brand'
+import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/saved'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -85,6 +87,10 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -131,6 +137,11 @@ const BrandsBrandRoute = BrandsBrandRouteImport.update({
   path: '/brands/$brand',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSavedRoute = AuthenticatedSavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -145,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/saved': typeof AuthenticatedSavedRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
   '/guide/best-electric-bikes-bangladesh': typeof GuideBestElectricBikesBangladeshRoute
@@ -164,6 +176,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/saved': typeof AuthenticatedSavedRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
   '/guide/best-electric-bikes-bangladesh': typeof GuideBestElectricBikesBangladeshRoute
@@ -176,6 +189,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/byd': typeof BydRouteWithChildren
@@ -187,6 +201,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/_authenticated/saved': typeof AuthenticatedSavedRoute
   '/brands/$brand': typeof BrandsBrandRoute
   '/byd/$slug': typeof BydSlugRoute
   '/guide/best-electric-bikes-bangladesh': typeof GuideBestElectricBikesBangladeshRoute
@@ -211,6 +226,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/sitemap.xml'
     | '/terms'
+    | '/saved'
     | '/brands/$brand'
     | '/byd/$slug'
     | '/guide/best-electric-bikes-bangladesh'
@@ -230,6 +246,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/sitemap.xml'
     | '/terms'
+    | '/saved'
     | '/brands/$brand'
     | '/byd/$slug'
     | '/guide/best-electric-bikes-bangladesh'
@@ -241,6 +258,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/about'
     | '/auth'
     | '/byd'
@@ -252,6 +270,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/sitemap.xml'
     | '/terms'
+    | '/_authenticated/saved'
     | '/brands/$brand'
     | '/byd/$slug'
     | '/guide/best-electric-bikes-bangladesh'
@@ -264,6 +283,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   BydRoute: typeof BydRouteWithChildren
@@ -358,6 +378,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -421,8 +448,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrandsBrandRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/saved': {
+      id: '/_authenticated/saved'
+      path: '/saved'
+      fullPath: '/saved'
+      preLoaderRoute: typeof AuthenticatedSavedRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedSavedRoute: typeof AuthenticatedSavedRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedSavedRoute: AuthenticatedSavedRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface BydRouteChildren {
   BydSlugRoute: typeof BydSlugRoute
@@ -463,6 +508,7 @@ const NewsRouteWithChildren = NewsRoute._addFileChildren(NewsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   BydRoute: BydRouteWithChildren,
