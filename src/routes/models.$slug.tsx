@@ -205,6 +205,7 @@ function ModelDetail() {
               >
                 অন্য গাড়ির সাথে তুলনা
               </Link>
+              <SaveModelButton slug={m.slug} />
             </div>
           </div>
 
