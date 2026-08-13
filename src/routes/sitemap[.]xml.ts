@@ -26,6 +26,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/compare", changefreq: "weekly", priority: "0.8" },
           { path: "/calculator", changefreq: "monthly", priority: "0.8" },
           { path: "/charging", changefreq: "monthly", priority: "0.7" },
+          { path: "/guide/best-electric-bikes-bangladesh", changefreq: "monthly", priority: "0.7" },
           { path: "/news", changefreq: "daily", priority: "0.8" },
           { path: "/about", changefreq: "yearly", priority: "0.4" },
           { path: "/privacy", changefreq: "yearly", priority: "0.2" },
