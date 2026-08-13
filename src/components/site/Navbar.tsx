@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Zap, Menu, X } from "lucide-react";
+import { Zap, Menu, X, Heart } from "lucide-react";
 import { useState } from "react";
 import logo from "@/assets/logo-banglaev.png";
+import { useAuth } from "@/hooks/useAuth";
+import { GoogleSignInButton } from "@/components/site/GoogleSignInButton";
 
 const nav = [
   { to: "/models", label: "সকল EV" },
@@ -15,6 +17,7 @@ const nav = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const { user, loading } = useAuth();
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="container-page flex h-16 items-center justify-between">
@@ -50,6 +53,23 @@ export function Navbar() {
           >
             <Zap className="h-4 w-4" /> শোরুম খুঁজুন
           </Link>
+          {loading ? (
+            <span className="h-9 w-24" aria-hidden />
+          ) : user ? (
+            <Link
+              to="/saved"
+              className="inline-flex items-center gap-2 rounded-full border border-input px-4 py-2 text-sm font-semibold hover:bg-accent"
+            >
+              <Heart className="h-4 w-4" /> সেভ করা
+            </Link>
+          ) : (
+            <Link
+              to="/auth"
+              className="inline-flex items-center rounded-full border border-input px-4 py-2 text-sm font-semibold hover:bg-accent"
+            >
+              সাইন ইন
+            </Link>
+          )}
         </div>
 
         <button
@@ -82,6 +102,20 @@ export function Navbar() {
             >
               শোরুম খুঁজুন
             </Link>
+            {!loading &&
+              (user ? (
+                <Link
+                  to="/saved"
+                  onClick={() => setOpen(false)}
+                  className="mt-2 rounded-full border border-input px-4 py-3 text-center text-sm font-semibold"
+                >
+                  সেভ করা EV
+                </Link>
+              ) : (
+                <div className="mt-3">
+                  <GoogleSignInButton redirectPath="/saved" label="Google দিয়ে সাইন ইন" />
+                </div>
+              ))}
           </nav>
         </div>
       )}

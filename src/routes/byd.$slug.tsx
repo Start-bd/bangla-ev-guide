@@ -4,6 +4,7 @@ import { Battery, Gauge, Zap, Shield, Palette, ArrowRight, Award } from "lucide-
 import { getModelBySlug, getBydModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits, formatBnDate } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
+import { SaveModelButton } from "@/components/site/SaveModelButton";
 import { localeLinks, ogMeta, breadcrumbLd, absUrl, ogImage } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
@@ -231,6 +232,7 @@ function ModelPage() {
               <Link to="/compare" className="inline-flex rounded-full border border-white/30 bg-white/5 px-5 py-3 font-semibold backdrop-blur hover:bg-white/15">
                 অন্য গাড়ির সাথে তুলনা
               </Link>
+              <SaveModelButton slug={m.slug} />
             </div>
           </div>
 
