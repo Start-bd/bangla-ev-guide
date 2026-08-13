@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Zap, Menu, X } from "lucide-react";
+import { Zap, Menu, X, Heart } from "lucide-react";
 import { useState } from "react";
 import logo from "@/assets/logo-banglaev.png";
+import { useAuth } from "@/hooks/useAuth";
+import { GoogleSignInButton } from "@/components/site/GoogleSignInButton";
 
 const nav = [
   { to: "/models", label: "সকল EV" },
