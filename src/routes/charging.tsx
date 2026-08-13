@@ -1,7 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Zap, Home, MapPin } from "lucide-react";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import chargingHero from "@/assets/pages/charging-hero.jpg";
+import bikesGuide from "@/assets/guides/electric-bikes-bangladesh.jpg";
 
 const CHG_TITLE = "EV Charging Stations in Bangladesh 2026 | BanglaEV";
 const CHG_DESC = "বাংলাদেশে EV চার্জিং স্টেশন: ১৪+ পাবলিক স্টেশন, ২০২৬-এর লক্ষ্য ১,২০০। হোম চার্জিং, BERC ট্যারিফ ৳৭.৬৪/kWh — সম্পূর্ণ গাইড।";
