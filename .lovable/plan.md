@@ -1,63 +1,55 @@
+# Add "Best Electric Bikes in Bangladesh" Guide Page
+
 ## Goal
 
-Address the high-impact items in the SEO audit for BanglaEV. Scope confirmed:
-- Domain: rewrite all canonical/og:url/sitemap/robots to `https://banglaev.com`.
-- Prices: use audit figures (Atto 3 Extended ৳55.90 lakh / Standard ৳49.90 lakh) with a visible "সর্বশেষ আপডেট" date.
-- Skip static /compare/x-vs-y pages, /guide/ev-tax-registration, /charging directory rebuild, expanded news articles, and BYD price-list hub (deferred).
+Import the two prepared Markdown guides (English + Bangla) as a single SEO-optimized guide page on banglaev.com, following the site's existing bilingual convention. The content is a buyer's guide for electric bikes in Bangladesh with FAQ schema.
+
+## Decisions (confirmed)
+
+- **URL**: one route at `/guide/best-electric-bikes-bangladesh`, Bengali content primary, English in a collapsible `<details>` "Read in English" toggle — matches the existing news-article pattern. Standard `localeLinks` hreflang with `?lang=en`.
+- **Dead links**: remap the Markdown's non-existent routes to real ones:
+  - `/shop/electric-bikes` → `/models`
+  - `/prices` → `/calculator`
+  - `/policy` → `/charging`
+  - `/services` → `/about`
+  - `/bn/about` → `/about`
+  - `/charging` stays `/charging`
+- **Content storage**: dedicated static route file.
+- **Image**: generate one branded hero (electric bike on a Dhaka street) via imagegen.
 
 ## What ships
 
-1. **Domain switch to banglaev.com**
-   - `src/lib/seo.ts`: `SITE_URL = "https://banglaev.com"`.
-   - `src/routes/__root.tsx`: WebSite JSON-LD `url` and SearchAction target → banglaev.com.
-   - `src/routes/sitemap[.]xml.ts`: `BASE_URL` → banglaev.com.
-   - `public/robots.txt`: `Sitemap:` → banglaev.com.
-   - `src/routes/byd.index.tsx`, `byd.$slug.tsx`, `models.$slug.tsx`: any remaining hardcoded hosts → banglaev.com.
-   - `scripts/check-seo-head.ts`: update `SITE_URL` so the SSR head test still passes against the new host.
-   - Note to user: the DNS/verification step in Project Settings → Domains is on them; canonicals will 404 in preview until DNS resolves. We deploy the code change now so it's ready.
+1. **Hero image** — `imagegen` standard tier, ~1400×800, saved to `src/assets/guides/electric-bikes-bangladesh.jpg`, imported into the route for the page hero and `og:image`.
 
-2. **Real prices on placeholder model pages** (`ev_models` table via a migration)
-   - Update `byd-atto-3` → `5590000` BDT, add variant note "Standard Range ৳49.90 lakh" in the model's description/notes column (whichever field the page renders).
-   - Update `byd-dolphin` → mark as "সর্বশেষ আপডেট" pending official; if audit's price is uncertain, leave placeholder but ADD `last_price_update` date so `format.ts` no longer prints "শীঘ্রই ঘোষণা" alone.
-   - Add `last_price_update` column (date) to `ev_models`; render a "সর্বশেষ আপডেট: DD MMM YYYY" line under the price in `models.$slug.tsx` and `byd.$slug.tsx`.
+2. **New route** — `src/routes/guide.best-electric-bikes-bangladesh.tsx`
+   - `createFileRoute("/guide/best-electric-bikes-bangladesh")`
+   - `head()`:
+     - `title`: "বাংলাদেশে সেরা ইলেকট্রিক বাইক (২০২৬) — ক্রয়ের গাইড | BanglaEV" (<60 chars)
+     - `description`: the bn `meta_description` (already <160 chars)
+     - `ogMeta({ ... path: "/guide/best-electric-bikes-bangladesh", type: "article", image: hero, imageAlt })`
+     - `localeLinks("/guide/best-electric-bikes-bangladesh")`
+     - JSON-LD scripts:
+       - `FAQPage` from the 5 FAQ Q&As (Bengali).
+       - `Article` (headline, datePublished 2026-08-13, author Organization BanglaEV, image, inLanguage bn, mainEntityOfPage absUrl).
+       - `breadcrumbLd` Home › গাইড › সেরা ইলেকট্রিক বাইক.
+   - Component: hero section with generated image; Bengali body (headings + paragraphs + checklist + FAQ) from the bn Markdown, with internal links remapped via `<Link to=...>`. English body in a `<details>` toggle from the en Markdown, links remapped the same way. Uses the existing `prose-bn` styling class and `container-page max-w-3xl` layout like `news.$slug.tsx`.
 
-3. **Structured data (JSON-LD)**
-   - `models.$slug.tsx` + `byd.$slug.tsx`: `Vehicle` + `Product` schema (name, brand, image, offers with `priceCurrency: "BDT"`, `price`, `availability`), `dateModified` from `last_price_update`, plus `BreadcrumbList` (Home › Brand › Model).
-   - `byd.index.tsx`: `FAQPage` from the existing 8-Q FAQ block, `BreadcrumbList`.
-   - `charging.tsx`: `FAQPage` from the existing FAQ block (if present), `BreadcrumbList`.
-   - `news.$slug.tsx`: `Article` (headline, datePublished, dateModified, author, image), `BreadcrumbList`.
-   - Every non-root leaf: `BreadcrumbList`. Extract a small `src/lib/jsonld.ts` helper so each route stays terse.
+3. **Sitemap + llms.txt** — add `/guide/best-electric-bikes-bangladesh` (with hreflang alternates + lastmod 2026-08-13) to `public/sitemap.xml` and a pointer line to `public/llms.txt`.
 
-4. **Meta polish**
-   - Trim any meta description over 160 chars (audit L5). Sweep every `head()` in `src/routes/`.
-   - Add `og:image:alt` to `ogMeta()` in `src/lib/seo.ts` and thread an `imageAlt` argument.
-   - `<html lang="bn">` is already set — verified, no change.
+4. **Cross-link** — add a link card to the guide from `/charging` (a "Related guide" CTA) since charging is the most topically adjacent hub. No nav-bar change.
 
-5. **Content/link hygiene**
-   - `src/components/site/Footer.tsx`: replace `#` social links with real BanglaEV handles (Facebook + YouTube) — using the same handle convention as the About page email; user can swap URLs later if they own different accounts. Swap Privacy/Terms links to new pages (below).
-   - New `src/routes/privacy.tsx` and `src/routes/terms.tsx` — plain bilingual pages (data usage, contact, no-warranty), each with its own head().
-   - New `public/llms.txt` describing the site, sitemap, and a per-section pointer list — mirrors robots.txt style.
+5. **Verify** — run the SSR head checker for the new route (canonical, hreflang, og:url all `https://banglaev.com/...`); typecheck + build via harness.
 
-6. **Verification**
-   - Update and run `scripts/check-seo-head.ts` against dev to confirm canonical/hreflang/og:url all resolve to banglaev.com.
-   - Run typecheck + `bun run build` implicitly via the harness.
+## Not doing
 
-## What we're NOT doing this pass
-
-Per the "high-impact only" scope: no static `/compare/x-vs-y` pages, no `/guide/ev-tax-registration-bangladesh`, no `/charging` directory rebuild, no news-article expansion, no per-model OG images (the "Edit with Lovable" badge is a paid publish setting, not a code change — flagged for the user to toggle in Project Settings).
+- No `/bn/` prefixed routes (would break the site's bilingual convention).
+- No `posts` table row (guides ≠ news).
+- No new top-level nav entry.
+- The Markdown's `<script type="application/ld+json">` inline FAQ blocks are replaced by the route's `head().scripts` FAQPage (no raw `<script>` in JSX body).
 
 ## Technical details
 
-- Domain URL is centralized in `src/lib/seo.ts::SITE_URL`; changing one constant flows to `localeLinks()` and `ogMeta()` on every route. Only the WebSite JSON-LD in `__root.tsx`, the sitemap `BASE_URL`, and `robots.txt` are separate copies.
-- The `ev_models` schema change is additive (new nullable `last_price_update date` column) — safe migration, no data loss. Price updates are `UPDATE` statements in the same migration; publish/anon SELECT policies already allow reads.
-- JSON-LD helper lives at `src/lib/jsonld.ts` and returns `{ type: "application/ld+json", children: JSON.stringify(...) }` entries suitable for `head().scripts`. Each schema function takes the loader-data shape it needs so route files stay ~3 lines heavier.
-- `og:image:alt` becomes an optional `imageAlt` on `ogMeta({ ... })`; default to the title when omitted so no route regresses.
-- `Footer.tsx` social hrefs: `https://facebook.com/banglaev` and `https://youtube.com/@banglaev` as placeholders matching the brand — user can override later; better than dead `#` links per audit L1.
-- `check-seo-head.ts` currently hardcodes `SITE_URL` — update to import from `src/lib/seo.ts` to avoid future drift.
-
-## After this ships (user actions, not code)
-
-1. Connect **banglaev.com** in Project Settings → Domains and complete DNS.
-2. Verify banglaev.com in Google Search Console and submit `https://banglaev.com/sitemap.xml`.
-3. Toggle off the "Edit with Lovable" badge in publish settings (paid plan).
-4. Confirm the Atto 3 / Dolphin figures with CG Runner BD Ltd before the next monthly price review.
+- Route filename dots→slashes: `guide.best-electric-bikes-bangladesh.tsx` → `createFileRoute("/guide/best-electric-bikes-bangladesh")`.
+- Use `<Link to="/models" params={{}}>` style for internal nav; remapped targets are all existing static routes so no `params` needed except none.
+- FAQ data: a `const FAQS = [{q, a}, ...]` array drives both the visible FAQ section and the `FAQPage` JSON-LD, keeping them in sync.
+- Bengali numerals already in the bn content; keep as-is.
