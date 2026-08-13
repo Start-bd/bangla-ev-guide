@@ -153,6 +153,9 @@ jobs:
   rls-security-regression:
     name: Security — RLS regression check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -174,7 +177,55 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Assert private tables are not anonymously readable
+        id: rls
         run: bun run test:rls
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
+      - name: Upload RLS check logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rls-check-logs
+          path: logs/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Comment RLS result on PR
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- rls-regression-check -->';
+            let body;
+            try {
+              body = fs.readFileSync('logs/rls-report.md', 'utf8');
+            } catch {
+              body = '### 🔐 RLS regression check\n\nThe check could not produce a report (the script crashed before running any query). See the job log.';
+            }
+            body = `${marker}\n${body}\n\n[View full test output](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              per_page: 100,
+            });
+            const existing = comments.find((c) => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
