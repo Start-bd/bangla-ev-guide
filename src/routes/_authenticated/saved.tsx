@@ -76,7 +76,16 @@ function SavedPage() {
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {savedModels.map((m) => (
             <div key={m.slug} className="flex flex-col gap-3">
-              <ModelCard model={m} />
+              <ModelCard
+                brand={m.brand}
+                model={m.model}
+                slug={m.slug}
+                type={m.type}
+                price_bdt={m.price_bdt}
+                range_km={m.range_km}
+                battery_kwh={m.battery_kwh}
+                zero_to_hundred={m.zero_to_hundred}
+              />
               <button
                 onClick={() => remove.mutate(m.slug)}
                 disabled={remove.isPending}
