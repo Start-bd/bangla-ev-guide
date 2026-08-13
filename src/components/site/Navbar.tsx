@@ -53,6 +53,23 @@ export function Navbar() {
           >
             <Zap className="h-4 w-4" /> শোরুম খুঁজুন
           </Link>
+          {loading ? (
+            <span className="h-9 w-24" aria-hidden />
+          ) : user ? (
+            <Link
+              to="/saved"
+              className="inline-flex items-center gap-2 rounded-full border border-input px-4 py-2 text-sm font-semibold hover:bg-accent"
+            >
+              <Heart className="h-4 w-4" /> সেভ করা
+            </Link>
+          ) : (
+            <Link
+              to="/auth"
+              className="inline-flex items-center rounded-full border border-input px-4 py-2 text-sm font-semibold hover:bg-accent"
+            >
+              সাইন ইন
+            </Link>
+          )}
         </div>
 
         <button
