@@ -17,7 +17,7 @@ export function SaveModelButton({ slug }: { slug: string }) {
   const isSaved = (saved.data ?? []).some((r) => r.model_slug === slug);
 
   const toggle = useMutation({
-    mutationFn: () =>
+    mutationFn: async (): Promise<{ saved: boolean }> =>
       isSaved ? unsaveModel({ data: { slug } }) : saveModel({ data: { slug } }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["saved-models"] }),
   });
