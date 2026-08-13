@@ -25,8 +25,19 @@ export const Route = createFileRoute("/byd/$slug")({
     ]);
     // Return a slim, serialisable snapshot for head() — full model still comes
     // from the query cache in the component via useSuspenseQuery.
-    return { image_url: model.image_url ?? null };
+    return {
+      image_url: model.image_url ?? null,
+      brand: model.brand,
+      model: model.model,
+      type: model.type ?? null,
+      range_km: model.range_km ?? null,
+      battery_kwh: model.battery_kwh ?? null,
+      zero_to_hundred: model.zero_to_hundred ?? null,
+      charging_time_min: model.charging_time_min ?? null,
+      price_bdt: model.price_bdt ?? null,
+    };
   },
+
   head: ({ params, loaderData }) => {
     const slug = params.slug;
     const titles: Record<string, { t: string; d: string }> = {
