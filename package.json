@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test:seo": "bun scripts/check-seo-head.ts",
-    "test:ssr-byd": "bun scripts/check-ssr-byd.ts"
+    "test:ssr-byd": "bun scripts/check-ssr-byd.ts",
+    "test:rls": "bun scripts/check-rls.ts"
   },
   "dependencies": {
     "@fontsource/hind-siliguri": "^5.2.7",
