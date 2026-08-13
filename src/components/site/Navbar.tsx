@@ -17,6 +17,7 @@ const nav = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const { user, loading } = useAuth();
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="container-page flex h-16 items-center justify-between">
