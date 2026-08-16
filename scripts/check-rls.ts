@@ -123,8 +123,17 @@ for (const check of CHECKS) {
     `| \`${check.table}\` | ${check.expect} | ${label === 'PASS' ? '✅ pass' : '❌ fail'} | ${status} | ${rows ?? 'n/a'} | ${detail.replace(/\|/g, '\\|')} |`,
   )
 
-  if (!ok) failures.push(`${check.table} (${check.expect}) — ${detail}`)
+  if (!ok) {
+    failures.push(`${check.table} (${check.expect}) — ${detail}`)
+    annotate(
+      'error',
+      check.table,
+      `RLS regression: ${check.table} (${check.expect})`,
+      `${query}\nHTTP ${status} · rows ${rows ?? 'n/a'}\n${detail}`,
+    )
+  }
 }
+
 
 // Write artifacts consumed by the CI PR-comment step.
 const report = [
