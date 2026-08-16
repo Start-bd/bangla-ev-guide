@@ -161,6 +161,18 @@ const report = [
   '| --- | --- | --- | --- | --- | --- |',
   ...reportRows,
   '',
+  ...(failureRepros.length > 0
+    ? [
+        '<details><summary>Reproduce the failing query locally (cURL)</summary>',
+        '',
+        'Set `SUPABASE_URL` and `SUPABASE_ANON_KEY` (publishable key) first, then run:',
+        '',
+        ...failureRepros,
+        '',
+        '</details>',
+        '',
+      ]
+    : []),
   `Full test output: [\`rls-check\` job log](${process.env.GITHUB_SERVER_URL ?? 'https://github.com'}/${process.env.GITHUB_REPOSITORY ?? ''}/actions/runs/${process.env.GITHUB_RUN_ID ?? ''}) · artifact \`rls-check-logs\` (\`logs/rls-check.log\`)`,
   '',
   '_Source of truth: `scripts/check-rls.ts` (`CHECKS` list)._',
