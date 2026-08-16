@@ -70,6 +70,7 @@ async function selectAnon(table: string) {
 }
 
 const failures: string[] = []
+const failureRepros: string[] = []
 const reportRows: string[] = []
 const logLines: string[] = []
 
@@ -95,8 +96,17 @@ function annotate(level: 'error' | 'notice', table: string, title: string, messa
 }
 
 
+function curlFor(table: string): string {
+  return [
+    `curl -s -i "$SUPABASE_URL/rest/v1/${table}?select=*&limit=1" \\`,
+    `  -H "apikey: $SUPABASE_ANON_KEY" \\`,
+    `  -H "Authorization: Bearer $SUPABASE_ANON_KEY"`,
+  ].join('\n')
+}
+
 for (const check of CHECKS) {
   const query = `GET ${SUPABASE_URL}/rest/v1/${check.table}?select=*&limit=1 (role: anon)`
+  const curl = curlFor(check.table)
   const { status, body } = await selectAnon(check.table)
   const rows = Array.isArray(body) ? body.length : null
   const snippet = JSON.stringify(body).slice(0, 300)
@@ -118,21 +128,25 @@ for (const check of CHECKS) {
 
   const label = ok ? 'PASS' : 'FAIL'
   console.log(`${label} ${check.table}: ${detail}`)
-  logLines.push(`${label} ${check.table}\n  expectation: ${check.expect}\n  query: ${query}\n  status: ${status}\n  rows: ${rows ?? 'n/a'}\n  response: ${snippet}\n  detail: ${detail}\n`)
+  logLines.push(`${label} ${check.table}\n  expectation: ${check.expect}\n  query: ${query}\n  status: ${status}\n  rows: ${rows ?? 'n/a'}\n  response: ${snippet}\n  detail: ${detail}\n  reproduce:\n${curl.split('\n').map((l) => '    ' + l).join('\n')}\n`)
   reportRows.push(
     `| \`${check.table}\` | ${check.expect} | ${label === 'PASS' ? '✅ pass' : '❌ fail'} | ${status} | ${rows ?? 'n/a'} | ${detail.replace(/\|/g, '\\|')} |`,
   )
 
   if (!ok) {
     failures.push(`${check.table} (${check.expect}) — ${detail}`)
+    failureRepros.push(
+      [`**\`${check.table}\`** — reproduce the failing anonymous request:`, '', '```bash', curl, '```'].join('\n'),
+    )
     annotate(
       'error',
       check.table,
       `RLS regression: ${check.table} (${check.expect})`,
-      `${query}\nHTTP ${status} · rows ${rows ?? 'n/a'}\n${detail}`,
+      `${query}\nHTTP ${status} · rows ${rows ?? 'n/a'}\n${detail}\n\nReproduce:\n${curl}`,
     )
   }
 }
+
 
 
 // Write artifacts consumed by the CI PR-comment step.
