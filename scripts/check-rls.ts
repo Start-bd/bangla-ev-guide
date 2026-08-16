@@ -73,6 +73,28 @@ const failures: string[] = []
 const reportRows: string[] = []
 const logLines: string[] = []
 
+// GitHub inline annotations: point reviewers at the exact CHECKS entry that failed.
+const SELF_PATH = 'scripts/check-rls.ts'
+const selfLines = existsSync(SELF_PATH) ? readFileSync(SELF_PATH, 'utf8').split('\n') : []
+
+function checkLineNumber(table: string): number {
+  const idx = selfLines.findIndex((l) => l.includes(`table: '${table}'`) || l.includes(`table: "${table}"`))
+  return idx === -1 ? 1 : idx + 1
+}
+
+function ghEscape(s: string): string {
+  return s.replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A').replace(/:/g, '%3A').replace(/,/g, '%2C')
+}
+
+function annotate(level: 'error' | 'notice', table: string, title: string, message: string) {
+  if (!process.env.GITHUB_ACTIONS) return
+  const line = checkLineNumber(table)
+  console.log(
+    `::${level} file=${SELF_PATH},line=${line},col=1,title=${ghEscape(title)}::${ghEscape(message)}`,
+  )
+}
+
+
 for (const check of CHECKS) {
   const query = `GET ${SUPABASE_URL}/rest/v1/${check.table}?select=*&limit=1 (role: anon)`
   const { status, body } = await selectAnon(check.table)
@@ -101,8 +123,17 @@ for (const check of CHECKS) {
     `| \`${check.table}\` | ${check.expect} | ${label === 'PASS' ? '✅ pass' : '❌ fail'} | ${status} | ${rows ?? 'n/a'} | ${detail.replace(/\|/g, '\\|')} |`,
   )
 
-  if (!ok) failures.push(`${check.table} (${check.expect}) — ${detail}`)
+  if (!ok) {
+    failures.push(`${check.table} (${check.expect}) — ${detail}`)
+    annotate(
+      'error',
+      check.table,
+      `RLS regression: ${check.table} (${check.expect})`,
+      `${query}\nHTTP ${status} · rows ${rows ?? 'n/a'}\n${detail}`,
+    )
+  }
 }
+
 
 // Write artifacts consumed by the CI PR-comment step.
 const report = [
