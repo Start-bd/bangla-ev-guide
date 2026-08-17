@@ -107,6 +107,32 @@ function BydHub() {
             Build Your Dreams — এই স্লোগানে BYD বিশ্বের সবচেয়ে নিরাপদ Blade Battery দিয়ে তৈরি করছে
             পরবর্তী প্রজন্মের ইলেকট্রিক গাড়ি।
           </p>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {priceSummary.map((item) => {
+              const m = models.find((x) => x.slug === item.slug) as EvModel | undefined;
+              const price = m?.price_bdt ?? null;
+              return (
+                <Link
+                  key={item.slug}
+                  to="/byd/$slug"
+                  params={{ slug: item.slug }}
+                  className="group rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur transition hover:border-primary/50 hover:bg-white/10"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-wide text-white/60">
+                    {item.badge}
+                  </p>
+                  <h3 className="mt-1 text-lg font-bold leading-tight">BYD {item.name}</h3>
+                  <p className="mt-2 text-xl font-extrabold text-primary">
+                    {formatBDTLakh(price)}
+                  </p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-white/70 transition group-hover:text-primary">
+                    বিস্তারিত <ArrowDownRight className="h-3 w-3" />
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 
