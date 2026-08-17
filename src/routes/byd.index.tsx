@@ -3,7 +3,9 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { MapPin, Phone, ArrowRight, ArrowDownRight } from "lucide-react";
 import { getBydModels } from "@/lib/models.functions";
 import { formatBDTLakh } from "@/lib/format";
-import type { ev_models } from "@/integrations/supabase/types";
+import type { Database } from "@/integrations/supabase/types";
+
+type EvModel = Database["public"]["Tables"]["ev_models"]["Row"];
 import { ModelCard } from "@/components/site/ModelCard";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import { ssrLog } from "@/lib/ssr-logger";
