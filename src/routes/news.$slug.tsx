@@ -17,10 +17,13 @@ export const Route = createFileRoute("/news/$slug")({
   loader: ({ context, params }) => context.queryClient.ensureQueryData(postQO(params.slug)),
   head: ({ params, loaderData }) => {
     const title = loaderData?.title_bn ?? loaderData?.meta_title ?? params.slug;
+    const FALLBACK_DESC =
+      "বাংলাদেশের ইলেকট্রিক গাড়ির সর্বশেষ খবর, দাম আপডেট, রিভিউ ও চার্জিং নেটওয়ার্কের তথ্য — BanglaEV-তে বাংলায় পড়ুন।";
+    const rawDesc = loaderData?.meta_description ?? loaderData?.excerpt_bn ?? "";
     const desc =
-      loaderData?.meta_description ??
-      loaderData?.excerpt_bn ??
-      "BanglaEV — বাংলাদেশের EV খবর ও রিভিউ।";
+      rawDesc.trim().length >= 50
+        ? rawDesc.trim().slice(0, 160)
+        : `${rawDesc.trim() ? `${rawDesc.trim()} ` : ""}${FALLBACK_DESC}`.slice(0, 160);
     const fullTitle = `${title} | BanglaEV`;
     return {
       meta: [

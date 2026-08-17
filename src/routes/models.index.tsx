@@ -73,6 +73,7 @@ function ModelsBrowse() {
       </section>
 
       <section className="container-page py-10">
+        <h2 className="mb-6 text-2xl font-bold md:text-3xl">সকল ইলেকট্রিক গাড়ি ব্রাউজ করুন</h2>
         <div className="mb-6 flex flex-wrap gap-2">
           <FilterButton active={brand === "all"} onClick={() => setBrand("all")}>
             সব ব্র্যান্ড
