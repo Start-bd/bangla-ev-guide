@@ -31,13 +31,30 @@ const faqs = [
 ];
 
 const priceSummary = [
-  { slug: "sealion-6", name: "Sealion 6", badge: "PHEV · ১,০৯২ কিমি" },
-  { slug: "seal", name: "Seal", badge: "Premium EV" },
-  { slug: "atto-3", name: "Atto 3", badge: "SUV" },
-  { slug: "dolphin", name: "Dolphin", badge: "হ্যাচব্যাক" },
+  { slug: "sealion-6", name: "Sealion 6", badge: "PHEV · ১,০৯২ কিমি", badgeEn: "PHEV · 1,092 km" },
+  { slug: "seal", name: "Seal", badge: "Premium EV", badgeEn: "Premium EV" },
+  { slug: "atto-3", name: "Atto 3", badge: "SUV", badgeEn: "SUV" },
+  { slug: "dolphin", name: "Dolphin", badge: "হ্যাচব্যাক", badgeEn: "Hatchback" },
 ];
 
+// English price label; falls back to "Coming soon" when no price is set.
+function formatLakhEn(amount: number | null | undefined): string {
+  if (!amount) return "Coming soon";
+  const lakh = amount / 100000;
+  if (lakh >= 100) return `BDT ${(lakh / 100).toFixed(2)} crore`;
+  return `BDT ${lakh.toFixed(1)} lakh`;
+}
+
+const copy = {
+  bn: { eyebrow: "দাম শুরু", details: "বিস্তারিত" },
+  en: { eyebrow: "Starting price", details: "View details" },
+};
+
 export const Route = createFileRoute("/byd/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    lang: search.lang === "en" ? ("en" as const) : ("bn" as const),
+  }),
+
   head: () => ({
     meta: [
       { title: "BYD Car Price in Bangladesh 2026 | BYD Seal, Atto 3, Sealion 6 | BanglaEV" },
