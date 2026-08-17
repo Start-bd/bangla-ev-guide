@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
-import { MapPin, Phone, ArrowRight } from "lucide-react";
+import { MapPin, Phone, ArrowRight, ArrowDownRight } from "lucide-react";
 import { getBydModels } from "@/lib/models.functions";
+import { formatBDTLakh } from "@/lib/format";
+import type { ev_models } from "@/integrations/supabase/types";
 import { ModelCard } from "@/components/site/ModelCard";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import { ssrLog } from "@/lib/ssr-logger";
