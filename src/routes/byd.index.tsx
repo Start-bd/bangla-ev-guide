@@ -31,13 +31,30 @@ const faqs = [
 ];
 
 const priceSummary = [
-  { slug: "sealion-6", name: "Sealion 6", badge: "PHEV · ১,০৯২ কিমি" },
-  { slug: "seal", name: "Seal", badge: "Premium EV" },
-  { slug: "atto-3", name: "Atto 3", badge: "SUV" },
-  { slug: "dolphin", name: "Dolphin", badge: "হ্যাচব্যাক" },
+  { slug: "sealion-6", name: "Sealion 6", badge: "PHEV · ১,০৯২ কিমি", badgeEn: "PHEV · 1,092 km" },
+  { slug: "seal", name: "Seal", badge: "Premium EV", badgeEn: "Premium EV" },
+  { slug: "atto-3", name: "Atto 3", badge: "SUV", badgeEn: "SUV" },
+  { slug: "dolphin", name: "Dolphin", badge: "হ্যাচব্যাক", badgeEn: "Hatchback" },
 ];
 
+// English price label; falls back to "Coming soon" when no price is set.
+function formatLakhEn(amount: number | null | undefined): string {
+  if (!amount) return "Coming soon";
+  const lakh = amount / 100000;
+  if (lakh >= 100) return `BDT ${(lakh / 100).toFixed(2)} crore`;
+  return `BDT ${lakh.toFixed(1)} lakh`;
+}
+
+const copy = {
+  bn: { eyebrow: "দাম শুরু", details: "বিস্তারিত" },
+  en: { eyebrow: "Starting price", details: "View details" },
+};
+
 export const Route = createFileRoute("/byd/")({
+  validateSearch: (search: Record<string, unknown>): { lang?: "en" } =>
+    search.lang === "en" ? { lang: "en" } : {},
+
+
   head: () => ({
     meta: [
       { title: "BYD Car Price in Bangladesh 2026 | BYD Seal, Atto 3, Sealion 6 | BanglaEV" },
@@ -99,6 +116,9 @@ export const Route = createFileRoute("/byd/")({
 
 function BydHub() {
   const { data: models } = useSuspenseQuery(bydQO);
+  const { lang } = Route.useSearch();
+  const isEn = lang === "en";
+  const t = isEn ? copy.en : copy.bn;
 
   return (
     <>
@@ -115,7 +135,8 @@ function BydHub() {
             পরবর্তী প্রজন্মের ইলেকট্রিক গাড়ি।
           </p>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <h2 className="mt-10 text-xl font-bold">{t.eyebrow}</h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {priceSummary.map((item) => {
               const m = models.find((x) => x.slug === item.slug) as EvModel | undefined;
               const price = m?.price_bdt ?? null;
@@ -124,22 +145,24 @@ function BydHub() {
                   key={item.slug}
                   to="/byd/$slug"
                   params={{ slug: item.slug }}
+                  search={isEn ? { lang: "en" } : {}}
                   className="group rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur transition hover:border-primary/50 hover:bg-white/10"
                 >
                   <p className="text-xs font-semibold uppercase tracking-wide text-white/60">
-                    {item.badge}
+                    {isEn ? item.badgeEn : item.badge}
                   </p>
                   <h3 className="mt-1 text-lg font-bold leading-tight">BYD {item.name}</h3>
                   <p className="mt-2 text-xl font-extrabold text-primary">
-                    {formatBDTLakh(price)}
+                    {isEn ? formatLakhEn(price) : formatBDTLakh(price)}
                   </p>
                   <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-white/70 transition group-hover:text-primary">
-                    বিস্তারিত <ArrowDownRight className="h-3 w-3" />
+                    {t.details} <ArrowDownRight className="h-3 w-3" />
                   </span>
                 </Link>
               );
             })}
           </div>
+
         </div>
       </section>
 
