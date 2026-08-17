@@ -51,9 +51,9 @@ const copy = {
 };
 
 export const Route = createFileRoute("/byd/")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    lang: search.lang === "en" ? ("en" as const) : ("bn" as const),
-  }),
+  validateSearch: (search: Record<string, unknown>): { lang?: "en" } =>
+    search.lang === "en" ? { lang: "en" } : {},
+
 
   head: () => ({
     meta: [
