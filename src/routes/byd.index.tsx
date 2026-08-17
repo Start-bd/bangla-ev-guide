@@ -30,6 +30,13 @@ const faqs = [
   { q: "BYD vs Toyota তুলনা?", a: "EV ক্যাটাগরিতে BYD এগিয়ে; হাইব্রিডে Sealion 6 Prius-এর চেয়ে বেশি রেঞ্জ দেয়।" },
 ];
 
+const priceSummary = [
+  { slug: "sealion-6", name: "Sealion 6", badge: "PHEV · ১,০৯২ কিমি" },
+  { slug: "seal", name: "Seal", badge: "Premium EV" },
+  { slug: "atto-3", name: "Atto 3", badge: "SUV" },
+  { slug: "dolphin", name: "Dolphin", badge: "হ্যাচব্যাক" },
+];
+
 export const Route = createFileRoute("/byd/")({
   head: () => ({
     meta: [
