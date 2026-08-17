@@ -71,7 +71,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BanglaEV — বাংলাদেশের সেরা ইলেকট্রিক গাড়ির গাইড | BYD, MG, Hyundai" },
+      { title: "BanglaEV — বাংলাদেশের ইলেকট্রিক গাড়ির গাইড" },
       {
         name: "description",
         content:
