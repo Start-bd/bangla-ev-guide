@@ -33,7 +33,7 @@ export const Route = createFileRoute("/byd/")({
       { name: "description", content: "BYD গাড়ির দাম বাংলাদেশে ২০২৬: Sealion 6 ৳৬৪.৯ লাখ থেকে শুরু, Seal ৳৮৯.৯ লাখ। Atto 3 ও Dolphin দাম শীঘ্রই ঘোষণা — স্পেসিফিকেশন ও শোরুম লোকেশন দেখুন।" },
       ...ogMeta({
         title: "BYD বাংলাদেশ — সকল মডেল, দাম ও শোরুম",
-        description: "BYD Seal, Sealion 6, Atto 3, Dolphin — সব মডেলের দাম ও শোরুম এক জায়গায়।",
+        description: "BYD দাম ২০২৬: Sealion 6 ৳৬৪.৯ লাখ, Seal ৳৮৯.৯ লাখ থেকে শুরু। Atto 3, Dolphin ও সব মডেলের স্পেস ও শোরুম।",
         path: "/byd",
       }),
     ],
