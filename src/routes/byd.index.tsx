@@ -1,7 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
-import { MapPin, Phone, ArrowRight } from "lucide-react";
+import { MapPin, Phone, ArrowRight, ArrowDownRight } from "lucide-react";
 import { getBydModels } from "@/lib/models.functions";
+import { formatBDTLakh } from "@/lib/format";
+import type { Database } from "@/integrations/supabase/types";
+
+type EvModel = Database["public"]["Tables"]["ev_models"]["Row"];
 import { ModelCard } from "@/components/site/ModelCard";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import { ssrLog } from "@/lib/ssr-logger";
@@ -24,6 +28,13 @@ const faqs = [
   { q: "চার্জিং কোথায় করব?", a: "তেজগাঁও শোরুম এবং ১৪+ পাবলিক স্টেশন; হোম চার্জিং সবচেয়ে সাশ্রয়ী।" },
   { q: "BYD গাড়ির সার্ভিস কোথায়?", a: "তেজগাঁও Aristo Tower এবং Otto Fix Ltd সার্ভিস সেন্টারে।" },
   { q: "BYD vs Toyota তুলনা?", a: "EV ক্যাটাগরিতে BYD এগিয়ে; হাইব্রিডে Sealion 6 Prius-এর চেয়ে বেশি রেঞ্জ দেয়।" },
+];
+
+const priceSummary = [
+  { slug: "sealion-6", name: "Sealion 6", badge: "PHEV · ১,০৯২ কিমি" },
+  { slug: "seal", name: "Seal", badge: "Premium EV" },
+  { slug: "atto-3", name: "Atto 3", badge: "SUV" },
+  { slug: "dolphin", name: "Dolphin", badge: "হ্যাচব্যাক" },
 ];
 
 export const Route = createFileRoute("/byd/")({
@@ -103,6 +114,32 @@ function BydHub() {
             Build Your Dreams — এই স্লোগানে BYD বিশ্বের সবচেয়ে নিরাপদ Blade Battery দিয়ে তৈরি করছে
             পরবর্তী প্রজন্মের ইলেকট্রিক গাড়ি।
           </p>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {priceSummary.map((item) => {
+              const m = models.find((x) => x.slug === item.slug) as EvModel | undefined;
+              const price = m?.price_bdt ?? null;
+              return (
+                <Link
+                  key={item.slug}
+                  to="/byd/$slug"
+                  params={{ slug: item.slug }}
+                  className="group rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur transition hover:border-primary/50 hover:bg-white/10"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-wide text-white/60">
+                    {item.badge}
+                  </p>
+                  <h3 className="mt-1 text-lg font-bold leading-tight">BYD {item.name}</h3>
+                  <p className="mt-2 text-xl font-extrabold text-primary">
+                    {formatBDTLakh(price)}
+                  </p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-white/70 transition group-hover:text-primary">
+                    বিস্তারিত <ArrowDownRight className="h-3 w-3" />
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 
