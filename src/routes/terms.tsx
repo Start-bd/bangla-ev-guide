@@ -13,6 +13,12 @@ export const Route = createFileRoute("/terms")({
         ...ogMeta({ title: t, description: d, path: "/terms" }),
       ],
       links: localeLinks("/terms"),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: "শর্তাবলি", path: "/terms" },
+        ]),
+      ],
     };
   },
   component: TermsPage,
