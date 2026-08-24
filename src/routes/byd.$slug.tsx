@@ -47,8 +47,8 @@ export const Route = createFileRoute("/byd/$slug")({
         d: "BYD Seal-এর দাম বাংলাদেশে ৳৮৯.৯ লাখ। রেঞ্জ ৫৭০ কিমি, ০-১০০ কিমি/ঘণ্টা ৩.৮ সেকেন্ড। সম্পূর্ণ স্পেক্স ও রিভিউ।",
       },
       "sealion-6": {
-        t: "BYD Sealion 6 Price BD — ১,০৯২ কিমি রেঞ্জ, EMI সুবিধা | BanglaEV",
-        d: "বাংলাদেশের #১ প্লাগ-ইন হাইব্রিড SUV। ১,০৯২ কিমি রেঞ্জ, ১৫.৬″ টাচস্ক্রিন, ৫-স্টার সেফটি। দাম ৳৬৪.৯ লাখ, EMI সুবিধা উপলব্ধ। সম্পূর্ণ স্পেক্স ও কেনার গাইড।",
+        t: "BYD Sealion 6 Price in Bangladesh 2026 — ৳৬৪.৯ লাখ | BanglaEV",
+        d: "দাম ৳৬৪.৯ লাখ, এখনই শোরুমে উপলব্ধ — BYD Sealion 6 প্লাগ-ইন হাইব্রিড SUV। ১,০৯২ কিমি কম্বাইন্ড রেঞ্জ, EMI সুবিধা, ৫-স্টার সেফটি ও সম্পূর্ণ স্পেক্স।",
       },
       "atto-3": {
         t: "BYD Atto 3 Price Bangladesh 2026 — Electric SUV স্পেক্স | BanglaEV",

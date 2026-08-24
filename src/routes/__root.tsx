@@ -71,7 +71,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BanglaEV — বাংলাদেশের ইলেকট্রিক গাড়ির গাইড" },
+      // No sitewide <title> / og:type here — every leaf route sets its own,
+      // and duplicating them at the root emits two tags per page.
+
       {
         name: "description",
         content:
@@ -81,7 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#00A651" },
       { name: "google-site-verification", content: "aYtVVCKYq_a0JYv7vCMiSRjULEP1APY3qIYqtmg-ofI" },
       { property: "og:site_name", content: "BanglaEV" },
-      { property: "og:type", content: "website" },
+      
       { property: "og:locale", content: "bn_BD" },
       { property: "og:locale:alternate", content: "en_US" },
       // og:image / twitter:image are set per-leaf-route via ogMeta() in src/lib/seo.ts.
