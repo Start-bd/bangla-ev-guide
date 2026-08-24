@@ -19,6 +19,12 @@ export const Route = createFileRoute("/models/")({
       ...ogMeta({ title: MODELS_TITLE, description: MODELS_DESC, path: "/models" }),
     ],
     links: localeLinks("/models"),
+    scripts: [
+      breadcrumbLd([
+        { name: "হোম", path: "/" },
+        { name: "মডেল", path: "/models" },
+      ]),
+    ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(allQO),
   component: ModelsBrowse,
