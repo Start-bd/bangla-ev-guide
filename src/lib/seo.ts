@@ -155,7 +155,7 @@ export function carLd(m: CarLdModel, path: string) {
             value: m.range_km,
             unitCode: "KMT",
           },
-ушка        }
+}
       : {}),
     ...(m.zero_to_hundred
       ? {
