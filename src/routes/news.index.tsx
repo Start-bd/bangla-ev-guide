@@ -18,6 +18,12 @@ export const Route = createFileRoute("/news/")({
       ...ogMeta({ title: NEWS_TITLE, description: NEWS_DESC, path: "/news" }),
     ],
     links: localeLinks("/news"),
+    scripts: [
+      breadcrumbLd([
+        { name: "হোম", path: "/" },
+        { name: "খবর", path: "/news" },
+      ]),
+    ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(postsQO),
   component: NewsPage,
