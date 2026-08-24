@@ -91,3 +91,93 @@ export function breadcrumbLd(items: Array<{ name: string; path: string }>) {
     }),
   };
 }
+
+/** Minimal shape of an ev_models row needed for Car JSON-LD. */
+export type CarLdModel = {
+  brand: string;
+  model: string;
+  slug: string;
+  type?: string | null;
+  image_url?: string | null;
+  range_km?: number | null;
+  battery_kwh?: number | null;
+  zero_to_hundred?: number | null;
+  price_bdt?: number | null;
+  last_price_update?: string | null;
+};
+
+/**
+ * Car (Vehicle) JSON-LD for an EV model page. Extends Product via
+ * additionalType so Google is eligible to show price/spec rich results.
+ * `path` must be the canonical path of the page rendering it, so the
+ * structured data self-references the same URL as canonical/og:url.
+ */
+export function carLd(m: CarLdModel, path: string) {
+  const url = absUrl(path);
+  const name = `${m.brand} ${m.model}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Car",
+    "@id": `${url}#vehicle`,
+    additionalType: "https://schema.org/Product",
+    name,
+    brand: { "@type": "Brand", name: m.brand },
+    model: m.model,
+    manufacturer: { "@type": "Organization", name: m.brand },
+    vehicleModelDate: m.last_price_update ?? undefined,
+    bodyType: m.type ?? undefined,
+    vehicleConfiguration: m.type ?? undefined,
+    fuelType: "Electric",
+    vehicleEngine: {
+      "@type": "EngineSpecification",
+      fuelType: "Electric",
+      engineType: "Electric motor",
+    },
+    inLanguage: "bn-BD",
+    itemCondition: "https://schema.org/NewCondition",
+    description: `${name} — ${m.type ?? "EV"}${m.range_km ? ` with ${m.range_km} km range` : ""} in Bangladesh.`,
+    image: m.image_url ? ogImage(m.image_url) : DEFAULT_OG_IMAGE,
+    url,
+    mainEntityOfPage: url,
+    ...(m.battery_kwh
+      ? {
+          fuelCapacity: {
+            "@type": "QuantitativeValue",
+            value: m.battery_kwh,
+            unitCode: "KWH",
+          },
+        }
+      : {}),
+    ...(m.range_km
+      ? {
+          mileageFromOdometer: {
+            "@type": "QuantitativeValue",
+            value: m.range_km,
+            unitCode: "KMT",
+          },
+ушка        }
+      : {}),
+    ...(m.zero_to_hundred
+      ? {
+          accelerationTime: {
+            "@type": "QuantitativeValue",
+            value: m.zero_to_hundred,
+            unitCode: "SEC",
+          },
+        }
+      : {}),
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "BDT",
+      ...(m.price_bdt ? { price: m.price_bdt } : {}),
+      availability: m.price_bdt
+        ? "https://schema.org/InStock"
+        : "https://schema.org/PreOrder",
+      itemCondition: "https://schema.org/NewCondition",
+      url,
+      areaServed: { "@type": "Country", name: "Bangladesh" },
+      seller: { "@id": "https://banglaev.com/#organization" },
+      ...(m.last_price_update ? { priceValidUntil: m.last_price_update } : {}),
+    },
+  };
+}
