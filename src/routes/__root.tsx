@@ -71,7 +71,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BanglaEV — বাংলাদেশের ইলেকট্রিক গাড়ির গাইড" },
+      // No sitewide <title> / og:type here — every leaf route sets its own,
+      // and duplicating them at the root emits two tags per page.
+
       {
         name: "description",
         content:
