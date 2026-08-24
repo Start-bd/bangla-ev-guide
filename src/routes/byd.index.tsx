@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
-import { MapPin, Phone, ArrowRight, ArrowDownRight } from "lucide-react";
+import { MapPin, Phone, ArrowRight } from "lucide-react";
 import { getBydModels } from "@/lib/models.functions";
 import { formatBDTLakh } from "@/lib/format";
 import type { Database } from "@/integrations/supabase/types";
@@ -126,7 +126,7 @@ function BydHub() {
         <div className="container-page py-16 md:py-24">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">BYD বাংলাদেশ</p>
           <h1 className="mt-3 max-w-3xl text-4xl font-extrabold leading-tight md:text-5xl">
-            BYD বাংলাদেশ — সকল মডেল, দাম ও শোরুম
+            BYD Car Price in Bangladesh 2026 — সকল মডেলের দাম ও শোরুম
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-white/80">
             চীনের শীর্ষ EV ব্র্যান্ড BYD এখন বাংলাদেশে। CG Runner BD Ltd-এর হাত ধরে BYD Seal,
@@ -135,33 +135,63 @@ function BydHub() {
             পরবর্তী প্রজন্মের ইলেকট্রিক গাড়ি।
           </p>
 
-          <h2 className="mt-10 text-xl font-bold">{t.eyebrow}</h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {priceSummary.map((item) => {
-              const m = models.find((x) => x.slug === item.slug) as EvModel | undefined;
-              const price = m?.price_bdt ?? null;
-              return (
-                <Link
-                  key={item.slug}
-                  to="/byd/$slug"
-                  params={{ slug: item.slug }}
-                  search={isEn ? { lang: "en" } : {}}
-                  className="group rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur transition hover:border-primary/50 hover:bg-white/10"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-wide text-white/60">
-                    {isEn ? item.badgeEn : item.badge}
-                  </p>
-                  <h3 className="mt-1 text-lg font-bold leading-tight">BYD {item.name}</h3>
-                  <p className="mt-2 text-xl font-extrabold text-primary">
-                    {isEn ? formatLakhEn(price) : formatBDTLakh(price)}
-                  </p>
-                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-white/70 transition group-hover:text-primary">
-                    {t.details} <ArrowDownRight className="h-3 w-3" />
-                  </span>
-                </Link>
-              );
-            })}
+          <h2 className="mt-10 text-xl font-bold">
+            {isEn ? "BYD price list Bangladesh 2026" : "BYD গাড়ির দাম তালিকা ২০২৬"}
+          </h2>
+          <div className="mt-4 overflow-x-auto rounded-2xl border border-white/15 bg-white/5 backdrop-blur">
+            <table className="w-full min-w-[560px] text-left text-sm">
+              <caption className="sr-only">
+                {isEn
+                  ? "BYD car price list in Bangladesh 2026 with range and battery"
+                  : "বাংলাদেশে BYD গাড়ির দাম, রেঞ্জ ও ব্যাটারি তালিকা ২০২৬"}
+              </caption>
+              <thead className="text-xs uppercase tracking-wide text-white/60">
+                <tr className="border-b border-white/10">
+                  <th scope="col" className="px-4 py-3">{isEn ? "Model" : "মডেল"}</th>
+                  <th scope="col" className="px-4 py-3">{t.eyebrow}</th>
+                  <th scope="col" className="px-4 py-3">{isEn ? "Type" : "ধরন"}</th>
+                  <th scope="col" className="px-4 py-3">{isEn ? "Range" : "রেঞ্জ"}</th>
+                  <th scope="col" className="px-4 py-3">{isEn ? "Battery" : "ব্যাটারি"}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {priceSummary.map((item) => {
+                  const m = models.find((x) => x.slug === item.slug) as EvModel | undefined;
+                  const price = m?.price_bdt ?? null;
+                  return (
+                    <tr key={item.slug} className="border-b border-white/10 last:border-0">
+                      <th scope="row" className="px-4 py-3 font-bold">
+                        <Link
+                          to="/byd/$slug"
+                          params={{ slug: item.slug }}
+                          search={isEn ? { lang: "en" } : {}}
+                          className="hover:text-primary"
+                        >
+                          BYD {item.name}
+                        </Link>
+                      </th>
+                      <td className="px-4 py-3 font-extrabold text-primary">
+                        {isEn ? formatLakhEn(price) : formatBDTLakh(price)}
+                      </td>
+                      <td className="px-4 py-3 text-white/80">{isEn ? item.badgeEn : item.badge}</td>
+                      <td className="px-4 py-3 text-white/80">
+                        {m?.range_km ? `${m.range_km} km` : "—"}
+                      </td>
+                      <td className="px-4 py-3 text-white/80">
+                        {m?.battery_kwh ? `${m.battery_kwh} kWh` : "—"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
+          <p className="mt-3 text-xs text-white/60">
+            {isEn
+              ? "Prices are indicative showroom prices in Bangladesh; contact CG Runner BD Ltd to confirm."
+              : "দাম নির্দেশক শোরুম মূল্য; নিশ্চিত করতে CG Runner BD Ltd-এ যোগাযোগ করুন।"}
+          </p>
+
 
         </div>
       </section>
