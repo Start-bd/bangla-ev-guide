@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { submitLead } from "@/lib/leads.functions";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import aboutHero from "@/assets/pages/about-hero.jpg";
 
 const ABOUT_TITLE = "আমাদের সম্পর্কে — BanglaEV";
@@ -19,6 +19,10 @@ export const Route = createFileRoute("/about")({
     ],
     links: localeLinks("/about"),
     scripts: [
+      breadcrumbLd([
+        { name: "হোম", path: "/" },
+        { name: "আমাদের সম্পর্কে", path: "/about" },
+      ]),
       {
         type: "application/ld+json",
         children: JSON.stringify({

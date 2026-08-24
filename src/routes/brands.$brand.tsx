@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-route
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getModelsByBrand } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 
 const brandQO = (brand: string) =>
   queryOptions({
@@ -62,6 +62,13 @@ export const Route = createFileRoute("/brands/$brand")({
         ...ogMeta({ title: t, description: d, path: `/brands/${b}`, image: firstImage }),
       ],
       links: localeLinks(`/brands/${b}`),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: "মডেল", path: "/models" },
+          { name: display, path: `/brands/${b}` },
+        ]),
+      ],
     };
   },
   component: BrandHub,

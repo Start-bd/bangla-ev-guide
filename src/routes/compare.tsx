@@ -3,7 +3,7 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getAllModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
 import { useMemo, useState } from "react";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import { MODEL_IMAGES } from "@/components/site/ModelCard";
 import { Zap, X } from "lucide-react";
 
@@ -20,6 +20,13 @@ export const Route = createFileRoute("/compare")({
       ...ogMeta({ title: CMP_TITLE, description: CMP_DESC, path: "/compare" }),
     ],
     links: localeLinks("/compare"),
+    scripts: [
+      breadcrumbLd([
+        { name: "হোম", path: "/" },
+        { name: "মডেল", path: "/models" },
+        { name: "তুলনা", path: "/compare" },
+      ]),
+    ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(allQO),
   component: ComparePage,

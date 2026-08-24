@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import termsHero from "@/assets/pages/terms-hero.jpg";
 
 export const Route = createFileRoute("/terms")({
@@ -13,6 +13,12 @@ export const Route = createFileRoute("/terms")({
         ...ogMeta({ title: t, description: d, path: "/terms" }),
       ],
       links: localeLinks("/terms"),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: "শর্তাবলি", path: "/terms" },
+        ]),
+      ],
     };
   },
   component: TermsPage,

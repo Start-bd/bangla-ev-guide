@@ -138,6 +138,45 @@ function checkJsonLd(path: string, html: string, canonical: string) {
     }
   });
 
+  // Sitewide entity graph: WebSite + Organization must be present everywhere.
+  for (const type of ["WebSite", "Organization"]) {
+    if (!nodes.some((n) => n && n["@type"] === type)) {
+      failures.push({ route: path, problem: `missing ${type} JSON-LD` });
+    }
+  }
+
+  // BreadcrumbList on every route except the homepage.
+  if (path !== "/") {
+    const crumbs = nodes.filter((n) => n && n["@type"] === "BreadcrumbList");
+    if (crumbs.length !== 1) {
+      failures.push({
+        route: path,
+        problem: `expected exactly one BreadcrumbList JSON-LD node, got ${crumbs.length}`,
+      });
+    } else {
+      const items = crumbs[0].itemListElement ?? [];
+      if (!Array.isArray(items) || items.length < 2) {
+        failures.push({ route: path, problem: "BreadcrumbList has fewer than 2 items" });
+      } else {
+        items.forEach((it: any, i: number) => {
+          if (it.position !== i + 1 || !it.name || !it.item) {
+            failures.push({
+              route: path,
+              problem: `BreadcrumbList item #${i + 1} malformed (position/name/item)`,
+            });
+          }
+        });
+        const last = items[items.length - 1];
+        if (last?.item !== canonical) {
+          failures.push({
+            route: path,
+            problem: `BreadcrumbList last item "${last?.item}" does not match canonical "${canonical}"`,
+          });
+        }
+      }
+    }
+  }
+
   const isModelRoute =
     /^\/models\/[^/]+$/.test(path) || /^\/byd\/[^/]+$/.test(path);
   if (!isModelRoute) return;

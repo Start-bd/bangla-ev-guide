@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Zap } from "lucide-react";
 import { getPosts } from "@/lib/posts.functions";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import newsHero from "@/assets/pages/news-hero.jpg";
 
 const postsQO = queryOptions({ queryKey: ["posts", 50], queryFn: () => getPosts({ data: { limit: 50 } }) });
@@ -18,6 +18,12 @@ export const Route = createFileRoute("/news/")({
       ...ogMeta({ title: NEWS_TITLE, description: NEWS_DESC, path: "/news" }),
     ],
     links: localeLinks("/news"),
+    scripts: [
+      breadcrumbLd([
+        { name: "হোম", path: "/" },
+        { name: "খবর", path: "/news" },
+      ]),
+    ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(postsQO),
   component: NewsPage,
