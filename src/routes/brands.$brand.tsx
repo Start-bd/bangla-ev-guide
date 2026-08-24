@@ -62,6 +62,13 @@ export const Route = createFileRoute("/brands/$brand")({
         ...ogMeta({ title: t, description: d, path: `/brands/${b}`, image: firstImage }),
       ],
       links: localeLinks(`/brands/${b}`),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: "মডেল", path: "/models" },
+          { name: display, path: `/brands/${b}` },
+        ]),
+      ],
     };
   },
   component: BrandHub,
