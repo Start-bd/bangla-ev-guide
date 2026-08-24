@@ -13,6 +13,12 @@ export const Route = createFileRoute("/privacy")({
         ...ogMeta({ title: t, description: d, path: "/privacy" }),
       ],
       links: localeLinks("/privacy"),
+      scripts: [
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: "প্রাইভেসি পলিসি", path: "/privacy" },
+        ]),
+      ],
     };
   },
   component: PrivacyPage,
