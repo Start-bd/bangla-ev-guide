@@ -20,6 +20,13 @@ export const Route = createFileRoute("/compare")({
       ...ogMeta({ title: CMP_TITLE, description: CMP_DESC, path: "/compare" }),
     ],
     links: localeLinks("/compare"),
+    scripts: [
+      breadcrumbLd([
+        { name: "হোম", path: "/" },
+        { name: "মডেল", path: "/models" },
+        { name: "তুলনা", path: "/compare" },
+      ]),
+    ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(allQO),
   component: ComparePage,
