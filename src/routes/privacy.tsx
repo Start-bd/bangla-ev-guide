@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import privacyHero from "@/assets/pages/privacy-hero.jpg";
 
 export const Route = createFileRoute("/privacy")({
