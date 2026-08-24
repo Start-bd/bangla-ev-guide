@@ -5,7 +5,7 @@ import { getModelBySlug, getBydModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits, formatBnDate } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
 import { SaveModelButton } from "@/components/site/SaveModelButton";
-import { localeLinks, ogMeta, breadcrumbLd, absUrl, ogImage } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd, carLd } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
@@ -142,64 +142,7 @@ function ModelPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Car",
-            additionalType: "https://schema.org/Product",
-            name: `${m.brand} ${m.model}`,
-            brand: { "@type": "Brand", name: m.brand },
-            model: m.model,
-            vehicleModelDate: m.last_price_update ?? undefined,
-            bodyType: m.type ?? undefined,
-            fuelType: "Electric",
-            description: `${m.brand} ${m.model} — ${m.type ?? "EV"}${m.range_km ? ` with ${m.range_km} km range` : ""}.`,
-            image: m.image_url ? ogImage(m.image_url) : undefined,
-            url: absUrl(`/byd/${m.slug}`),
-            ...(m.battery_kwh
-              ? {
-                  vehicleEngine: {
-                    "@type": "EngineSpecification",
-                    fuelType: "Electric",
-                    engineType: "Electric motor",
-                  },
-                  fuelCapacity: {
-                    "@type": "QuantitativeValue",
-                    value: m.battery_kwh,
-                    unitCode: "KWH",
-                  },
-                }
-              : {}),
-            ...(m.range_km
-              ? {
-                  mileageFromOdometer: {
-                    "@type": "QuantitativeValue",
-                    value: m.range_km,
-                    unitCode: "KMT",
-                  },
-                }
-              : {}),
-            ...(m.zero_to_hundred
-              ? {
-                  accelerationTime: {
-                    "@type": "QuantitativeValue",
-                    value: m.zero_to_hundred,
-                    unitCode: "SEC",
-                  },
-                }
-              : {}),
-            ...(m.price_bdt
-              ? {
-                  offers: {
-                    "@type": "Offer",
-                    priceCurrency: "BDT",
-                    price: m.price_bdt,
-                    availability: "https://schema.org/InStock",
-                    url: absUrl(`/byd/${m.slug}`),
-                    ...(m.last_price_update ? { priceValidUntil: m.last_price_update } : {}),
-                  },
-                }
-              : {}),
-          }),
+          __html: JSON.stringify(carLd(m, `/byd/${m.slug}`)),
         }}
       />
 

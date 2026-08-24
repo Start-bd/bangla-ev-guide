@@ -104,6 +104,70 @@ async function checkRoute(baseUrl: string, path: string) {
     /<meta\b[^>]*\bproperty=["']og:url["'][^>]*\bcontent=["']([^"']+)["']/gi,
     canonical,
   );
+
+  checkJsonLd(path, html, canonical);
+}
+
+/**
+ * Parse every application/ld+json block in the document and assert it is
+ * valid JSON. On model routes (/models/* and /byd/<model>), also assert a
+ * Car node exists whose url self-references the page canonical.
+ */
+function checkJsonLd(path: string, html: string, canonical: string) {
+  const blocks = [
+    ...html.matchAll(
+      /<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi,
+    ),
+  ].map((m) => m[1]);
+
+  if (blocks.length === 0) {
+    failures.push({ route: path, problem: "no JSON-LD blocks found" });
+    return;
+  }
+
+  const nodes: any[] = [];
+  blocks.forEach((raw, i) => {
+    try {
+      const parsed = JSON.parse(raw);
+      nodes.push(...(Array.isArray(parsed) ? parsed : [parsed]));
+    } catch (err) {
+      failures.push({
+        route: path,
+        problem: `JSON-LD block #${i + 1} is not valid JSON (${(err as Error).message})`,
+      });
+    }
+  });
+
+  const isModelRoute =
+    /^\/models\/[^/]+$/.test(path) || /^\/byd\/[^/]+$/.test(path);
+  if (!isModelRoute) return;
+
+  const cars = nodes.filter((n) => n && n["@type"] === "Car");
+  if (cars.length !== 1) {
+    failures.push({
+      route: path,
+      problem: `expected exactly one Car JSON-LD node, got ${cars.length}`,
+    });
+    return;
+  }
+  const car = cars[0];
+  for (const field of ["name", "brand", "image", "offers"]) {
+    if (!car[field]) {
+      failures.push({ route: path, problem: `Car JSON-LD missing "${field}"` });
+    }
+  }
+  if (car.url !== canonical) {
+    failures.push({
+      route: path,
+      problem: `Car JSON-LD url "${car.url}" does not match canonical "${canonical}"`,
+    });
+  }
+  if (car.offers && car.offers.priceCurrency !== "BDT") {
+    failures.push({
+      route: path,
+      problem: `Car JSON-LD offers.priceCurrency should be BDT, got "${car.offers?.priceCurrency}"`,
+    });
+  }
 }
 
 async function fetchSitemapPaths(baseUrl: string): Promise<string[]> {
@@ -197,7 +261,7 @@ async function main() {
     for (const f of failures) console.error(`  [${f.route}] ${f.problem}`);
     process.exit(1);
   }
-  console.log("\n✅ All routes have a unique canonical + bn/en/x-default hreflang + og:url");
+  console.log("\n✅ All routes have a unique canonical + bn/en/x-default hreflang + og:url + valid JSON-LD");
 }
 
 main().catch((err) => {
