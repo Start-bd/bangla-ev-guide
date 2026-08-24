@@ -83,7 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#00A651" },
       { name: "google-site-verification", content: "aYtVVCKYq_a0JYv7vCMiSRjULEP1APY3qIYqtmg-ofI" },
       { property: "og:site_name", content: "BanglaEV" },
-      { property: "og:type", content: "website" },
+      
       { property: "og:locale", content: "bn_BD" },
       { property: "og:locale:alternate", content: "en_US" },
       // og:image / twitter:image are set per-leaf-route via ogMeta() in src/lib/seo.ts.
