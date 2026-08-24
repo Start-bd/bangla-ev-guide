@@ -74,11 +74,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // No sitewide <title> / og:type here — every leaf route sets its own,
       // and duplicating them at the root emits two tags per page.
 
-      {
-        name: "description",
-        content:
-          "BYD, MG, Hyundai সহ বাংলাদেশে সকল EV-এর দাম, রিভিউ ও তুলনা। চার্জিং স্টেশন, কস্ট ক্যালকুলেটর ও সর্বশেষ খবর এক জায়গায়।",
-      },
+      // No sitewide description — each leaf route sets its own unique one.
       { name: "author", content: "BanglaEV" },
       { name: "theme-color", content: "#00A651" },
       { name: "google-site-verification", content: "aYtVVCKYq_a0JYv7vCMiSRjULEP1APY3qIYqtmg-ofI" },

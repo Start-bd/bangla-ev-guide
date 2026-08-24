@@ -57,11 +57,11 @@ export const Route = createFileRoute("/byd/")({
 
   head: () => ({
     meta: [
-      { title: "BYD Car Price in Bangladesh 2026 | BYD Seal, Atto 3, Sealion 6 | BanglaEV" },
-      { name: "description", content: "BYD গাড়ির দাম বাংলাদেশে ২০২৬: Sealion 6 ৳৬৪.৯ লাখ থেকে শুরু, Seal ৳৮৯.৯ লাখ। Atto 3 ও Dolphin দাম শীঘ্রই ঘোষণা — স্পেসিফিকেশন ও শোরুম লোকেশন দেখুন।" },
+      { title: "BYD Car Price in Bangladesh 2026 — Seal, Sealion 6, Atto 3" },
+      { name: "description", content: "BYD car price in Bangladesh 2026 — আপডেটেড প্রাইস গাইড: Sealion 6 ৳৬৪.৯ লাখ, Seal ৳৮৯.৯ লাখ, Atto 3 ও Dolphin আপডেট, সাথে স্পেসিফিকেশন ও শোরুম।" },
       ...ogMeta({
-        title: "BYD বাংলাদেশ — সকল মডেল, দাম ও শোরুম",
-        description: "BYD দাম ২০২৬: Sealion 6 ৳৬৪.৯ লাখ, Seal ৳৮৯.৯ লাখ থেকে শুরু। Atto 3, Dolphin ও সব মডেলের স্পেস ও শোরুম।",
+        title: "BYD Car Price in Bangladesh 2026 — Seal, Sealion 6, Atto 3",
+        description: "BYD-এর সব মডেলের আপডেটেড দাম: Sealion 6 ৳৬৪.৯ লাখ, Seal ৳৮৯.৯ লাখ। Atto 3 ও Dolphin আপডেট, স্পেসিফিকেশন ও ঢাকার শোরুম লোকেশন।",
         path: "/byd",
       }),
     ],
