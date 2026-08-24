@@ -261,7 +261,7 @@ async function main() {
     for (const f of failures) console.error(`  [${f.route}] ${f.problem}`);
     process.exit(1);
   }
-  console.log("\n✅ All routes have a unique canonical + bn/en/x-default hreflang + og:url");
+  console.log("\n✅ All routes have a unique canonical + bn/en/x-default hreflang + og:url + valid JSON-LD");
 }
 
 main().catch((err) => {
