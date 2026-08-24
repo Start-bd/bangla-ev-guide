@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CostCalculator } from "@/components/site/CostCalculator";
-import { localeLinks, ogMeta } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import calcHero from "@/assets/pages/calculator-hero.jpg";
 
 const CALC_TITLE = "EV vs Petrol Cost Calculator Bangladesh | BanglaEV";
@@ -15,6 +15,10 @@ export const Route = createFileRoute("/calculator")({
     ],
     links: localeLinks("/calculator"),
     scripts: [
+      breadcrumbLd([
+        { name: "হোম", path: "/" },
+        { name: "খরচ ক্যালকুলেটর", path: "/calculator" },
+      ]),
       {
         type: "application/ld+json",
         children: JSON.stringify({
