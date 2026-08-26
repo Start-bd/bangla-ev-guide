@@ -59,9 +59,13 @@ function warnFallback(slug: string, brand: string, model: string) {
   );
 }
 
-// Validate every registered mapping once at module load.
-for (const [slug, entry] of Object.entries(MODEL_IMAGES)) {
-  assertValidMapping(slug, entry);
+// Validate every registered mapping once at module load in development only.
+// Doing this in production can generate noisy SSR logs or surface build-time
+// asset generation issues to runtime. Keep validation for developer feedback.
+if (process.env.NODE_ENV === "development") {
+  for (const [slug, entry] of Object.entries(MODEL_IMAGES)) {
+    assertValidMapping(slug, entry);
+  }
 }
 
 
@@ -157,7 +161,7 @@ export function ModelCard(p: ModelCardProps) {
         </ul>
 
         <div className="mt-auto">
-          <span className="inline-flex w-full items-center justify-center rounded-lg bg-foreground/5 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+          <span className="inline-flex w-full items-center justify-center rounded-lg bg-foreground/5 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors group-hover:bg-primary gro[...]">
             বিস্তারিত দেখুন →
           </span>
         </div>
