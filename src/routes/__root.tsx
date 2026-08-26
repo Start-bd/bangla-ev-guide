@@ -169,6 +169,19 @@ function RootComponent() {
   const router = useRouter();
 
   useEffect(() => {
+    initMonitoring();
+    const onError = (e: ErrorEvent) => captureError(e.error ?? e.message, { kind: "onerror" });
+    const onRejection = (e: PromiseRejectionEvent) =>
+      captureError(e.reason, { kind: "unhandledrejection" });
+    window.addEventListener("error", onError);
+    window.addEventListener("unhandledrejection", onRejection);
+    return () => {
+      window.removeEventListener("error", onError);
+      window.removeEventListener("unhandledrejection", onRejection);
+    };
+  }, []);
+
+  useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
