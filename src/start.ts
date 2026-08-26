@@ -3,7 +3,7 @@ import { createStart, createMiddleware } from "@tanstack/react-start";
 import { renderErrorPage } from "./lib/error-page";
 import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
 
-const errorMiddleware = createMiddleware().server(async ({ next }) => {
+const errorMiddleware = createMiddleware().server(async ({ next, request }) => {
   try {
     return await next();
   } catch (error) {
@@ -11,6 +11,17 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
       throw error;
     }
     console.error(error);
+    try {
+      const { captureServerError } = await import("./lib/monitoring.server");
+      const url = request ? new URL(request.url) : undefined;
+      await captureServerError(error, {
+        route: url?.pathname,
+        url: url?.href,
+        method: request?.method,
+      });
+    } catch (reportError) {
+      console.error("[monitoring] failed to report SSR error", reportError);
+    }
     return new Response(renderErrorPage(), {
       status: 500,
       headers: { "content-type": "text/html; charset=utf-8" },
