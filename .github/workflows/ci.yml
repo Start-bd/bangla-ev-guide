@@ -7,6 +7,52 @@ on:
     branches: [main]
 
 jobs:
+  build-and-checks:
+    name: Build & basic checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: TypeScript typecheck
+        run: bunx tsc --noEmit
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Production build
+        run: bun run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+          VITE_APP_RELEASE: ${{ github.sha }}
+
+      - name: Report build failure to monitoring
+        if: failure() && env.SENTRY_DSN != ''
+        run: bun scripts/report-ci-failure.ts
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_ENVIRONMENT: ci
+          SENTRY_RELEASE: ${{ github.sha }}
+          FAILURE_CONTEXT: "CI build/checks failed on ${{ github.sha }}"
+
   seo-head-test:
     name: SEO SSR Head Content Test
     runs-on: ubuntu-latest
