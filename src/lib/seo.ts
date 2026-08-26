@@ -1,4 +1,18 @@
-export const SITE_URL = "https://banglaev.com";
+export const SITE_URL = (() => {
+  // Resolve SITE_URL from environment in multiple runtimes (Node, Vite). Fall back to prod.
+  try {
+    // Node.js
+    if (typeof process !== "undefined" && process.env?.SITE_URL) return process.env.SITE_URL;
+  } catch {}
+
+  try {
+    // Vite / browser build-time env (import.meta.env may not be typed here)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (typeof import.meta !== "undefined" && (import.meta as any).env?.SITE_URL) return (import.meta as any).env.SITE_URL;
+  } catch {}
+
+  return "https://banglaev.com";
+})();
 
 // Branded default social share card (1200x630) used when a route has no
 // meaningful image of its own. Uploaded via lovable-assets — served from CDN.
@@ -6,23 +20,27 @@ export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.jpg`;
 
 /**
  * Build canonical + bn/en/x-default hreflang link entries for a route path.
- * Pass a path starting with "/", e.g. "/about" or `/byd/${slug}`.
+ * Pass a path starting with "/", e.g. "/about" or `/byd/${"slug"}`.
+ * This function now safely composes URLs using the WHATWG URL API so it
+ * correctly handles incoming paths that already contain query strings.
  */
 export function localeLinks(path: string) {
-  const clean = path.startsWith("/") ? path : `/${path}`;
-  const bn = `${SITE_URL}${clean}`;
-  const en = `${SITE_URL}${clean}${clean.includes("?") ? "&" : "?"}lang=en`;
+  const url = new URL(path, SITE_URL);
+  const bn = url.toString();
+  const enUrl = new URL(bn);
+  enUrl.searchParams.set("lang", "en");
+
   return [
     { rel: "canonical", href: bn },
     { rel: "alternate", hrefLang: "bn", href: bn },
-    { rel: "alternate", hrefLang: "en", href: en },
+    { rel: "alternate", hrefLang: "en", href: enUrl.toString() },
     { rel: "alternate", hrefLang: "x-default", href: bn },
   ];
 }
 
 export function absUrl(path: string) {
-  const clean = path.startsWith("/") ? path : `/${path}`;
-  return `${SITE_URL}${clean}`;
+  const url = new URL(path, SITE_URL);
+  return url.toString();
 }
 
 /**
@@ -34,7 +52,7 @@ export function ogImage(src?: string | null): string {
   if (!src) return DEFAULT_OG_IMAGE;
   if (/^https?:\/\//i.test(src)) return src;
   if (src.startsWith("//")) return `https:${src}`;
-  return `${SITE_URL}${src.startsWith("/") ? src : `/${src}`}`;
+  return absUrl(src.startsWith("/") ? src : `/${src}`);
 }
 
 /**
@@ -103,7 +121,11 @@ export type CarLdModel = {
   battery_kwh?: number | null;
   zero_to_hundred?: number | null;
   price_bdt?: number | null;
-  last_price_update?: string | null;
+  last_price_update?: string | null; // keep as informational, do not reuse for modelYear
+
+  // New explicit fields to avoid overloading last_price_update
+  model_year?: string | number | null; // e.g. "2024"
+  price_valid_until?: string | null; // ISO date when the listed price is valid until
 };
 
 /**
@@ -115,6 +137,10 @@ export type CarLdModel = {
 export function carLd(m: CarLdModel, path: string) {
   const url = absUrl(path);
   const name = `${m.brand} ${m.model}`;
+
+  // Prefer an explicit model_year field for vehicleModelDate
+  const vehicleModelDate = m.model_year ? String(m.model_year) : undefined;
+
   return {
     "@context": "https://schema.org",
     "@type": "Car",
@@ -124,7 +150,7 @@ export function carLd(m: CarLdModel, path: string) {
     brand: { "@type": "Brand", name: m.brand },
     model: m.model,
     manufacturer: { "@type": "Organization", name: m.brand },
-    vehicleModelDate: m.last_price_update ?? undefined,
+    vehicleModelDate: vehicleModelDate,
     bodyType: m.type ?? undefined,
     vehicleConfiguration: m.type ?? undefined,
     fuelType: "Electric",
@@ -135,7 +161,7 @@ export function carLd(m: CarLdModel, path: string) {
     },
     inLanguage: "bn-BD",
     itemCondition: "https://schema.org/NewCondition",
-    description: `${name} — ${m.type ?? "EV"}${m.range_km ? ` with ${m.range_km} km range` : ""} in Bangladesh.`,
+    description: `${name} — ${m.type ?? "EV"}${m.range_km ? ` with ${m.range_km} km range` : ""} in Bangladesh.",
     image: m.image_url ? ogImage(m.image_url) : DEFAULT_OG_IMAGE,
     url,
     mainEntityOfPage: url,
@@ -155,7 +181,7 @@ export function carLd(m: CarLdModel, path: string) {
             value: m.range_km,
             unitCode: "KMT",
           },
-}
+        }
       : {}),
     ...(m.zero_to_hundred
       ? {
@@ -170,14 +196,12 @@ export function carLd(m: CarLdModel, path: string) {
       "@type": "Offer",
       priceCurrency: "BDT",
       ...(m.price_bdt ? { price: m.price_bdt } : {}),
-      availability: m.price_bdt
-        ? "https://schema.org/InStock"
-        : "https://schema.org/PreOrder",
+      availability: m.price_bdt ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
       itemCondition: "https://schema.org/NewCondition",
       url,
       areaServed: { "@type": "Country", name: "Bangladesh" },
-      seller: { "@id": "https://banglaev.com/#organization" },
-      ...(m.last_price_update ? { priceValidUntil: m.last_price_update } : {}),
+      seller: { "@id": `${SITE_URL}/#organization` },
+      ...(m.price_valid_until ? { priceValidUntil: m.price_valid_until } : {}),
     },
   };
 }
