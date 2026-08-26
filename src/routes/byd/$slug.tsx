@@ -21,19 +21,31 @@ export const Route = createFileRoute("/byd/$slug")({
       ? `পূর্বদর্শী ডিটেইল: ${model.brand} ${model.model} — দাম ও স্পেসিফিকেশন ।` 
       : "এই পৃষ্ঠাটি অস্থায়ী। বিস্তারিত শীঘ্রই যুক্ত করা হবে।";
 
-    const scripts = model ? [carLd({
-      brand: model.brand,
-      model: model.model,
-      slug: model.slug,
-      type: model.type,
-      image_url: model.image_url,
-      range_km: model.range_km,
-      battery_kwh: model.battery_kwh,
-      zero_to_hundred: model.zero_to_hundred,
-      price_bdt: model.price_bdt,
-      model_year: model.model_year,
-      price_valid_until: model.price_valid_until,
-    }, `/byd/${params.slug}`)] : [];
+    const scripts = model
+      ? [
+          {
+            type: "application/ld+json",
+            children: JSON.stringify(
+              carLd(
+                {
+                  brand: model.brand,
+                  model: model.model,
+                  slug: model.slug,
+                  type: model.type,
+                  image_url: model.image_url,
+                  range_km: model.range_km,
+                  battery_kwh: model.battery_kwh,
+                  zero_to_hundred: model.zero_to_hundred,
+                  price_bdt: model.price_bdt,
+                  model_year: model.model_year,
+                  price_valid_until: model.price_valid_until,
+                },
+                `/byd/${params.slug}`,
+              ),
+            ),
+          },
+        ]
+      : [];
 
     return {
       meta: [

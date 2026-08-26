@@ -161,7 +161,7 @@ export function carLd(m: CarLdModel, path: string) {
     },
     inLanguage: "bn-BD",
     itemCondition: "https://schema.org/NewCondition",
-    description: `${name} — ${m.type ?? "EV"}${m.range_km ? ` with ${m.range_km} km range` : ""} in Bangladesh.",
+    description: `${name} — ${m.type ?? "EV"}${m.range_km ? ` with ${m.range_km} km range` : ""} in Bangladesh.`,
     image: m.image_url ? ogImage(m.image_url) : DEFAULT_OG_IMAGE,
     url,
     mainEntityOfPage: url,
