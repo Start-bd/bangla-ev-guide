@@ -161,7 +161,7 @@ export function ModelCard(p: ModelCardProps) {
         </ul>
 
         <div className="mt-auto">
-          <span className="inline-flex w-full items-center justify-center rounded-lg bg-foreground/5 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors group-hover:bg-primary gro[...]">
+          <span className="inline-flex w-full items-center justify-center rounded-lg bg-foreground/5 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
             বিস্তারিত দেখুন →
           </span>
         </div>
