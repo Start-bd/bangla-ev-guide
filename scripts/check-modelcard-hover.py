@@ -22,8 +22,33 @@ BUTTON_TEXT = "বিস্তারিত দেখুন"
 failures: list[str] = []
 
 
-def luminance(rgb: str) -> float:
-    r, g, b = [int(x) / 255 for x in rgb.replace("rgba(", "").replace("rgb(", "").rstrip(")").split(",")[:3]]
+def oklch_to_rgb(l: float, c: float, h: float) -> tuple[float, float, float]:
+    import math
+    hr = math.radians(h)
+    a, b = c * math.cos(hr), c * math.sin(hr)
+    l_ = l + 0.3963377774 * a + 0.2158037573 * b
+    m_ = l - 0.1055613458 * a - 0.0638541728 * b
+    s_ = l - 0.0894841775 * a - 1.2914855480 * b
+    l3, m3, s3 = l_**3, m_**3, s_**3
+    r = 4.0767416621 * l3 - 3.3077115913 * m3 + 0.2309699292 * s3
+    g = -1.2684380046 * l3 + 2.6097574011 * m3 - 0.3413193965 * s3
+    bl = -0.0041960863 * l3 - 0.7034186147 * m3 + 1.7076147010 * s3
+    return (min(max(r, 0), 1), min(max(g, 0), 1), min(max(bl, 0), 1))
+
+
+def parse_color(color: str) -> tuple[float, float, float]:
+    color = color.strip()
+    if color.startswith("oklch("):
+        parts = color[6:].rstrip(")").split("/")[0].split()
+        l, c = float(parts[0]), float(parts[1])
+        h = float(parts[2]) if len(parts) > 2 and parts[2] != "none" else 0.0
+        return oklch_to_rgb(l, c, h)
+    nums = color.replace("rgba(", "").replace("rgb(", "").rstrip(")").split(",")[:3]
+    return tuple(int(x) / 255 for x in nums)
+
+
+def luminance(color: str) -> float:
+    r, g, b = parse_color(color)
     def lin(c: float) -> float:
         return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
     return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
