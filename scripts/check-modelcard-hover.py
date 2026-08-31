@@ -114,7 +114,8 @@ async def main():
         context = await browser.new_context(viewport={"width": 1280, "height": 1800})
         page = await context.new_page()
 
-        for route in ["/byd", "/compare"]:
+        # /compare doesn't render ModelCard; /byd and /models do.
+        for route in ["/byd", "/models"]:
             await page.goto(f"{BASE_URL}{route}", wait_until="domcontentloaded")
             await page.wait_for_selector(f"span:has-text('{BUTTON_TEXT}')", timeout=15000)
             await check_card(page, route, "hover", first=True)
