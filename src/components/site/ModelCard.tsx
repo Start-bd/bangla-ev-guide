@@ -161,7 +161,7 @@ export function ModelCard(p: ModelCardProps) {
         </ul>
 
         <div className="mt-auto">
-          <span className="inline-flex w-full items-center justify-center rounded-lg bg-foreground/5 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+          <span className="inline-flex w-full items-center justify-center rounded-lg bg-foreground/5 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground group-focus-visible:bg-primary group-focus-visible:text-primary-foreground group-focus-visible:outline-none group-focus-visible:ring-2 group-focus-visible:ring-ring group-focus-visible:ring-offset-2">
             বিস্তারিত দেখুন →
           </span>
         </div>
@@ -171,11 +171,11 @@ export function ModelCard(p: ModelCardProps) {
 
   // BYD keeps its dedicated hub URL (SEO); other brands route through /models/$slug.
   return isByd ? (
-    <Link to="/byd/$slug" params={{ slug: p.slug }} className="block h-full">
+    <Link to="/byd/$slug" params={{ slug: p.slug }} className="group block h-full focus-visible:outline-none">
       {Inner}
     </Link>
   ) : (
-    <Link to="/models/$slug" params={{ slug: p.slug }} className="block h-full">
+    <Link to="/models/$slug" params={{ slug: p.slug }} className="group block h-full focus-visible:outline-none">
       {Inner}
     </Link>
   );
