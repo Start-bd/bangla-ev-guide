@@ -44,14 +44,14 @@ def parse_color(color: str) -> tuple[float, float, float]:
         h = float(parts[2]) if len(parts) > 2 and parts[2] != "none" else 0.0
         return oklch_to_rgb(l, c, h)
     nums = color.replace("rgba(", "").replace("rgb(", "").rstrip(")").split(",")[:3]
-    return tuple(int(x) / 255 for x in nums)
+    def lin(c: float) -> float:
+        return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    return tuple(lin(int(x) / 255) for x in nums)
 
 
 def luminance(color: str) -> float:
-    r, g, b = parse_color(color)
-    def lin(c: float) -> float:
-        return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
-    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
+    r, g, b = parse_color(color)  # both paths return linear sRGB
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
 
 
 def contrast(a: str, b: str) -> float:
