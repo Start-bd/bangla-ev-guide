@@ -171,11 +171,11 @@ export function ModelCard(p: ModelCardProps) {
 
   // BYD keeps its dedicated hub URL (SEO); other brands route through /models/$slug.
   return isByd ? (
-    <Link to="/byd/$slug" params={{ slug: p.slug }} className="block h-full">
+    <Link to="/byd/$slug" params={{ slug: p.slug }} className="group block h-full focus-visible:outline-none">
       {Inner}
     </Link>
   ) : (
-    <Link to="/models/$slug" params={{ slug: p.slug }} className="block h-full">
+    <Link to="/models/$slug" params={{ slug: p.slug }} className="group block h-full focus-visible:outline-none">
       {Inner}
     </Link>
   );
