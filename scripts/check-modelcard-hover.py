@@ -38,6 +38,17 @@ def oklch_to_rgb(l: float, c: float, h: float) -> tuple[float, float, float]:
 
 def parse_color(color: str) -> tuple[float, float, float]:
     color = color.strip()
+    if color.startswith("oklab("):
+        parts = color[6:].rstrip(")").split("/")[0].split()
+        l, a, b = float(parts[0]), float(parts[1]), float(parts[2])
+        l_ = l + 0.3963377774 * a + 0.2158037573 * b
+        m_ = l - 0.1055613458 * a - 0.0638541728 * b
+        s_ = l - 0.0894841775 * a - 1.2914855480 * b
+        l3, m3, s3 = l_**3, m_**3, s_**3
+        r = 4.0767416621 * l3 - 3.3077115913 * m3 + 0.2309699292 * s3
+        g = -1.2684380046 * l3 + 2.6097574011 * m3 - 0.3413193965 * s3
+        bl = -0.0041960863 * l3 - 0.7034186147 * m3 + 1.7076147010 * s3
+        return (min(max(r, 0), 1), min(max(g, 0), 1), min(max(bl, 0), 1))
     if color.startswith("oklch("):
         parts = color[6:].rstrip(")").split("/")[0].split()
         l, c = float(parts[0]), float(parts[1])
