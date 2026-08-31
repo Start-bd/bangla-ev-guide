@@ -78,7 +78,17 @@ async def check_card(page, route: str, state: str, first: bool):
     if state == "hover":
         await card.hover()
     else:
-        await card.focus()
+        # :focus-visible only matches on keyboard modality — Tab to the card link.
+        href = await card.get_attribute("href")
+        await page.keyboard.press("Home")  # scroll top so tab order starts fresh
+        for _ in range(60):
+            await page.keyboard.press("Tab")
+            active = await page.evaluate("document.activeElement && document.activeElement.getAttribute('href')")
+            if active == href:
+                break
+        else:
+            failures.append(f"{route}: could not Tab-focus model card link {href}")
+            return
     await page.wait_for_timeout(400)  # let transition settle
 
     styles = await btn.evaluate(
