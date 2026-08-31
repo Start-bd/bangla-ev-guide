@@ -83,8 +83,16 @@ async def check_card(page, route: str, state: str, first: bool):
         await page.keyboard.press("Home")  # scroll top so tab order starts fresh
         for _ in range(60):
             await page.keyboard.press("Tab")
-            active = await page.evaluate("document.activeElement && document.activeElement.getAttribute('href')")
-            if active == href:
+            active = await page.evaluate(
+                """() => {
+                    const el = document.activeElement;
+                    if (!el || el.getAttribute('href') !== arguments) return false;
+                    return true;
+                }""" if False else
+                "(href) => { const el = document.activeElement; return !!el && el.getAttribute('href') === href && el.className.includes('group block'); }",
+                href,
+            )
+            if active:
                 break
         else:
             failures.append(f"{route}: could not Tab-focus model card link {href}")
