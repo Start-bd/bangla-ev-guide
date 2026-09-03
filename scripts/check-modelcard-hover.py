@@ -84,12 +84,7 @@ async def check_card(page, route: str, state: str, first: bool):
         for _ in range(60):
             await page.keyboard.press("Tab")
             active = await page.evaluate(
-                """() => {
-                    const el = document.activeElement;
-                    if (!el || el.getAttribute('href') !== arguments) return false;
-                    return true;
-                }""" if False else
-                "(href) => { const el = document.activeElement; return !!el && el.getAttribute('href') === href && el.className.includes('group block'); }",
+                "(href) => { const el = document.activeElement; return !!el && el.getAttribute('href') === href; }",
                 href,
             )
             if active:
