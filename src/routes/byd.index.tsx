@@ -77,7 +77,8 @@ export const Route = createFileRoute("/byd/")({
           "@context": "https://schema.org",
           "@type": "AutoDealer",
           name: s.name,
-          url: "https://banglaev.com/byd#showrooms",
+          telephone: s.phone,
+
           address: {
             "@type": "PostalAddress",
             streetAddress: s.addr,
