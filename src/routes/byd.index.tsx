@@ -78,6 +78,8 @@ export const Route = createFileRoute("/byd/")({
           "@type": "AutoDealer",
           name: s.name,
           telephone: s.phone,
+          url: "https://banglaev.com/byd#showrooms",
+
 
           address: {
             "@type": "PostalAddress",
