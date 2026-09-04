@@ -252,13 +252,23 @@ function BydHub() {
                 </div>
                 <h3 className="text-lg font-bold">{s.name}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.addr}</p>
+                <a
+                  href={`tel:${s.phone}`}
+                  className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                >
+                  <Phone className="h-4 w-4" /> {SALES_PHONE_DISPLAY}
+                </a>
                 <p className="mt-2 text-sm font-medium text-primary">{s.note}</p>
               </div>
             ))}
           </div>
           <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-sm">
-            <Phone className="h-4 w-4 text-primary" /> পরিবেশক: <strong>CG Runner BD Ltd</strong>
+            <Phone className="h-4 w-4 text-primary" /> পরিবেশক: <strong>CG Runner BD Ltd</strong> —{" "}
+            <a href={`tel:${SALES_PHONE}`} className="font-semibold text-primary hover:underline">
+              {SALES_PHONE_DISPLAY}
+            </a>
           </p>
+
         </div>
       </section>
 
