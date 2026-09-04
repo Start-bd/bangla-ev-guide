@@ -13,11 +13,15 @@ import bydHero from "@/assets/pages/byd-hero.jpg";
 
 const bydQO = queryOptions({ queryKey: ["models", "byd"], queryFn: () => getBydModels() });
 
+const SALES_PHONE = "+8801676015303";
+const SALES_PHONE_DISPLAY = "01676-015303";
+
 const showrooms = [
-  { name: "CG Runner BD Ltd — Tejgaon", addr: "Aristo Tower, Tejgaon, Dhaka", locality: "Dhaka", note: "৬,০০০ স্কয়ার ফিট ফ্ল্যাগশিপ শোরুম" },
-  { name: "Noor Autos — Uttara", addr: "House 8, Road 9C, Sector 15, Uttara, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার" },
-  { name: "Otto Fix Ltd — Madani Avenue", addr: "Vatara, Madani Avenue, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার" },
+  { name: "CG Runner BD Ltd — Tejgaon", addr: "Aristo Tower, Tejgaon, Dhaka", locality: "Dhaka", note: "৬,০০০ স্কয়ার ফিট ফ্ল্যাগশিপ শোরুম", phone: SALES_PHONE },
+  { name: "Noor Autos — Uttara", addr: "House 8, Road 9C, Sector 15, Uttara, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার", phone: SALES_PHONE },
+  { name: "Otto Fix Ltd — Madani Avenue", addr: "Vatara, Madani Avenue, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার", phone: SALES_PHONE },
 ];
+
 
 const faqs = [
   { q: "BYD বাংলাদেশের পরিবেশক কে?", a: "CG Runner BD Ltd একমাত্র অনুমোদিত পরিবেশক।" },
