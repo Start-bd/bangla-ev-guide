@@ -22,6 +22,45 @@ const postsQO = queryOptions({ queryKey: ["posts", 4], queryFn: () => getPosts({
 const HOME_TITLE = "BanglaEV — বাংলাদেশের ইলেকট্রিক গাড়ির গাইড";
 const HOME_DESC = "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।";
 
+// Short, quotable buyer Q&A — drives both the visible FAQ section and FAQPage JSON-LD.
+const FAQS: { q: string; a: string }[] = [
+  {
+    q: "বাংলাদেশে ইলেকট্রিক গাড়ির দাম কত?",
+    a: "বাংলাদেশে নতুন ইলেকট্রিক গাড়ির দাম সাধারণত ৩০ লাখ থেকে ৯০ লাখ টাকার মধ্যে। BYD Sealion 6 ও Seal-এর মতো মডেল অনুমোদিত পরিবেশকের মাধ্যমে পাওয়া যায়; সর্বশেষ দাম BanglaEV-এর মডেল পাতায় আপডেট করা হয়।",
+  },
+  {
+    q: "বাংলাদেশে কোন ইলেকট্রিক গাড়ি সবচেয়ে জনপ্রিয়?",
+    a: "BYD বর্তমানে বাংলাদেশে সবচেয়ে পরিচিত EV ব্র্যান্ড — বিশেষ করে Sealion 6 ও Seal। এর পাশে MG, Hyundai Ioniq 5 এবং Zeekr X-ও আমদানি হচ্ছে।",
+  },
+  {
+    q: "ইলেকট্রিক গাড়ি চালাতে প্রতি কিলোমিটারে খরচ কত?",
+    a: "বাংলাদেশে EV চালাতে প্রতি কিলোমিটারে আনুমানিক ৩ টাকা খরচ হয়, যেখানে পেট্রোল গাড়িতে প্রায় ১৫ টাকা। অর্থাৎ জ্বালানি খরচ প্রায় ৫ গুণ কম।",
+  },
+  {
+    q: "বাংলাদেশে ইলেকট্রিক গাড়ি চার্জ করা যায় কোথায়?",
+    a: "বেশিরভাগ মালিক বাসায় ৭ kW AC চার্জারে রাতভর চার্জ করেন। ঢাকা, চট্টগ্রাম ও মহাসড়কে পাবলিক DC ফাস্ট চার্জিং স্টেশনের সংখ্যা বাড়ছে — তালিকা আমাদের চার্জিং গাইডে আছে।",
+  },
+  {
+    q: "বাংলাদেশে ইলেকট্রিক গাড়ির আমদানি শুল্ক কেমন?",
+    a: "সরকার EV-তে প্রচলিত গাড়ির তুলনায় কম শুল্ক-কর দেয়, তবে হার ইঞ্জিন/মোটর ক্ষমতা ও নীতিমালার উপর নির্ভর করে পরিবর্তিত হয়। কেনার আগে অনুমোদিত পরিবেশকের কাছ থেকে সর্বশেষ হার যাচাই করুন।",
+  },
+];
+
+const faqLd = {
+  type: "application/ld+json" as const,
+  children: JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": "https://banglaev.com/#faq",
+    inLanguage: "bn-BD",
+    mainEntity: FAQS.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  }),
+};
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -33,7 +72,9 @@ export const Route = createFileRoute("/")({
       ...localeLinks("/"),
       { rel: "preload", as: "image", href: heroCar, fetchpriority: "high", media: "(min-width: 768px)" },
     ],
+    scripts: [faqLd],
   }),
+
 
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(featuredQO);
