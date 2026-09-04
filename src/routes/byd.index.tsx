@@ -13,11 +13,15 @@ import bydHero from "@/assets/pages/byd-hero.jpg";
 
 const bydQO = queryOptions({ queryKey: ["models", "byd"], queryFn: () => getBydModels() });
 
+const SALES_PHONE = "+8801676015303";
+const SALES_PHONE_DISPLAY = "01676-015303";
+
 const showrooms = [
-  { name: "CG Runner BD Ltd — Tejgaon", addr: "Aristo Tower, Tejgaon, Dhaka", locality: "Dhaka", note: "৬,০০০ স্কয়ার ফিট ফ্ল্যাগশিপ শোরুম" },
-  { name: "Noor Autos — Uttara", addr: "House 8, Road 9C, Sector 15, Uttara, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার" },
-  { name: "Otto Fix Ltd — Madani Avenue", addr: "Vatara, Madani Avenue, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার" },
+  { name: "CG Runner BD Ltd — Tejgaon", addr: "Aristo Tower, Tejgaon, Dhaka", locality: "Dhaka", note: "৬,০০০ স্কয়ার ফিট ফ্ল্যাগশিপ শোরুম", phone: SALES_PHONE },
+  { name: "Noor Autos — Uttara", addr: "House 8, Road 9C, Sector 15, Uttara, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার", phone: SALES_PHONE },
+  { name: "Otto Fix Ltd — Madani Avenue", addr: "Vatara, Madani Avenue, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার", phone: SALES_PHONE },
 ];
+
 
 const faqs = [
   { q: "BYD বাংলাদেশের পরিবেশক কে?", a: "CG Runner BD Ltd একমাত্র অনুমোদিত পরিবেশক।" },
@@ -73,7 +77,10 @@ export const Route = createFileRoute("/byd/")({
           "@context": "https://schema.org",
           "@type": "AutoDealer",
           name: s.name,
+          telephone: s.phone,
           url: "https://banglaev.com/byd#showrooms",
+
+
           address: {
             "@type": "PostalAddress",
             streetAddress: s.addr,
@@ -245,13 +252,23 @@ function BydHub() {
                 </div>
                 <h3 className="text-lg font-bold">{s.name}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.addr}</p>
+                <a
+                  href={`tel:${s.phone}`}
+                  className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                >
+                  <Phone className="h-4 w-4" /> {SALES_PHONE_DISPLAY}
+                </a>
                 <p className="mt-2 text-sm font-medium text-primary">{s.note}</p>
               </div>
             ))}
           </div>
           <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-sm">
-            <Phone className="h-4 w-4 text-primary" /> পরিবেশক: <strong>CG Runner BD Ltd</strong>
+            <Phone className="h-4 w-4 text-primary" /> পরিবেশক: <strong>CG Runner BD Ltd</strong> —{" "}
+            <a href={`tel:${SALES_PHONE}`} className="font-semibold text-primary hover:underline">
+              {SALES_PHONE_DISPLAY}
+            </a>
           </p>
+
         </div>
       </section>
 
