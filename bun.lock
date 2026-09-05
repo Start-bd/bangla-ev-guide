@@ -87,6 +87,9 @@
       },
     },
   },
+  "patchedDependencies": {
+    "@tanstack/start-server-core@1.169.31": "patches/@tanstack%2Fstart-server-core@1.169.31.patch",
+  },
   "overrides": {
     "seroval": "^1.6.2",
     "seroval-plugins": "^1.6.2",
