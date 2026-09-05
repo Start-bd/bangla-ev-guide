@@ -320,7 +320,24 @@ function HomePage() {
           </div>
         </Link>
       </section>
+
+      {/* FAQ */}
+      <section className="border-t border-border bg-card py-20">
+        <div className="container-page max-w-3xl">
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">সাধারণ প্রশ্ন</p>
+          <h2 className="mt-2 text-3xl font-bold md:text-4xl">বাংলাদেশে ইলেকট্রিক গাড়ি সম্পর্কে যা জানতে চান</h2>
+          <dl className="mt-8 grid gap-4">
+            {FAQS.map((f) => (
+              <div key={f.q} className="rounded-2xl border border-border bg-background p-6">
+                <dt className="text-lg font-bold">{f.q}</dt>
+                <dd className="mt-2 text-muted-foreground">{f.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
     </>
+
 
   );
 }
