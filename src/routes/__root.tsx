@@ -15,6 +15,7 @@ import { initMonitoring, captureError } from "../lib/monitoring";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { authorLd } from "@/lib/seo";
 
 function NotFoundComponent() {
   return (
