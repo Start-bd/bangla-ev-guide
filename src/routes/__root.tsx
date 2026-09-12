@@ -15,6 +15,7 @@ import { initMonitoring, captureError } from "../lib/monitoring";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { authorLd } from "@/lib/seo";
 
 function NotFoundComponent() {
   return (
@@ -77,7 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // and duplicating them at the root emits two tags per page.
 
       // No sitewide description — each leaf route sets its own unique one.
-      { name: "author", content: "BanglaEV" },
+      { name: "author", content: "Tawhid Hasan" },
       { name: "theme-color", content: "#00A651" },
       { name: "google-site-verification", content: "aYtVVCKYq_a0JYv7vCMiSRjULEP1APY3qIYqtmg-ofI" },
       { property: "og:site_name", content: "BanglaEV" },
@@ -123,6 +124,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "@type": "ImageObject",
             url: "https://banglaev.com/favicon.png",
           },
+          founder: { "@id": "https://banglaev.com/#author" },
           sameAs: [
             "https://facebook.com/banglaev",
             "https://youtube.com/@banglaev",
@@ -132,6 +134,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "Bangladesh's guide to electric vehicles — BYD, MG, Hyundai prices, reviews, comparisons, charging and cost calculators.",
           areaServed: { "@type": "Country", name: "Bangladesh" },
           knowsLanguage: ["bn", "en"],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          ...authorLd(),
         }),
       },
       {

@@ -68,7 +68,7 @@ export const Route = createFileRoute("/guide/best-electric-bikes-bangladesh")({
           headline: "বাংলাদেশে সেরা ইলেকট্রিক বাইক — ক্রেতার গাইড ও শীর্ষ পিক",
           datePublished: DATE_PUBLISHED,
           dateModified: DATE_PUBLISHED,
-          author: { "@type": "Organization", name: "BanglaEV" },
+          author: { "@id": "https://banglaev.com/#author" },
           publisher: {
             "@type": "Organization",
             name: "BanglaEV",

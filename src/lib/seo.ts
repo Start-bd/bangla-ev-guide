@@ -205,3 +205,30 @@ export function carLd(m: CarLdModel, path: string) {
     },
   };
 }
+
+/**
+ * Named human author for Article / NewsArticle structured data and the
+ * Organization founder. Real person — do not edit these values without
+ * confirmation from the author.
+ */
+export const AUTHOR = {
+  name: "Tawhid Hasan",
+  jobTitle: "Founder",
+  url: "https://www.linkedin.com/in/tawhid03",
+} as const;
+
+/**
+ * Person JSON-LD node for the site author. Reference via `{ "@id": SITE_URL/#author }`
+ * from Article/NewsArticle author fields, or embed directly.
+ */
+export function authorLd() {
+  return {
+    "@type": "Person",
+    "@id": `${SITE_URL}/#author`,
+    name: AUTHOR.name,
+    jobTitle: AUTHOR.jobTitle,
+    url: AUTHOR.url,
+    sameAs: [AUTHOR.url],
+    worksFor: { "@id": `${SITE_URL}/#organization` },
+  };
+}

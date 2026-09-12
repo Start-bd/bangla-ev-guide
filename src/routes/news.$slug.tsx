@@ -79,7 +79,7 @@ function PostPage() {
             headline: p.title_bn,
             datePublished: p.published_at ? new Date(p.published_at).toISOString() : undefined,
             dateModified: p.published_at ? new Date(p.published_at).toISOString() : undefined,
-            author: { "@type": "Organization", name: "BanglaEV" },
+            author: { "@id": "https://banglaev.com/#author" },
             publisher: {
               "@type": "Organization",
               name: "BanglaEV",
