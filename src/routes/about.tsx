@@ -8,7 +8,8 @@ import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import aboutHero from "@/assets/pages/about-hero.jpg";
 
 const ABOUT_TITLE = "আমাদের সম্পর্কে — BanglaEV";
-const ABOUT_DESC = "BanglaEV বাংলাদেশের স্বাধীন EV রিসার্চ ও তথ্য প্ল্যাটফর্ম। যোগাযোগ ও বিজ্ঞাপন পার্টনারশিপের তথ্য।";
+const ABOUT_DESC =
+  "BanglaEV বাংলাদেশের স্বাধীন EV রিসার্চ ও তথ্য প্ল্যাটফর্ম। যোগাযোগ ও বিজ্ঞাপন পার্টনারশিপের তথ্য।";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -56,18 +57,23 @@ function AboutPage() {
         <div>
           <h2 className="text-2xl font-bold">আমাদের লক্ষ্য</h2>
           <p className="mt-3 text-muted-foreground">
-            বাংলাদেশে ইলেকট্রিক গাড়ির গ্রহণযোগ্যতা বাড়াতে আমরা স্বচ্ছ, নির্ভরযোগ্য তথ্য সরবরাহ করি — দাম,
-            স্পেক্স, রিভিউ, চার্জিং ও পলিসি — সবই বাংলা ও ইংরেজিতে।
+            বাংলাদেশে ইলেকট্রিক গাড়ির গ্রহণযোগ্যতা বাড়াতে আমরা স্বচ্ছ, নির্ভরযোগ্য তথ্য সরবরাহ করি
+            — দাম, স্পেক্স, রিভিউ, চার্জিং ও পলিসি — সবই বাংলা ও ইংরেজিতে।
           </p>
           <ul className="mt-5 space-y-2 text-sm">
-            <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-primary" /> অবস্থান: ময়মনসিংহ, বাংলাদেশ</li>
-            <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-primary" /> hello@banglaev.com</li>
+            <li className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-primary" /> অবস্থান: ময়মনসিংহ, বাংলাদেশ
+            </li>
+            <li className="flex items-center gap-2">
+              <Mail className="h-4 w-4 text-primary" /> hello@banglaev.com
+            </li>
           </ul>
 
           <div id="partnership" className="mt-10 rounded-2xl bg-accent p-6">
             <h3 className="font-bold">বিজ্ঞাপন ও পার্টনারশিপ</h3>
             <p className="mt-2 text-sm">
-              BYD, MG, Hyundai ডিলারশিপ ও EV ব্র্যান্ডগুলির জন্য বিশেষ পার্টনারশিপ প্যাকেজ। যোগাযোগ ফর্মে বার্তা পাঠান।
+              BYD, MG, Hyundai ডিলারশিপ ও EV ব্র্যান্ডগুলির জন্য বিশেষ পার্টনারশিপ প্যাকেজ। যোগাযোগ
+              ফর্মে বার্তা পাঠান।
             </p>
           </div>
         </div>
@@ -93,7 +99,9 @@ function ContactForm() {
       <div className="rounded-2xl border border-primary/30 bg-accent p-8 text-center">
         <CheckCircle2 className="mx-auto h-12 w-12 text-primary" />
         <h3 className="mt-3 text-xl font-bold">ধন্যবাদ!</h3>
-        <p className="mt-2 text-sm text-muted-foreground">আপনার বার্তা পেয়েছি। ২৪ ঘণ্টার মধ্যে যোগাযোগ করব।</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          আপনার বার্তা পেয়েছি। ২৪ ঘণ্টার মধ্যে যোগাযোগ করব।
+        </p>
       </div>
     );
   }
@@ -107,9 +115,27 @@ function ContactForm() {
       className="space-y-4 rounded-2xl border border-border bg-card p-6"
     >
       <h3 className="text-xl font-bold">যোগাযোগ ফর্ম</h3>
-      <Field label="নাম" value={form.name} onChange={(v) => setForm({ ...form, name: v })} required maxLength={100} />
-      <Field label="ইমেইল" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} required maxLength={200} />
-      <Field label="ফোন (ঐচ্ছিক)" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} maxLength={30} />
+      <Field
+        label="নাম"
+        value={form.name}
+        onChange={(v) => setForm({ ...form, name: v })}
+        required
+        maxLength={100}
+      />
+      <Field
+        label="ইমেইল"
+        type="email"
+        value={form.email}
+        onChange={(v) => setForm({ ...form, email: v })}
+        required
+        maxLength={200}
+      />
+      <Field
+        label="ফোন (ঐচ্ছিক)"
+        value={form.phone}
+        onChange={(v) => setForm({ ...form, phone: v })}
+        maxLength={30}
+      />
       <label className="block">
         <span className="mb-1.5 block text-sm font-medium">বার্তা</span>
         <textarea
@@ -120,7 +146,9 @@ function ContactForm() {
           onChange={(e) => setForm({ ...form, message: e.target.value })}
         />
       </label>
-      {m.error && <p className="text-sm text-destructive">পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</p>}
+      {m.error && (
+        <p className="text-sm text-destructive">পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</p>
+      )}
       <button
         type="submit"
         disabled={m.isPending}
@@ -133,8 +161,20 @@ function ContactForm() {
 }
 
 function Field({
-  label, value, onChange, type = "text", required, maxLength,
-}: { label: string; value: string; onChange: (v: string) => void; type?: string; required?: boolean; maxLength?: number }) {
+  label,
+  value,
+  onChange,
+  type = "text",
+  required,
+  maxLength,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  required?: boolean;
+  maxLength?: number;
+}) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-sm font-medium">{label}</span>

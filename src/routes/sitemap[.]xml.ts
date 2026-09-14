@@ -33,7 +33,8 @@ export const Route = createFileRoute("/sitemap.xml")({
         let bydPaths: { path: string; changefreq: string; priority: string }[] = [];
         let modelPaths: { path: string; changefreq: string; priority: string }[] = [];
         let brandPaths: { path: string; changefreq: string; priority: string }[] = [];
-        let postPaths: { path: string; lastmod?: string; changefreq: string; priority: string }[] = [];
+        let postPaths: { path: string; lastmod?: string; changefreq: string; priority: string }[] =
+          [];
 
         try {
           if (!process.env.SUPABASE_URL || !process.env.SUPABASE_PUBLISHABLE_KEY) {
@@ -58,7 +59,9 @@ export const Route = createFileRoute("/sitemap.xml")({
             .map((m) => ({ path: `/models/${m.slug}`, changefreq: "monthly", priority: "0.7" }));
 
           brandPaths = Array.from(
-            new Set((models ?? []).filter((m) => m.brand !== "BYD").map((m) => m.brand.toLowerCase())),
+            new Set(
+              (models ?? []).filter((m) => m.brand !== "BYD").map((m) => m.brand.toLowerCase()),
+            ),
           ).map((b) => ({ path: `/brands/${b}`, changefreq: "weekly", priority: "0.7" }));
 
           postPaths = (posts ?? []).map((p) => ({
@@ -86,7 +89,9 @@ export const Route = createFileRoute("/sitemap.xml")({
               `    <changefreq>${e.changefreq}</changefreq>`,
               `    <priority>${e.priority}</priority>`,
               `  </url>`,
-            ].filter(Boolean).join("\n"),
+            ]
+              .filter(Boolean)
+              .join("\n"),
           ),
           `</urlset>`,
         ].join("\n");

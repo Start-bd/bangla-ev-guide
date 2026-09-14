@@ -8,7 +8,8 @@ export const SITE_URL = (() => {
   try {
     // Vite / browser build-time env (import.meta.env may not be typed here)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (typeof import.meta !== "undefined" && (import.meta as any).env?.SITE_URL) return (import.meta as any).env.SITE_URL;
+    if (typeof import.meta !== "undefined" && (import.meta as any).env?.SITE_URL)
+      return (import.meta as any).env.SITE_URL;
   } catch {}
 
   return "https://banglaev.com";
