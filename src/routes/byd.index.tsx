@@ -63,6 +63,17 @@ export const Route = createFileRoute("/byd/")({
   validateSearch: (search: Record<string, unknown>): { lang?: "en" } =>
     search.lang === "en" ? { lang: "en" } : {},
 
+  // loader must precede head: TanStack Router infers head()'s `loaderData`
+  // type from this loader's return type, and that inference only resolves
+  // when loader is declared first in this options object.
+  loader: async ({ context }) => {
+    try {
+      return await context.queryClient.ensureQueryData(bydQO);
+    } catch (e) {
+      ssrLog.error({ scope: "loader", event: "loader_failed", route: "/byd" }, e);
+      throw e;
+    }
+  },
 
   head: ({ loaderData }) => {
     const sealPrice = formatBDTLakh(loaderData?.find((m) => m.slug === "seal")?.price_bdt);
@@ -114,14 +125,6 @@ export const Route = createFileRoute("/byd/")({
         ]),
       ],
     };
-  },
-  loader: async ({ context }) => {
-    try {
-      return await context.queryClient.ensureQueryData(bydQO);
-    } catch (e) {
-      ssrLog.error({ scope: "loader", event: "loader_failed", route: "/byd" }, e);
-      throw e;
-    }
   },
   component: BydHub,
 });
