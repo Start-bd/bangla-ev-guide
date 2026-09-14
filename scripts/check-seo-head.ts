@@ -5,9 +5,14 @@
  * For every route advertised in /sitemap.xml, fetch the SSR HTML and assert:
  *   - exactly one  <link rel="canonical" href="..."> matching the route URL
  *   - exactly one  <link rel="alternate" hreflang="bn" href="...">
- *   - exactly one  <link rel="alternate" hreflang="en" href="...?lang=en">
  *   - exactly one  <link rel="alternate" hreflang="x-default" href="...">
  *   - exactly one  <meta property="og:url" content="...">
+ *
+ * There is no separate "en" hreflang check: every route is a single URL
+ * (English is offered inline, not as a distinct page), so canonical,
+ * hreflang="bn" and hreflang="x-default" all self-reference the same URL.
+ * See the comment on `localeLinks` in src/lib/seo.ts for why a "?lang=en"
+ * alternate was removed rather than fixed.
  *
  * Usage:
  *   BASE_URL=http://localhost:5173 bun scripts/check-seo-head.ts
@@ -67,7 +72,6 @@ async function checkRoute(baseUrl: string, path: string) {
   const head = headMatch ? headMatch[1] : html;
 
   const canonical = `${SITE_URL}${path}`;
-  const enHref = `${SITE_URL}${path}${path.includes("?") ? "&" : "?"}lang=en`;
 
   expectOne(
     path,
@@ -82,13 +86,6 @@ async function checkRoute(baseUrl: string, path: string) {
     '<link rel=alternate hreflang="bn">',
     /<link\b(?=[^>]*\brel=["']alternate["'])(?=[^>]*\bhref[L|l]ang=["']bn["'])[^>]*\bhref=["']([^"']+)["']/gi,
     canonical,
-  );
-  expectOne(
-    path,
-    head,
-    '<link rel=alternate hreflang="en">',
-    /<link\b(?=[^>]*\brel=["']alternate["'])(?=[^>]*\bhref[L|l]ang=["']en["'])[^>]*\bhref=["']([^"']+)["']/gi,
-    enHref,
   );
   expectOne(
     path,

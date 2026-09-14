@@ -19,21 +19,26 @@ export const SITE_URL = (() => {
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.jpg`;
 
 /**
- * Build canonical + bn/en/x-default hreflang link entries for a route path.
+ * Build canonical + bn/x-default hreflang link entries for a route path.
  * Pass a path starting with "/", e.g. "/about" or `/byd/${"slug"}`.
- * This function now safely composes URLs using the WHATWG URL API so it
+ * This function safely composes URLs using the WHATWG URL API so it
  * correctly handles incoming paths that already contain query strings.
+ *
+ * There is deliberately no separate "en" alternate here. Every route is a
+ * single URL — English is offered inline (e.g. a "Read in English" detail),
+ * not as a distinct page — so a "?lang=en" hreflang alternate would point
+ * to a URL whose own canonical self-references the bn URL, which Google's
+ * hreflang guidelines treat as an invalid/self-contradicting annotation.
+ * If distinct English pages are ever built, give them a real path and add
+ * a genuine hreflang="en" alternate pointing at that path.
  */
 export function localeLinks(path: string) {
   const url = new URL(path, SITE_URL);
   const bn = url.toString();
-  const enUrl = new URL(bn);
-  enUrl.searchParams.set("lang", "en");
 
   return [
     { rel: "canonical", href: bn },
     { rel: "alternate", hrefLang: "bn", href: bn },
-    { rel: "alternate", hrefLang: "en", href: enUrl.toString() },
     { rel: "alternate", hrefLang: "x-default", href: bn },
   ];
 }
@@ -72,6 +77,11 @@ export function ogMeta(opts: {
   const image = ogImage(opts.image);
   const imageAlt = opts.imageAlt ?? opts.title;
   const type = opts.type ?? "website";
+  // Only assert width/height for the one asset we've verified these against
+  // (og-default.jpg, actually 1200x640) — every route-specific image (model
+  // photos, page heroes, guide covers) has its own, different dimensions, so
+  // a hardcoded 1200x630 for those would misdeclare the actual image size.
+  const isDefaultImage = image === DEFAULT_OG_IMAGE;
   return [
     { property: "og:title", content: opts.title },
     { property: "og:description", content: opts.description },
@@ -79,8 +89,12 @@ export function ogMeta(opts: {
     { property: "og:url", content: url },
     { property: "og:image", content: image },
     { property: "og:image:alt", content: imageAlt },
-    { property: "og:image:width", content: "1200" },
-    { property: "og:image:height", content: "630" },
+    ...(isDefaultImage
+      ? [
+          { property: "og:image:width", content: "1200" },
+          { property: "og:image:height", content: "640" },
+        ]
+      : []),
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: opts.title },
     { name: "twitter:description", content: opts.description },

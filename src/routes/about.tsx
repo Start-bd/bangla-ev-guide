@@ -23,23 +23,6 @@ export const Route = createFileRoute("/about")({
         { name: "হোম", path: "/" },
         { name: "আমাদের সম্পর্কে", path: "/about" },
       ]),
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "LocalBusiness",
-          name: "BanglaEV",
-          description: ABOUT_DESC,
-          url: "https://banglaev.com/about",
-          email: "hello@banglaev.com",
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: "Mymensingh",
-            addressCountry: "BD",
-          },
-          areaServed: "BD",
-        }),
-      },
     ],
   }),
   component: AboutPage,

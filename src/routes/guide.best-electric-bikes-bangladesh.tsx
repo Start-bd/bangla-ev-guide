@@ -81,7 +81,6 @@ export const Route = createFileRoute("/guide/best-electric-bikes-bangladesh")({
       },
       breadcrumbLd([
         { name: "হোম", path: "/" },
-        { name: "গাইড", path: "/charging" },
         { name: "সেরা ইলেকট্রিক বাইক", path: PATH },
       ]),
     ],

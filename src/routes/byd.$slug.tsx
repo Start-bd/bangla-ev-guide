@@ -41,23 +41,25 @@ export const Route = createFileRoute("/byd/$slug")({
 
   head: ({ params, loaderData }) => {
     const slug = params.slug;
-    const titles: Record<string, { t: string; d: string }> = {
-      seal: {
+    // Price-bearing copy is a function of live loaderData so the <title>/
+    // meta description can never drift from the price shown in the page body.
+    const titles: Record<string, (d: NonNullable<typeof loaderData>) => { t: string; d: string }> = {
+      seal: (d) => ({
         t: "BYD Seal Price in Bangladesh 2026 — স্পেক্স, রিভিউ | BanglaEV",
-        d: "BYD Seal-এর দাম বাংলাদেশে ৳৮৯.৯ লাখ। রেঞ্জ ৫৭০ কিমি, ০-১০০ কিমি/ঘণ্টা ৩.৮ সেকেন্ড। সম্পূর্ণ স্পেক্স ও রিভিউ।",
-      },
-      "sealion-6": {
-        t: "BYD Sealion 6 Price in Bangladesh 2026 — ৳৬৪.৯ লাখ | BanglaEV",
-        d: "দাম ৳৬৪.৯ লাখ, এখনই শোরুমে উপলব্ধ — BYD Sealion 6 প্লাগ-ইন হাইব্রিড SUV। ১,০৯২ কিমি কম্বাইন্ড রেঞ্জ, EMI সুবিধা, ৫-স্টার সেফটি ও সম্পূর্ণ স্পেক্স।",
-      },
-      "atto-3": {
+        d: `BYD Seal-এর দাম বাংলাদেশে ${formatBDTLakh(d.price_bdt)}। রেঞ্জ ৫৭০ কিমি, ০-১০০ কিমি/ঘণ্টা ৩.৮ সেকেন্ড। সম্পূর্ণ স্পেক্স ও রিভিউ।`,
+      }),
+      "sealion-6": (d) => ({
+        t: `BYD Sealion 6 Price in Bangladesh 2026 — ${formatBDTLakh(d.price_bdt)} | BanglaEV`,
+        d: `দাম ${formatBDTLakh(d.price_bdt)}, এখনই শোরুমে উপলব্ধ — BYD Sealion 6 প্লাগ-ইন হাইব্রিড SUV। ১,০৯২ কিমি কম্বাইন্ড রেঞ্জ, EMI সুবিধা, ৫-স্টার সেফটি ও সম্পূর্ণ স্পেক্স।`,
+      }),
+      "atto-3": () => ({
         t: "BYD Atto 3 Price Bangladesh 2026 — Electric SUV স্পেক্স | BanglaEV",
         d: "BYD Atto 3 — কম্প্যাক্ট ইলেকট্রিক SUV। Blade Battery, ৫-স্টার Euro NCAP, ৩০ মিনিটে দ্রুত চার্জ।",
-      },
-      dolphin: {
+      }),
+      dolphin: () => ({
         t: "BYD Dolphin Price Bangladesh 2026 — Compact EV | BanglaEV",
         d: "BYD Dolphin — কম্প্যাক্ট হ্যাচব্যাক ইলেকট্রিক গাড়ি। শহরের জন্য আদর্শ, সাশ্রয়ী দাম।",
-      },
+      }),
     };
     // Spec-derived fallback so every BYD model gets a unique, factual description.
     const name = loaderData ? `${loaderData.brand} ${loaderData.model}` : slug.replace(/-/g, " ");
@@ -75,7 +77,7 @@ export const Route = createFileRoute("/byd/$slug")({
         loaderData?.price_bdt ? `দাম ${formatBDTLakh(loaderData.price_bdt)}।` : "দাম শীঘ্রই ঘোষণা।"
       } সম্পূর্ণ স্পেসিফিকেশন ও কেনার গাইড।`,
     };
-    const meta = titles[slug] ?? generated;
+    const meta = loaderData && titles[slug] ? titles[slug](loaderData) : generated;
     const modelName = loaderData
       ? name
       : meta.t.split(" —")[0].split(" Price")[0].trim();

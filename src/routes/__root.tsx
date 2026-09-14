@@ -125,6 +125,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             url: "https://banglaev.com/favicon.png",
           },
           founder: { "@id": "https://banglaev.com/#author" },
+          email: "hello@banglaev.com",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Mymensingh",
+            addressCountry: "BD",
+          },
           sameAs: [
             "https://facebook.com/banglaev",
             "https://youtube.com/@banglaev",
