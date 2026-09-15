@@ -17,22 +17,56 @@ const SALES_PHONE = "+8801676015303";
 const SALES_PHONE_DISPLAY = "01676-015303";
 
 const showrooms = [
-  { name: "CG Runner BD Ltd — Tejgaon", addr: "Aristo Tower, Tejgaon, Dhaka", locality: "Dhaka", note: "৬,০০০ স্কয়ার ফিট ফ্ল্যাগশিপ শোরুম", phone: SALES_PHONE },
-  { name: "Noor Autos — Uttara", addr: "House 8, Road 9C, Sector 15, Uttara, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার", phone: SALES_PHONE },
-  { name: "Otto Fix Ltd — Madani Avenue", addr: "Vatara, Madani Avenue, Dhaka", locality: "Dhaka", note: "অনুমোদিত ডিলার", phone: SALES_PHONE },
+  {
+    name: "CG Runner BD Ltd — Tejgaon",
+    addr: "Aristo Tower, Tejgaon, Dhaka",
+    locality: "Dhaka",
+    note: "৬,০০০ স্কয়ার ফিট ফ্ল্যাগশিপ শোরুম",
+    phone: SALES_PHONE,
+  },
+  {
+    name: "Noor Autos — Uttara",
+    addr: "House 8, Road 9C, Sector 15, Uttara, Dhaka",
+    locality: "Dhaka",
+    note: "অনুমোদিত ডিলার",
+    phone: SALES_PHONE,
+  },
+  {
+    name: "Otto Fix Ltd — Madani Avenue",
+    addr: "Vatara, Madani Avenue, Dhaka",
+    locality: "Dhaka",
+    note: "অনুমোদিত ডিলার",
+    phone: SALES_PHONE,
+  },
 ];
 
-
-const faqs = [
-  { q: "BYD বাংলাদেশের পরিবেশক কে?", a: "CG Runner BD Ltd একমাত্র অনুমোদিত পরিবেশক।" },
-  { q: "BYD Seal-এর দাম কত?", a: "৳৮৯.৯ লাখ (Premium ও Performance ভ্যারিয়েন্ট)।" },
-  { q: "BYD Sealion 6 কি প্লাগ-ইন হাইব্রিড?", a: "হ্যাঁ, ১,০৯২ কিমি কম্বাইন্ড রেঞ্জ সহ PHEV।" },
-  { q: "BYD Atto 3 কখন বাংলাদেশে এসেছে?", a: "আপগ্রেডেড ভার্সন সেপ্টেম্বর ২০২৪-এ লঞ্চ হয়েছে।" },
-  { q: "BYD গাড়ির ব্যাটারি কত বছর চলে?", a: "BYD Blade Battery-তে সাধারণত ৮ বছর/১.৫ লাখ কিমি ওয়ারেন্টি।" },
-  { q: "চার্জিং কোথায় করব?", a: "তেজগাঁও শোরুম এবং ১৪+ পাবলিক স্টেশন; হোম চার্জিং সবচেয়ে সাশ্রয়ী।" },
-  { q: "BYD গাড়ির সার্ভিস কোথায়?", a: "তেজগাঁও Aristo Tower এবং Otto Fix Ltd সার্ভিস সেন্টারে।" },
-  { q: "BYD vs Toyota তুলনা?", a: "EV ক্যাটাগরিতে BYD এগিয়ে; হাইব্রিডে Sealion 6 Prius-এর চেয়ে বেশি রেঞ্জ দেয়।" },
-];
+// Price-bearing FAQ answers are derived from live model data (see buildFaqs)
+// so they can never drift from the price table rendered on the same page.
+function buildFaqs(models: EvModel[] | undefined): { q: string; a: string }[] {
+  const sealPrice = formatBDTLakh(models?.find((m) => m.slug === "seal")?.price_bdt);
+  return [
+    { q: "BYD বাংলাদেশের পরিবেশক কে?", a: "CG Runner BD Ltd একমাত্র অনুমোদিত পরিবেশক।" },
+    { q: "BYD Seal-এর দাম কত?", a: `${sealPrice} (Premium ও Performance ভ্যারিয়েন্ট)।` },
+    { q: "BYD Sealion 6 কি প্লাগ-ইন হাইব্রিড?", a: "হ্যাঁ, ১,০৯২ কিমি কম্বাইন্ড রেঞ্জ সহ PHEV।" },
+    { q: "BYD Atto 3 কখন বাংলাদেশে এসেছে?", a: "আপগ্রেডেড ভার্সন সেপ্টেম্বর ২০২৪-এ লঞ্চ হয়েছে।" },
+    {
+      q: "BYD গাড়ির ব্যাটারি কত বছর চলে?",
+      a: "BYD Blade Battery-তে সাধারণত ৮ বছর/১.৫ লাখ কিমি ওয়ারেন্টি।",
+    },
+    {
+      q: "চার্জিং কোথায় করব?",
+      a: "তেজগাঁও শোরুম এবং ১৪+ পাবলিক স্টেশন; হোম চার্জিং সবচেয়ে সাশ্রয়ী।",
+    },
+    {
+      q: "BYD গাড়ির সার্ভিস কোথায়?",
+      a: "তেজগাঁও Aristo Tower এবং Otto Fix Ltd সার্ভিস সেন্টারে।",
+    },
+    {
+      q: "BYD vs Toyota তুলনা?",
+      a: "EV ক্যাটাগরিতে BYD এগিয়ে; হাইব্রিডে Sealion 6 Prius-এর চেয়ে বেশি রেঞ্জ দেয়।",
+    },
+  ];
+}
 
 const priceSummary = [
   { slug: "sealion-6", name: "Sealion 6", badge: "PHEV · ১,০৯২ কিমি", badgeEn: "PHEV · 1,092 km" },
@@ -58,58 +92,9 @@ export const Route = createFileRoute("/byd/")({
   validateSearch: (search: Record<string, unknown>): { lang?: "en" } =>
     search.lang === "en" ? { lang: "en" } : {},
 
-
-  head: () => ({
-    meta: [
-      { title: "BYD Car Price in Bangladesh 2026 — Seal, Sealion 6, Atto 3" },
-      { name: "description", content: "BYD car price in Bangladesh 2026 — আপডেটেড প্রাইস গাইড: Sealion 6 ৳৬৪.৯ লাখ, Seal ৳৮৯.৯ লাখ, Atto 3 ও Dolphin আপডেট, সাথে স্পেসিফিকেশন ও শোরুম।" },
-      ...ogMeta({
-        title: "BYD Car Price in Bangladesh 2026 — Seal, Sealion 6, Atto 3",
-        description: "BYD-এর সব মডেলের আপডেটেড দাম: Sealion 6 ৳৬৪.৯ লাখ, Seal ৳৮৯.৯ লাখ। Atto 3 ও Dolphin আপডেট, স্পেসিফিকেশন ও ঢাকার শোরুম লোকেশন।",
-        path: "/byd",
-      }),
-    ],
-    links: localeLinks("/byd"),
-    scripts: [
-      ...showrooms.map((s) => ({
-        type: "application/ld+json" as const,
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "AutoDealer",
-          name: s.name,
-          telephone: s.phone,
-          url: "https://banglaev.com/byd#showrooms",
-
-
-          address: {
-            "@type": "PostalAddress",
-            streetAddress: s.addr,
-            addressLocality: s.locality,
-            addressCountry: "BD",
-          },
-          areaServed: { "@type": "Country", name: "Bangladesh" },
-          brand: { "@type": "Brand", name: "BYD" },
-          parentOrganization: { "@type": "Organization", name: "CG Runner BD Ltd" },
-        }),
-      })),
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: faqs.map((f) => ({
-            "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
-          })),
-        }),
-      },
-      breadcrumbLd([
-        { name: "হোম", path: "/" },
-        { name: "BYD", path: "/byd" },
-      ]),
-    ],
-  }),
+  // loader must precede head: TanStack Router infers head()'s `loaderData`
+  // type from this loader's return type, and that inference only resolves
+  // when loader is declared first in this options object.
   loader: async ({ context }) => {
     try {
       return await context.queryClient.ensureQueryData(bydQO);
@@ -117,6 +102,61 @@ export const Route = createFileRoute("/byd/")({
       ssrLog.error({ scope: "loader", event: "loader_failed", route: "/byd" }, e);
       throw e;
     }
+  },
+
+  head: ({ loaderData }) => {
+    const sealPrice = formatBDTLakh(loaderData?.find((m) => m.slug === "seal")?.price_bdt);
+    const sealion6Price = formatBDTLakh(loaderData?.find((m) => m.slug === "sealion-6")?.price_bdt);
+    const title = "BYD Car Price in Bangladesh 2026 — Seal, Sealion 6, Atto 3";
+    const description = `BYD-এর সব মডেলের আপডেটেড দাম: Sealion 6 ${sealion6Price}, Seal ${sealPrice}। Atto 3 ও Dolphin আপডেট, স্পেসিফিকেশন ও ঢাকার শোরুম লোকেশন।`;
+    return {
+      meta: [
+        { title },
+        {
+          name: "description",
+          content: `BYD car price in Bangladesh 2026 — আপডেটেড প্রাইস গাইড: Sealion 6 ${sealion6Price}, Seal ${sealPrice}, Atto 3 ও Dolphin আপডেট, সাথে স্পেসিফিকেশন ও শোরুম।`,
+        },
+        ...ogMeta({ title, description, path: "/byd" }),
+      ],
+      links: localeLinks("/byd"),
+      scripts: [
+        ...showrooms.map((s) => ({
+          type: "application/ld+json" as const,
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AutoDealer",
+            name: s.name,
+            telephone: s.phone,
+            url: "https://banglaev.com/byd#showrooms",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: s.addr,
+              addressLocality: s.locality,
+              addressCountry: "BD",
+            },
+            areaServed: { "@type": "Country", name: "Bangladesh" },
+            brand: { "@type": "Brand", name: "BYD" },
+            parentOrganization: { "@type": "Organization", name: "CG Runner BD Ltd" },
+          }),
+        })),
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: buildFaqs(loaderData).map((f) => ({
+              "@type": "Question",
+              name: f.q,
+              acceptedAnswer: { "@type": "Answer", text: f.a },
+            })),
+          }),
+        },
+        breadcrumbLd([
+          { name: "হোম", path: "/" },
+          { name: "BYD", path: "/byd" },
+        ]),
+      ],
+    };
   },
   component: BydHub,
 });
@@ -131,15 +171,17 @@ function BydHub() {
     <>
       <section className="hero-gradient text-white">
         <div className="container-page py-16 md:py-24">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">BYD বাংলাদেশ</p>
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+            BYD বাংলাদেশ
+          </p>
           <h1 className="mt-3 max-w-3xl text-4xl font-extrabold leading-tight md:text-5xl">
             BYD Car Price in Bangladesh 2026 — সকল মডেলের দাম ও শোরুম
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-white/80">
             চীনের শীর্ষ EV ব্র্যান্ড BYD এখন বাংলাদেশে। CG Runner BD Ltd-এর হাত ধরে BYD Seal,
-            Sealion 6, Atto 3 ও Dolphin মডেল পাওয়া যাচ্ছে তেজগাঁও, উত্তরা ও মাদানি অ্যাভিনিউ শোরুমে।
-            Build Your Dreams — এই স্লোগানে BYD বিশ্বের সবচেয়ে নিরাপদ Blade Battery দিয়ে তৈরি করছে
-            পরবর্তী প্রজন্মের ইলেকট্রিক গাড়ি।
+            Sealion 6, Atto 3 ও Dolphin মডেল পাওয়া যাচ্ছে তেজগাঁও, উত্তরা ও মাদানি অ্যাভিনিউ
+            শোরুমে। Build Your Dreams — এই স্লোগানে BYD বিশ্বের সবচেয়ে নিরাপদ Blade Battery দিয়ে
+            তৈরি করছে পরবর্তী প্রজন্মের ইলেকট্রিক গাড়ি।
           </p>
 
           <h2 className="mt-10 text-xl font-bold">
@@ -154,11 +196,21 @@ function BydHub() {
               </caption>
               <thead className="text-xs uppercase tracking-wide text-white/60">
                 <tr className="border-b border-white/10">
-                  <th scope="col" className="px-4 py-3">{isEn ? "Model" : "মডেল"}</th>
-                  <th scope="col" className="px-4 py-3">{t.eyebrow}</th>
-                  <th scope="col" className="px-4 py-3">{isEn ? "Type" : "ধরন"}</th>
-                  <th scope="col" className="px-4 py-3">{isEn ? "Range" : "রেঞ্জ"}</th>
-                  <th scope="col" className="px-4 py-3">{isEn ? "Battery" : "ব্যাটারি"}</th>
+                  <th scope="col" className="px-4 py-3">
+                    {isEn ? "Model" : "মডেল"}
+                  </th>
+                  <th scope="col" className="px-4 py-3">
+                    {t.eyebrow}
+                  </th>
+                  <th scope="col" className="px-4 py-3">
+                    {isEn ? "Type" : "ধরন"}
+                  </th>
+                  <th scope="col" className="px-4 py-3">
+                    {isEn ? "Range" : "রেঞ্জ"}
+                  </th>
+                  <th scope="col" className="px-4 py-3">
+                    {isEn ? "Battery" : "ব্যাটারি"}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -180,7 +232,9 @@ function BydHub() {
                       <td className="px-4 py-3 font-extrabold text-primary">
                         {isEn ? formatLakhEn(price) : formatBDTLakh(price)}
                       </td>
-                      <td className="px-4 py-3 text-white/80">{isEn ? item.badgeEn : item.badge}</td>
+                      <td className="px-4 py-3 text-white/80">
+                        {isEn ? item.badgeEn : item.badge}
+                      </td>
                       <td className="px-4 py-3 text-white/80">
                         {m?.range_km ? `${m.range_km} km` : "—"}
                       </td>
@@ -198,8 +252,6 @@ function BydHub() {
               ? "Prices are indicative showroom prices in Bangladesh; contact CG Runner BD Ltd to confirm."
               : "দাম নির্দেশক শোরুম মূল্য; নিশ্চিত করতে CG Runner BD Ltd-এ যোগাযোগ করুন।"}
           </p>
-
-
         </div>
       </section>
 
@@ -240,7 +292,6 @@ function BydHub() {
         )}
       </section>
 
-
       <section id="showrooms" className="bg-accent py-16">
         <div className="container-page">
           <h2 className="mb-8 text-3xl font-bold">BYD শোরুম লোকেশন</h2>
@@ -268,14 +319,13 @@ function BydHub() {
               {SALES_PHONE_DISPLAY}
             </a>
           </p>
-
         </div>
       </section>
 
       <section className="container-page py-16">
         <h2 className="mb-8 text-3xl font-bold">প্রায়ই জিজ্ঞাসিত প্রশ্ন</h2>
         <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
-          {faqs.map((f) => (
+          {buildFaqs(models).map((f) => (
             <details key={f.q} className="group p-6 [&_summary::-webkit-details-marker]:hidden">
               <summary className="flex cursor-pointer items-center justify-between font-semibold">
                 {f.q}
@@ -288,12 +338,17 @@ function BydHub() {
       </section>
 
       <section className="container-page pb-20">
-        <Link to="/compare" className="block rounded-2xl bg-[var(--color-navy)] p-8 text-white transition hover:opacity-95 md:p-10">
+        <Link
+          to="/compare"
+          className="block rounded-2xl bg-[var(--color-navy)] p-8 text-white transition hover:opacity-95 md:p-10"
+        >
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="text-sm font-semibold uppercase tracking-wider text-primary">তুলনা</p>
               <h3 className="mt-2 text-2xl font-bold">BYD vs Toyota, Hyundai, MG</h3>
-              <p className="mt-2 max-w-xl opacity-80">সকল EV-এর দাম, রেঞ্জ ও স্পেসিফিকেশন পাশাপাশি দেখুন।</p>
+              <p className="mt-2 max-w-xl opacity-80">
+                সকল EV-এর দাম, রেঞ্জ ও স্পেসিফিকেশন পাশাপাশি দেখুন।
+              </p>
             </div>
             <span className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-primary-foreground">
               বিস্তারিত তুলনা <ArrowRight className="h-4 w-4" />
