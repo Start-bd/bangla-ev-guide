@@ -5,11 +5,9 @@ import type { Database } from "@/integrations/supabase/types";
 import { ssrLog } from "@/lib/ssr-logger";
 
 function pub() {
-  return createClient<Database>(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_PUBLISHABLE_KEY!,
-    { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
-  );
+  return createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
+    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+  });
 }
 
 async function safeQuery<T>(fn: string, run: () => Promise<T>, fallback: T): Promise<T> {
@@ -22,64 +20,84 @@ async function safeQuery<T>(fn: string, run: () => Promise<T>, fallback: T): Pro
 }
 
 export const getAllModels = createServerFn({ method: "GET" }).handler(() =>
-  safeQuery("getAllModels", async () => {
-    const { data, error } = await pub()
-      .from("ev_models")
-      .select("*")
-      .order("display_order", { ascending: true });
-    if (error) throw new Error(error.message);
-    return data ?? [];
-  }, []),
+  safeQuery(
+    "getAllModels",
+    async () => {
+      const { data, error } = await pub()
+        .from("ev_models")
+        .select("*")
+        .order("display_order", { ascending: true });
+      if (error) throw new Error(error.message);
+      return data ?? [];
+    },
+    [],
+  ),
 );
 
 export const getFeaturedModels = createServerFn({ method: "GET" }).handler(() =>
-  safeQuery("getFeaturedModels", async () => {
-    const { data, error } = await pub()
-      .from("ev_models")
-      .select("*")
-      .eq("is_featured", true)
-      .order("display_order", { ascending: true });
-    if (error) throw new Error(error.message);
-    return data ?? [];
-  }, []),
+  safeQuery(
+    "getFeaturedModels",
+    async () => {
+      const { data, error } = await pub()
+        .from("ev_models")
+        .select("*")
+        .eq("is_featured", true)
+        .order("display_order", { ascending: true });
+      if (error) throw new Error(error.message);
+      return data ?? [];
+    },
+    [],
+  ),
 );
 
 export const getBydModels = createServerFn({ method: "GET" }).handler(() =>
-  safeQuery("getBydModels", async () => {
-    const { data, error } = await pub()
-      .from("ev_models")
-      .select("*")
-      .eq("brand", "BYD")
-      .order("display_order", { ascending: true });
-    if (error) throw new Error(error.message);
-    return data ?? [];
-  }, []),
+  safeQuery(
+    "getBydModels",
+    async () => {
+      const { data, error } = await pub()
+        .from("ev_models")
+        .select("*")
+        .eq("brand", "BYD")
+        .order("display_order", { ascending: true });
+      if (error) throw new Error(error.message);
+      return data ?? [];
+    },
+    [],
+  ),
 );
 
 export const getModelsByBrand = createServerFn({ method: "GET" })
   .inputValidator((d) => z.object({ brand: z.string() }).parse(d))
   .handler(({ data }) =>
-    safeQuery(`getModelsByBrand(${data.brand})`, async () => {
-      const { data: rows, error } = await pub()
-        .from("ev_models")
-        .select("*")
-        .ilike("brand", data.brand)
-        .order("display_order", { ascending: true });
-      if (error) throw new Error(error.message);
-      return rows ?? [];
-    }, []),
+    safeQuery(
+      `getModelsByBrand(${data.brand})`,
+      async () => {
+        const { data: rows, error } = await pub()
+          .from("ev_models")
+          .select("*")
+          .ilike("brand", data.brand)
+          .order("display_order", { ascending: true });
+        if (error) throw new Error(error.message);
+        return rows ?? [];
+      },
+      [],
+    ),
   );
 
 export const getModelBySlug = createServerFn({ method: "GET" })
   .inputValidator((d) => z.object({ slug: z.string() }).parse(d))
   .handler(({ data }) =>
-    safeQuery(`getModelBySlug(${data.slug})`, async () => {
-      const { data: row, error } = await pub()
-        .from("ev_models")
-        .select("*")
-        .eq("slug", data.slug)
-        .maybeSingle();
-      if (error) throw new Error(error.message);
-      return row;
-    }, null),
+    safeQuery(
+      `getModelBySlug(${data.slug})`,
+      async () => {
+        const { data: row, error } = await pub()
+          .from("ev_models")
+          .select("*")
+          .eq("slug", data.slug)
+          .maybeSingle();
+        if (error) throw new Error(error.message);
+        return row;
+      },
+      null,
+    ),
   );

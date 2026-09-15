@@ -62,9 +62,7 @@ function SavedPage() {
       ) : savedModels.length === 0 ? (
         <div className="mt-10 rounded-2xl border border-dashed border-border p-10 text-center">
           <Heart className="mx-auto h-8 w-8 text-muted-foreground" />
-          <p className="mt-4 text-sm text-muted-foreground">
-            এখনো কোনো গাড়ি সেভ করা হয়নি।
-          </p>
+          <p className="mt-4 text-sm text-muted-foreground">এখনো কোনো গাড়ি সেভ করা হয়নি।</p>
           <Link
             to="/models"
             className="mt-6 inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
