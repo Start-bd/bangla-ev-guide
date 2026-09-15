@@ -42,7 +42,9 @@ export const Route = createFileRoute("/sitemap.xml")({
           .map((m) => ({ path: `/models/${m.slug}`, changefreq: "monthly", priority: "0.7" }));
 
         const brandPaths = Array.from(
-          new Set((models ?? []).filter((m) => m.brand !== "BYD").map((m) => m.brand.toLowerCase())),
+          new Set(
+            (models ?? []).filter((m) => m.brand !== "BYD").map((m) => m.brand.toLowerCase()),
+          ),
         ).map((b) => ({ path: `/brands/${b}`, changefreq: "weekly", priority: "0.7" }));
 
         const postPaths = (posts ?? []).map((p) => ({
@@ -67,7 +69,9 @@ export const Route = createFileRoute("/sitemap.xml")({
               `    <changefreq>${e.changefreq}</changefreq>`,
               `    <priority>${e.priority}</priority>`,
               `  </url>`,
-            ].filter(Boolean).join("\n"),
+            ]
+              .filter(Boolean)
+              .join("\n"),
           ),
           `</urlset>`,
         ].join("\n");

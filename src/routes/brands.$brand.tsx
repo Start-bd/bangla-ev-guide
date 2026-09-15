@@ -47,11 +47,10 @@ export const Route = createFileRoute("/brands/$brand")({
       throw redirect({ to: "/byd" });
     }
   },
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(brandQO(params.brand)),
+  loader: ({ context, params }) => context.queryClient.ensureQueryData(brandQO(params.brand)),
   head: ({ params, loaderData }) => {
     const b = params.brand;
-    const display = BRAND_NAMES[b.toLowerCase()] ?? (b.charAt(0).toUpperCase() + b.slice(1));
+    const display = BRAND_NAMES[b.toLowerCase()] ?? b.charAt(0).toUpperCase() + b.slice(1);
     const t = `${display} Electric Cars in Bangladesh 2026 | Price & Specs — BanglaEV`;
     const d = `${display} EV লাইনআপ বাংলাদেশে — সকল মডেলের দাম, রেঞ্জ, ব্যাটারি ও স্পেসিফিকেশন।`;
     const firstImage = loaderData?.find((m) => m.image_url)?.image_url ?? null;
