@@ -116,6 +116,7 @@ function checkJsonLd(path: string, html: string, canonical: string) {
     return;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- arbitrary JSON-LD shapes
   const nodes: any[] = [];
   blocks.forEach((raw, i) => {
     try {
@@ -149,6 +150,7 @@ function checkJsonLd(path: string, html: string, canonical: string) {
       if (!Array.isArray(items) || items.length < 2) {
         failures.push({ route: path, problem: "BreadcrumbList has fewer than 2 items" });
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- arbitrary JSON-LD shapes
         items.forEach((it: any, i: number) => {
           if (it.position !== i + 1 || !it.name || !it.item) {
             failures.push({

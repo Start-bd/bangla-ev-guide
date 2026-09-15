@@ -10,7 +10,8 @@ import { Zap, X } from "lucide-react";
 const allQO = queryOptions({ queryKey: ["models", "all"], queryFn: () => getAllModels() });
 
 const CMP_TITLE = "Compare Electric Cars Bangladesh 2026 | BanglaEV";
-const CMP_DESC = "যে কোনো ব্র্যান্ডের ইলেকট্রিক গাড়ি পাশাপাশি তুলনা করুন — BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr। দাম, রেঞ্জ, ব্যাটারি ও স্পেসিফিকেশন।";
+const CMP_DESC =
+  "যে কোনো ব্র্যান্ডের ইলেকট্রিক গাড়ি পাশাপাশি তুলনা করুন — BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr। দাম, রেঞ্জ, ব্যাটারি ও স্পেসিফিকেশন।";
 
 export const Route = createFileRoute("/compare")({
   head: () => ({
@@ -39,17 +40,13 @@ function ComparePage() {
   const [selected, setSelected] = useState<string[]>(["seal", "hyundai-ioniq-5", "mg-4"]);
   const [brandFilter, setBrandFilter] = useState<string>("all");
 
-  const brands = useMemo(
-    () => Array.from(new Set(models.map((m) => m.brand))).sort(),
-    [models],
-  );
+  const brands = useMemo(() => Array.from(new Set(models.map((m) => m.brand))).sort(), [models]);
 
   const picked = selected
     .map((s) => models.find((m) => m.slug === s))
     .filter(Boolean) as typeof models;
 
-  const visible =
-    brandFilter === "all" ? models : models.filter((m) => m.brand === brandFilter);
+  const visible = brandFilter === "all" ? models : models.filter((m) => m.brand === brandFilter);
 
   const toggle = (slug: string) =>
     setSelected((cur) =>
@@ -79,7 +76,8 @@ function ComparePage() {
             ইলেকট্রিক গাড়ি তুলনা — বাংলাদেশ ২০২৬
           </h1>
           <p className="mt-3 max-w-2xl text-white/80">
-            সকল ব্র্যান্ডের মধ্যে সর্বোচ্চ ৩টি গাড়ি পাশাপাশি তুলনা করুন — BYD, MG, Hyundai, Kia, Tesla ও আরও।
+            সকল ব্র্যান্ডের মধ্যে সর্বোচ্চ ৩টি গাড়ি পাশাপাশি তুলনা করুন — BYD, MG, Hyundai, Kia,
+            Tesla ও আরও।
           </p>
         </div>
       </section>
@@ -184,7 +182,9 @@ function ComparePage() {
                             <div className="absolute inset-0 grid place-items-center text-center">
                               <div>
                                 <Zap className="mx-auto h-5 w-5 text-white/25" />
-                                <p className="mt-1 text-[10px] font-bold text-white/70">{m.brand}</p>
+                                <p className="mt-1 text-[10px] font-bold text-white/70">
+                                  {m.brand}
+                                </p>
                               </div>
                             </div>
                           )}
@@ -211,7 +211,9 @@ function ComparePage() {
                 <CRow
                   label="দ্রুত চার্জ"
                   picked={picked}
-                  get={(m) => (m.charging_time_min ? `${toBnDigits(m.charging_time_min)} মিনিট` : "—")}
+                  get={(m) =>
+                    m.charging_time_min ? `${toBnDigits(m.charging_time_min)} মিনিট` : "—"
+                  }
                 />
                 <CRow label="টাইপ" picked={picked} get={(m) => m.type ?? "—"} />
                 <CRow

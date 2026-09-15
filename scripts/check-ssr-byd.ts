@@ -21,12 +21,7 @@ const LOG_PATH = resolve(ROOT, "logs/ssr-byd.jsonl");
 const PORT = Number(process.env.PORT ?? 5273);
 const BASE = `http://localhost:${PORT}`;
 const ROUTES = ["/byd", "/byd/seal", "/"];
-const WATCH_FNS = new Set([
-  "getBydModels",
-  "getFeaturedModels",
-  "getAllModels",
-  "getModelBySlug",
-]);
+const WATCH_FNS = new Set(["getBydModels", "getFeaturedModels", "getAllModels", "getModelBySlug"]);
 const WATCH_ROUTES = new Set(["/byd", "/byd/$slug"]);
 
 type SsrLine = {
@@ -114,7 +109,6 @@ async function waitForBackend(timeoutMs = 60_000) {
     `backend did not become healthy within ${timeoutMs}ms (last status: ${lastStatus})`,
   );
 }
-
 
 async function main() {
   await mkdir(dirname(LOG_PATH), { recursive: true });
