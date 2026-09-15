@@ -43,9 +43,7 @@ export const Route = createFileRoute("/models/$slug")({
   },
   head: ({ params, loaderData }) => {
     const slug = params.slug;
-    const label = loaderData
-      ? `${loaderData.brand} ${loaderData.model}`
-      : slug.replace(/-/g, " ");
+    const label = loaderData ? `${loaderData.brand} ${loaderData.model}` : slug.replace(/-/g, " ");
     const t = `${label} — Price in Bangladesh 2026 | BanglaEV`;
     const d = `${label} বাংলাদেশে — রেঞ্জ, ব্যাটারি, দাম ও সম্পূর্ণ স্পেসিফিকেশন।`;
     return {
@@ -65,7 +63,10 @@ export const Route = createFileRoute("/models/$slug")({
       scripts: [
         breadcrumbLd([
           { name: "হোম", path: "/" },
-          { name: loaderData?.brand ?? "মডেল", path: `/brands/${(loaderData?.brand ?? "").toLowerCase()}` },
+          {
+            name: loaderData?.brand ?? "মডেল",
+            path: `/brands/${(loaderData?.brand ?? "").toLowerCase()}`,
+          },
           { name: label, path: `/models/${slug}` },
         ]),
       ],
@@ -134,7 +135,9 @@ function ModelDetail() {
               )}
             </div>
             {m.last_price_update && (
-              <p className="mt-3 text-xs text-white/70">সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}</p>
+              <p className="mt-3 text-xs text-white/70">
+                সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}
+              </p>
             )}
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
@@ -177,9 +180,7 @@ function ModelDetail() {
                   <SpecRow
                     label="০-১০০ কিমি/ঘণ্টা"
                     value={
-                      m.zero_to_hundred
-                        ? `${toBnDigits(String(m.zero_to_hundred))} সেকেন্ড`
-                        : "—"
+                      m.zero_to_hundred ? `${toBnDigits(String(m.zero_to_hundred))} সেকেন্ড` : "—"
                     }
                   />
                   <SpecRow

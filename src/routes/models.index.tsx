@@ -9,7 +9,8 @@ import modelsHero from "@/assets/pages/models-hero.jpg";
 const allQO = queryOptions({ queryKey: ["models", "all"], queryFn: () => getAllModels() });
 
 const MODELS_TITLE = "Electric Cars in Bangladesh 2026 — Price & Specs | BanglaEV";
-const MODELS_DESC = "বাংলাদেশে উপলব্ধ সকল ইলেকট্রিক গাড়ির তালিকা: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr, Deepal — দাম, রেঞ্জ ও স্পেসিফিকেশন এক জায়গায়।";
+const MODELS_DESC =
+  "বাংলাদেশে উপলব্ধ সকল ইলেকট্রিক গাড়ির তালিকা: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr, Deepal — দাম, রেঞ্জ ও স্পেসিফিকেশন এক জায়গায়।";
 
 export const Route = createFileRoute("/models/")({
   head: () => ({
@@ -35,33 +36,27 @@ function ModelsBrowse() {
   const [brand, setBrand] = useState<string>("all");
   const [type, setType] = useState<string>("all");
 
-  const brands = useMemo(
-    () => Array.from(new Set(models.map((m) => m.brand))).sort(),
-    [models],
-  );
+  const brands = useMemo(() => Array.from(new Set(models.map((m) => m.brand))).sort(), [models]);
   const types = useMemo(
     () => Array.from(new Set(models.map((m) => m.type).filter(Boolean))) as string[],
     [models],
   );
 
   const filtered = models.filter(
-    (m) =>
-      (brand === "all" || m.brand === brand) && (type === "all" || m.type === type),
+    (m) => (brand === "all" || m.brand === brand) && (type === "all" || m.type === type),
   );
 
   return (
     <>
       <section className="hero-gradient text-white">
         <div className="container-page py-16 md:py-20">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">
-            EV ব্রাউজ
-          </p>
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">EV ব্রাউজ</p>
           <h1 className="mt-3 max-w-3xl text-4xl font-extrabold leading-tight md:text-5xl">
             বাংলাদেশের সকল ইলেকট্রিক গাড়ি
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-white/80">
-            BYD থেকে Tesla — বাংলাদেশে উপলব্ধ ও আসন্ন সকল EV-এর দাম, রেঞ্জ ও স্পেসিফিকেশন।
-            ব্র্যান্ড বা টাইপ অনুযায়ী ফিল্টার করুন।
+            BYD থেকে Tesla — বাংলাদেশে উপলব্ধ ও আসন্ন সকল EV-এর দাম, রেঞ্জ ও স্পেসিফিকেশন। ব্র্যান্ড
+            বা টাইপ অনুযায়ী ফিল্টার করুন।
           </p>
         </div>
       </section>
@@ -123,9 +118,9 @@ function ModelsBrowse() {
         )}
 
         <div className="mt-12 rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-          <strong className="text-foreground">নোট:</strong> কিছু মডেল বাংলাদেশে
-          অনানুষ্ঠানিকভাবে আমদানি হয়। অফিশিয়াল দাম না থাকলে "—" দেখানো হয়েছে।
-          সঠিক দাম ও উপলব্ধতা যাচাই করতে সংশ্লিষ্ট ব্র্যান্ডের{" "}
+          <strong className="text-foreground">নোট:</strong> কিছু মডেল বাংলাদেশে অনানুষ্ঠানিকভাবে
+          আমদানি হয়। অফিশিয়াল দাম না থাকলে "—" দেখানো হয়েছে। সঠিক দাম ও উপলব্ধতা যাচাই করতে
+          সংশ্লিষ্ট ব্র্যান্ডের{" "}
           <Link to="/about" className="text-primary underline">
             পরিবেশক
           </Link>{" "}
