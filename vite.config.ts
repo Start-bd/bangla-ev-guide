@@ -6,6 +6,7 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { imagetools } from "vite-imagetools";
+import netlify from "@netlify/vite-plugin-tanstack-start";
 
 export default defineConfig({
   tanstackStart: {
@@ -14,6 +15,8 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
-    plugins: [imagetools()],
+    // netlify() must run after the wrapper's own tanstackStart() plugin so it can see the
+    // finished route tree when it reconfigures the Nitro build output for Netlify Functions.
+    plugins: [netlify(), imagetools()],
   },
 });
