@@ -58,19 +58,19 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.04 270);
 
-  --primary: oklch(0.66 0.18 148);            /* #00A651 EV green */
+  --primary: oklch(0.66 0.18 148); /* #00A651 EV green */
   --primary-foreground: oklch(1 0 0);
 
-  --navy: oklch(0.22 0.05 275);               /* #1A1A2E */
+  --navy: oklch(0.22 0.05 275); /* #1A1A2E */
   --navy-foreground: oklch(0.98 0.005 270);
 
-  --secondary: oklch(0.96 0.02 150);          /* light green tint */
+  --secondary: oklch(0.96 0.02 150); /* light green tint */
   --secondary-foreground: oklch(0.25 0.08 148);
 
   --muted: oklch(0.97 0.005 270);
   --muted-foreground: oklch(0.48 0.03 270);
 
-  --accent: oklch(0.94 0.06 148);             /* #E8F5E9 */
+  --accent: oklch(0.94 0.06 148); /* #E8F5E9 */
   --accent-foreground: oklch(0.25 0.08 148);
 
   --destructive: oklch(0.6 0.22 27);
@@ -104,20 +104,28 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html { scroll-behavior: smooth; }
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     letter-spacing: -0.01em;
     font-weight: 700;
   }
-  :lang(bn), [lang="bn"] {
+  :lang(bn),
+  [lang="bn"] {
     font-family: "Noto Sans Bengali", "Inter", sans-serif;
   }
 }
@@ -137,7 +145,16 @@
 }
 
 @keyframes bolt-pulse {
-  0%, 100% { opacity: 0.6; transform: translateY(0); }
-  50% { opacity: 1; transform: translateY(-4px); }
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
 }
-.animate-bolt { animation: bolt-pulse 2.4s ease-in-out infinite; }
+.animate-bolt {
+  animation: bolt-pulse 2.4s ease-in-out infinite;
+}

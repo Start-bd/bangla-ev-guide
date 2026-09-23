@@ -11,6 +11,7 @@ Two gaps remain.
 No page on the site links to it. It is not in the header nav, not in the footer, and the planned "related guide" card on the charging page was never added. Search engines discover pages mainly through internal links, so an orphan page ranks poorly even when it is in the sitemap.
 
 Fix:
+
 - Add a "সম্পর্কিত গাইড" card at the bottom of `/charging` linking to the guide (hero thumbnail, title, one-line summary).
 - Add a "গাইড" link to the footer's resources column.
 - Add a compact guide teaser card to the home page below the news section.

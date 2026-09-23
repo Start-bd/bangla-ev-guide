@@ -4,7 +4,8 @@ import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import calcHero from "@/assets/pages/calculator-hero.jpg";
 
 const CALC_TITLE = "EV vs Petrol Cost Calculator Bangladesh | BanglaEV";
-const CALC_DESC = "ইলেকট্রিক গাড়ি বনাম পেট্রোল — আপনার দৈনিক ড্রাইভিং দিয়ে মাসিক ও বার্ষিক সাশ্রয় হিসাব করুন।";
+const CALC_DESC =
+  "ইলেকট্রিক গাড়ি বনাম পেট্রোল — আপনার দৈনিক ড্রাইভিং দিয়ে মাসিক ও বার্ষিক সাশ্রয় হিসাব করুন।";
 
 export const Route = createFileRoute("/calculator")({
   head: () => ({
@@ -40,7 +41,9 @@ function CalculatorPage() {
     <>
       <section className="hero-gradient text-white">
         <div className="container-page py-16">
-          <h1 className="text-4xl font-extrabold md:text-5xl">EV বনাম পেট্রোল — মাসিক খরচ হিসাব করুন</h1>
+          <h1 className="text-4xl font-extrabold md:text-5xl">
+            EV বনাম পেট্রোল — মাসিক খরচ হিসাব করুন
+          </h1>
           <p className="mt-3 max-w-2xl text-white/80">
             নিচের স্লাইডার ব্যবহার করে আপনার ড্রাইভিং প্যাটার্ন অনুযায়ী সাশ্রয় হিসাব করুন।
           </p>
