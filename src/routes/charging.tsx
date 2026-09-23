@@ -5,7 +5,8 @@ import chargingHero from "@/assets/pages/charging-hero.jpg";
 import bikesGuide from "@/assets/guides/electric-bikes-bangladesh.jpg";
 
 const CHG_TITLE = "EV Charging Stations in Bangladesh 2026 | BanglaEV";
-const CHG_DESC = "বাংলাদেশে EV চার্জিং স্টেশন: ১৪+ পাবলিক স্টেশন, ২০২৬-এর লক্ষ্য ১,২০০। হোম চার্জিং, BERC ট্যারিফ ৳৭.৬৪/kWh — সম্পূর্ণ গাইড।";
+const CHG_DESC =
+  "বাংলাদেশে EV চার্জিং স্টেশন: ১৪+ পাবলিক স্টেশন, ২০২৬-এর লক্ষ্য ১,২০০। হোম চার্জিং, BERC ট্যারিফ ৳৭.৬৪/kWh — সম্পূর্ণ গাইড।";
 
 const CHG_FAQS = [
   { q: "বাসায় চার্জ করা যাবে?", a: "হ্যাঁ। ৭kW ওয়ালবক্স দিয়ে সারারাতে ফুল চার্জ।" },
@@ -59,7 +60,9 @@ function ChargingPage() {
     <>
       <section className="hero-gradient text-white">
         <div className="container-page py-16">
-          <h1 className="text-4xl font-extrabold md:text-5xl">বাংলাদেশে EV চার্জিং — কোথায়, কিভাবে</h1>
+          <h1 className="text-4xl font-extrabold md:text-5xl">
+            বাংলাদেশে EV চার্জিং — কোথায়, কিভাবে
+          </h1>
           <p className="mt-3 max-w-2xl text-white/80">
             ২০২৫-এ ১৪+ পাবলিক স্টেশন। ২০২৬-এর সরকারি লক্ষ্য: ১,২০০ স্টেশন।
           </p>
@@ -83,8 +86,9 @@ function ChargingPage() {
           <Home className="h-6 w-6 text-primary" />
           <h2 className="mt-3 text-2xl font-bold">হোম চার্জিং</h2>
           <p className="mt-3 text-muted-foreground">
-            সবচেয়ে সাশ্রয়ী উপায়। একটি ৭-১১ kW AC ওয়ালবক্স ইনস্টল করলে সারারাতে গাড়ি ফুল চার্জ হয়ে যায়।
-            BERC-এর EV ট্যারিফ <strong>৳৭.৬৪/kWh</strong> — ৬০ কিমি/দিন চালালে মাসে ~৳২,৫০০।
+            সবচেয়ে সাশ্রয়ী উপায়। একটি ৭-১১ kW AC ওয়ালবক্স ইনস্টল করলে সারারাতে গাড়ি ফুল চার্জ
+            হয়ে যায়। BERC-এর EV ট্যারিফ <strong>৳৭.৬৪/kWh</strong> — ৬০ কিমি/দিন চালালে মাসে
+            ~৳২,৫০০।
           </p>
         </div>
 
@@ -92,8 +96,8 @@ function ChargingPage() {
           <Zap className="h-6 w-6 text-primary" />
           <h2 className="mt-3 text-2xl font-bold">DC ফাস্ট চার্জিং</h2>
           <p className="mt-3 text-muted-foreground">
-            পাবলিক স্টেশনে ৫০-১২০ kW DC ফাস্ট চার্জার থাকে। বেশিরভাগ EV ৩০%→৮০% মাত্র ৩০ মিনিটে চার্জ হয়।
-            লং ট্রিপের জন্য আদর্শ।
+            পাবলিক স্টেশনে ৫০-১২০ kW DC ফাস্ট চার্জার থাকে। বেশিরভাগ EV ৩০%→৮০% মাত্র ৩০ মিনিটে
+            চার্জ হয়। লং ট্রিপের জন্য আদর্শ।
           </p>
         </div>
       </section>
@@ -103,7 +107,10 @@ function ChargingPage() {
           <h2 className="mb-6 text-2xl font-bold">ঢাকার পরিচিত চার্জিং লোকেশন</h2>
           <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
             {stations.map((s) => (
-              <div key={s} className="flex items-center gap-2 rounded-xl border border-border bg-card p-4 text-sm">
+              <div
+                key={s}
+                className="flex items-center gap-2 rounded-xl border border-border bg-card p-4 text-sm"
+              >
                 <MapPin className="h-4 w-4 text-primary" /> {s}
               </div>
             ))}
@@ -141,7 +148,9 @@ function ChargingPage() {
             />
           </div>
           <div className="flex flex-col justify-center p-6">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary">গাইড</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+              গাইড
+            </span>
             <h3 className="mt-2 font-display text-xl font-bold group-hover:text-primary">
               বাংলাদেশে সেরা ইলেকট্রিক বাইক (২০২৬) — ক্রয়ের গাইড
             </h3>
@@ -152,6 +161,5 @@ function ChargingPage() {
         </Link>
       </section>
     </>
-
   );
 }
