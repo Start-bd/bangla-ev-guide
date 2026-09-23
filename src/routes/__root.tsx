@@ -51,7 +51,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-[60vh] items-center justify-center px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold">পেজটি লোড হয়নি</h1>
-        <p className="mt-2 text-sm text-muted-foreground">কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।
+        </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -62,7 +64,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           >
             আবার চেষ্টা করুন
           </button>
-          <a href="/" className="inline-flex rounded-full border border-input px-4 py-2 text-sm font-semibold">হোম</a>
+          <a
+            href="/"
+            className="inline-flex rounded-full border border-input px-4 py-2 text-sm font-semibold"
+          >
+            হোম
+          </a>
         </div>
       </div>
     </div>
@@ -82,7 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#00A651" },
       { name: "google-site-verification", content: "aYtVVCKYq_a0JYv7vCMiSRjULEP1APY3qIYqtmg-ofI" },
       { property: "og:site_name", content: "BanglaEV" },
-      
+
       { property: "og:locale", content: "bn_BD" },
       { property: "og:locale:alternate", content: "en_US" },
       // og:image / twitter:image are set per-leaf-route via ogMeta() in src/lib/seo.ts.
@@ -125,6 +132,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             url: "https://banglaev.com/favicon.png",
           },
           founder: { "@id": "https://banglaev.com/#author" },
+          email: "hello@banglaev.com",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Mymensingh",
+            addressCountry: "BD",
+          },
           sameAs: [
             "https://facebook.com/banglaev",
             "https://youtube.com/@banglaev",

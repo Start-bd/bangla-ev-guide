@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { ssrLog } from "@/lib/ssr-logger";
 
 const BASE_URL = "https://banglaev.com";
 
@@ -9,16 +10,6 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const supa = createClient<Database>(
-          process.env.SUPABASE_URL!,
-          process.env.SUPABASE_PUBLISHABLE_KEY!,
-          { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
-        );
-        const [{ data: models }, { data: posts }] = await Promise.all([
-          supa.from("ev_models").select("slug,brand"),
-          supa.from("posts").select("slug,published_at").eq("published", true),
-        ]);
-
         const staticPaths = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/models", changefreq: "weekly", priority: "0.9" },
@@ -33,24 +24,55 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/terms", changefreq: "yearly", priority: "0.2" },
         ];
 
-        const bydPaths = (models ?? [])
-          .filter((m) => m.brand === "BYD")
-          .map((m) => ({ path: `/byd/${m.slug}`, changefreq: "monthly", priority: "0.8" }));
+        // This is the site's only sitemap.xml (the previously-duplicated
+        // public/sitemap.xml static file was removed — it silently shadowed
+        // this route on Vercel and never reflected models/posts added only
+        // to the database). Never let a Supabase hiccup take the whole
+        // sitemap down: fall back to the static paths alone so the URL
+        // always returns a valid 200 sitemap.
+        let bydPaths: { path: string; changefreq: string; priority: string }[] = [];
+        let modelPaths: { path: string; changefreq: string; priority: string }[] = [];
+        let brandPaths: { path: string; changefreq: string; priority: string }[] = [];
+        let postPaths: { path: string; lastmod?: string; changefreq: string; priority: string }[] =
+          [];
 
-        const modelPaths = (models ?? [])
-          .filter((m) => m.brand !== "BYD")
-          .map((m) => ({ path: `/models/${m.slug}`, changefreq: "monthly", priority: "0.7" }));
+        try {
+          if (!process.env.SUPABASE_URL || !process.env.SUPABASE_PUBLISHABLE_KEY) {
+            throw new Error("SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY not configured");
+          }
+          const supa = createClient<Database>(
+            process.env.SUPABASE_URL,
+            process.env.SUPABASE_PUBLISHABLE_KEY,
+            { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
+          );
+          const [{ data: models }, { data: posts }] = await Promise.all([
+            supa.from("ev_models").select("slug,brand"),
+            supa.from("posts").select("slug,published_at").eq("published", true),
+          ]);
 
-        const brandPaths = Array.from(
-          new Set((models ?? []).filter((m) => m.brand !== "BYD").map((m) => m.brand.toLowerCase())),
-        ).map((b) => ({ path: `/brands/${b}`, changefreq: "weekly", priority: "0.7" }));
+          bydPaths = (models ?? [])
+            .filter((m) => m.brand === "BYD")
+            .map((m) => ({ path: `/byd/${m.slug}`, changefreq: "monthly", priority: "0.8" }));
 
-        const postPaths = (posts ?? []).map((p) => ({
-          path: `/news/${p.slug}`,
-          lastmod: p.published_at ?? undefined,
-          changefreq: "monthly",
-          priority: "0.6",
-        }));
+          modelPaths = (models ?? [])
+            .filter((m) => m.brand !== "BYD")
+            .map((m) => ({ path: `/models/${m.slug}`, changefreq: "monthly", priority: "0.7" }));
+
+          brandPaths = Array.from(
+            new Set(
+              (models ?? []).filter((m) => m.brand !== "BYD").map((m) => m.brand.toLowerCase()),
+            ),
+          ).map((b) => ({ path: `/brands/${b}`, changefreq: "weekly", priority: "0.7" }));
+
+          postPaths = (posts ?? []).map((p) => ({
+            path: `/news/${p.slug}`,
+            lastmod: p.published_at ?? undefined,
+            changefreq: "monthly",
+            priority: "0.6",
+          }));
+        } catch (err) {
+          ssrLog.error({ scope: "sitemap", event: "db_fetch_failed" }, err);
+        }
 
         const all = [...staticPaths, ...bydPaths, ...modelPaths, ...brandPaths, ...postPaths];
 
@@ -62,12 +84,14 @@ export const Route = createFileRoute("/sitemap.xml")({
               `  <url>`,
               `    <loc>${BASE_URL}${e.path}</loc>`,
               `    <xhtml:link rel="alternate" hreflang="bn" href="${BASE_URL}${e.path}"/>`,
-              `    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}${e.path}?lang=en"/>`,
+              `    <xhtml:link rel="alternate" hreflang="x-default" href="${BASE_URL}${e.path}"/>`,
               "lastmod" in e && e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
               `    <changefreq>${e.changefreq}</changefreq>`,
               `    <priority>${e.priority}</priority>`,
               `  </url>`,
-            ].filter(Boolean).join("\n"),
+            ]
+              .filter(Boolean)
+              .join("\n"),
           ),
           `</urlset>`,
         ].join("\n");

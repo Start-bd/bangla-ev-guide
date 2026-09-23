@@ -15,12 +15,18 @@ import news4 from "@/assets/news/news-4.jpg";
 import bikesGuide from "@/assets/guides/electric-bikes-bangladesh.jpg";
 const NEWS_FALLBACKS = [news1, news2, news3, news4];
 
-
-const featuredQO = queryOptions({ queryKey: ["models", "featured"], queryFn: () => getFeaturedModels() });
-const postsQO = queryOptions({ queryKey: ["posts", 4], queryFn: () => getPosts({ data: { limit: 4 } }) });
+const featuredQO = queryOptions({
+  queryKey: ["models", "featured"],
+  queryFn: () => getFeaturedModels(),
+});
+const postsQO = queryOptions({
+  queryKey: ["posts", 4],
+  queryFn: () => getPosts({ data: { limit: 4 } }),
+});
 
 const HOME_TITLE = "BanglaEV — বাংলাদেশের ইলেকট্রিক গাড়ির গাইড";
-const HOME_DESC = "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।";
+const HOME_DESC =
+  "বাংলাদেশে ইলেকট্রিক গাড়ি কিনুন: BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr — সকল EV-এর দাম, রিভিউ ও তুলনা এক জায়গায়।";
 
 // Short, quotable buyer Q&A — drives both the visible FAQ section and FAQPage JSON-LD.
 const FAQS: { q: string; a: string }[] = [
@@ -70,11 +76,16 @@ export const Route = createFileRoute("/")({
     ],
     links: [
       ...localeLinks("/"),
-      { rel: "preload", as: "image", href: heroCar, fetchpriority: "high", media: "(min-width: 768px)" },
+      {
+        rel: "preload",
+        as: "image",
+        href: heroCar,
+        fetchpriority: "high",
+        media: "(min-width: 768px)",
+      },
     ],
     scripts: [faqLd],
   }),
-
 
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(featuredQO);
@@ -110,14 +121,20 @@ function HomePage() {
               বাংলাদেশের সম্পূর্ণ EV গাইড
             </h1>
             <p className="mt-5 max-w-xl text-lg text-white/80">
-              BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr — বাংলাদেশে উপলব্ধ সকল ইলেকট্রিক গাড়ির
-              দাম, রিভিউ, তুলনা ও চার্জিং গাইড এক জায়গায়।
+              BYD, MG, Hyundai, Kia, Tesla, Neta, Zeekr — বাংলাদেশে উপলব্ধ সকল ইলেকট্রিক গাড়ির দাম,
+              রিভিউ, তুলনা ও চার্জিং গাইড এক জায়গায়।
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/models" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-105">
+              <Link
+                to="/models"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-105"
+              >
                 সকল EV দেখুন <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link to="/compare" className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur hover:bg-white/15">
+              <Link
+                to="/compare"
+                className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur hover:bg-white/15"
+              >
                 দাম তুলনা করুন
               </Link>
             </div>
@@ -134,7 +151,6 @@ function HomePage() {
               className="relative rounded-2xl shadow-2xl shadow-black/40 ring-1 ring-white/10"
             />
           </div>
-
         </div>
       </section>
 
@@ -143,7 +159,9 @@ function HomePage() {
         <div className="container-page py-10">
           <div className="mb-6 flex flex-col items-start justify-between gap-2 md:flex-row md:items-end">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wider text-primary">ব্র্যান্ড</p>
+              <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+                ব্র্যান্ড
+              </p>
               <h2 className="mt-1 text-2xl font-bold">ব্র্যান্ড অনুযায়ী ব্রাউজ করুন</h2>
             </div>
             <Link to="/models" className="text-sm font-semibold text-primary hover:underline">
@@ -181,7 +199,9 @@ function HomePage() {
       <section className="container-page py-20">
         <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-primary">ফিচার্ড মডেল</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+              ফিচার্ড মডেল
+            </p>
             <h2 className="mt-2 text-3xl font-bold md:text-4xl">জনপ্রিয় EV গাড়ি</h2>
           </div>
           <Link to="/models" className="text-sm font-semibold text-primary hover:underline">
@@ -216,11 +236,29 @@ function HomePage() {
             />
             <div className="grid gap-4">
               {[
-                { icon: Zap, t: "জ্বালানি সাশ্রয়", v: "৳৩/কিমি", s: "পেট্রোলে ৳১৫/কিমি — মাসে হাজার টাকা সাশ্রয়" },
-                { icon: Leaf, t: "পরিবেশ বান্ধব", v: "৭৭% কম কার্বন", s: "শূন্য টেইলপাইপ ইমিশন, পরিচ্ছন্ন বাতাস" },
-                { icon: Wrench, t: "কম রক্ষণাবেক্ষণ", v: "৫০% সাশ্রয়", s: "ইঞ্জিন অয়েল, স্পার্ক প্লাগ — কিছুই লাগে না" },
+                {
+                  icon: Zap,
+                  t: "জ্বালানি সাশ্রয়",
+                  v: "৳৩/কিমি",
+                  s: "পেট্রোলে ৳১৫/কিমি — মাসে হাজার টাকা সাশ্রয়",
+                },
+                {
+                  icon: Leaf,
+                  t: "পরিবেশ বান্ধব",
+                  v: "৭৭% কম কার্বন",
+                  s: "শূন্য টেইলপাইপ ইমিশন, পরিচ্ছন্ন বাতাস",
+                },
+                {
+                  icon: Wrench,
+                  t: "কম রক্ষণাবেক্ষণ",
+                  v: "৫০% সাশ্রয়",
+                  s: "ইঞ্জিন অয়েল, স্পার্ক প্লাগ — কিছুই লাগে না",
+                },
               ].map((c) => (
-                <div key={c.t} className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
+                <div
+                  key={c.t}
+                  className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm"
+                >
                   <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground">
                     <c.icon className="h-6 w-6" />
                   </div>
@@ -233,7 +271,6 @@ function HomePage() {
               ))}
             </div>
           </div>
-
         </div>
       </section>
 
@@ -241,12 +278,18 @@ function HomePage() {
       <section className="container-page py-20">
         <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-primary">কস্ট ক্যালকুলেটর</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+              কস্ট ক্যালকুলেটর
+            </p>
             <h2 className="mt-2 text-3xl font-bold md:text-4xl">আপনার মাসিক সাশ্রয় হিসাব করুন</h2>
             <p className="mt-4 text-muted-foreground">
-              আপনার দৈনিক ড্রাইভিং, পেট্রোল ও বিদ্যুতের দাম দিন — দেখুন EV-তে শিফট করলে মাসে কত টাকা সাশ্রয় হবে।
+              আপনার দৈনিক ড্রাইভিং, পেট্রোল ও বিদ্যুতের দাম দিন — দেখুন EV-তে শিফট করলে মাসে কত টাকা
+              সাশ্রয় হবে।
             </p>
-            <Link to="/calculator" className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground hover:bg-primary/90">
+            <Link
+              to="/calculator"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground hover:bg-primary/90"
+            >
               <Calculator className="h-4 w-4" /> পূর্ণ ক্যালকুলেটর খুলুন
             </Link>
           </div>
@@ -259,32 +302,47 @@ function HomePage() {
         <div className="container-page">
           <div className="mb-10 flex items-end justify-between">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wider text-primary">সর্বশেষ খবর</p>
+              <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+                সর্বশেষ খবর
+              </p>
               <h2 className="mt-2 text-3xl font-bold">EV ও অটো আপডেট</h2>
             </div>
-            <Link to="/news" className="text-sm font-semibold text-primary hover:underline">সব দেখুন →</Link>
+            <Link to="/news" className="text-sm font-semibold text-primary hover:underline">
+              সব দেখুন →
+            </Link>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {posts.map((p, i) => {
               const cover = p.cover_url || NEWS_FALLBACKS[i % NEWS_FALLBACKS.length];
               return (
-              <Link key={p.id} to="/news/$slug" params={{ slug: p.slug }} className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-lg">
-                <div className="aspect-[16/10] overflow-hidden bg-muted">
-                  <img
-                    src={cover}
-                    alt={p.title_bn}
-                    width={1280}
-                    height={800}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="flex flex-1 flex-col p-5">
-                  <span className="text-xs font-semibold uppercase text-primary">{p.category}</span>
-                  <h3 className="mt-2 line-clamp-3 font-display text-lg font-bold leading-snug group-hover:text-primary">{p.title_bn}</h3>
-                  <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{p.excerpt_bn}</p>
-                </div>
-              </Link>
+                <Link
+                  key={p.id}
+                  to="/news/$slug"
+                  params={{ slug: p.slug }}
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <div className="aspect-[16/10] overflow-hidden bg-muted">
+                    <img
+                      src={cover}
+                      alt={p.title_bn}
+                      width={1280}
+                      height={800}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col p-5">
+                    <span className="text-xs font-semibold uppercase text-primary">
+                      {p.category}
+                    </span>
+                    <h3 className="mt-2 line-clamp-3 font-display text-lg font-bold leading-snug group-hover:text-primary">
+                      {p.title_bn}
+                    </h3>
+                    <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                      {p.excerpt_bn}
+                    </p>
+                  </div>
+                </Link>
               );
             })}
           </div>
@@ -309,7 +367,9 @@ function HomePage() {
             />
           </div>
           <div className="flex flex-col justify-center p-6">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary">নতুন গাইড</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+              নতুন গাইড
+            </span>
             <h2 className="mt-2 font-display text-2xl font-bold group-hover:text-primary">
               বাংলাদেশে সেরা ইলেকট্রিক বাইক (২০২৬)
             </h2>
@@ -324,8 +384,12 @@ function HomePage() {
       {/* FAQ */}
       <section className="border-t border-border bg-card py-20">
         <div className="container-page max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">সাধারণ প্রশ্ন</p>
-          <h2 className="mt-2 text-3xl font-bold md:text-4xl">বাংলাদেশে ইলেকট্রিক গাড়ি সম্পর্কে যা জানতে চান</h2>
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+            সাধারণ প্রশ্ন
+          </p>
+          <h2 className="mt-2 text-3xl font-bold md:text-4xl">
+            বাংলাদেশে ইলেকট্রিক গাড়ি সম্পর্কে যা জানতে চান
+          </h2>
           <dl className="mt-8 grid gap-4">
             {FAQS.map((f) => (
               <div key={f.q} className="rounded-2xl border border-border bg-background p-6">
@@ -337,7 +401,5 @@ function HomePage() {
         </div>
       </section>
     </>
-
-
   );
 }

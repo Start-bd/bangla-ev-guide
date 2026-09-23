@@ -55,7 +55,9 @@ function warnFallback(slug: string, brand: string, model: string) {
   warnedSlugs.add(slug);
   ssrLog.error(
     { scope: "model-card", event: "fallback_image_used", slug, brand, model },
-    new Error(`ModelCard has no srcset image for slug "${slug}" — falling back to placeholder icon`),
+    new Error(
+      `ModelCard has no srcset image for slug "${slug}" — falling back to placeholder icon`,
+    ),
   );
 }
 
@@ -67,7 +69,6 @@ if (process.env.NODE_ENV === "development") {
     assertValidMapping(slug, entry);
   }
 }
-
 
 const BRAND_TINTS: Record<string, string> = {
   BYD: "from-[#0b3d91] to-[#1a1a2e]",
@@ -150,12 +151,16 @@ export function ModelCard(p: ModelCardProps) {
           </li>
           <li className="rounded-lg bg-muted px-2 py-2 text-center">
             <Zap className="mx-auto mb-1 h-4 w-4 text-primary" />
-            <span className="block font-semibold">{p.battery_kwh ? `${toBnDigits(String(p.battery_kwh))} kWh` : "—"}</span>
+            <span className="block font-semibold">
+              {p.battery_kwh ? `${toBnDigits(String(p.battery_kwh))} kWh` : "—"}
+            </span>
             <span className="text-muted-foreground">ব্যাটারি</span>
           </li>
           <li className="rounded-lg bg-muted px-2 py-2 text-center">
             <Gauge className="mx-auto mb-1 h-4 w-4 text-primary" />
-            <span className="block font-semibold">{p.zero_to_hundred ? `${toBnDigits(String(p.zero_to_hundred))}s` : "—"}</span>
+            <span className="block font-semibold">
+              {p.zero_to_hundred ? `${toBnDigits(String(p.zero_to_hundred))}s` : "—"}
+            </span>
             <span className="text-muted-foreground">০-১০০</span>
           </li>
         </ul>
@@ -171,11 +176,19 @@ export function ModelCard(p: ModelCardProps) {
 
   // BYD keeps its dedicated hub URL (SEO); other brands route through /models/$slug.
   return isByd ? (
-    <Link to="/byd/$slug" params={{ slug: p.slug }} className="group block h-full focus-visible:outline-none">
+    <Link
+      to="/byd/$slug"
+      params={{ slug: p.slug }}
+      className="group block h-full focus-visible:outline-none"
+    >
       {Inner}
     </Link>
   ) : (
-    <Link to="/models/$slug" params={{ slug: p.slug }} className="group block h-full focus-visible:outline-none">
+    <Link
+      to="/models/$slug"
+      params={{ slug: p.slug }}
+      className="group block h-full focus-visible:outline-none"
+    >
       {Inner}
     </Link>
   );
