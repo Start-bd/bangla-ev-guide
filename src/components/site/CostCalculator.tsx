@@ -20,7 +20,10 @@ export function CostCalculator({ compact = false }: Props) {
     const bevCost = (monthlyKm / 6) * elecRate;
     const cur = carType === "ICE" ? iceCost : carType === "HEV" ? hevCost : bevCost;
     return {
-      iceCost, hevCost, bevCost, cur,
+      iceCost,
+      hevCost,
+      bevCost,
+      cur,
       savingsVsIce: iceCost - bevCost,
       annual: (iceCost - bevCost) * 12,
       fiveYear: (iceCost - bevCost) * 60,
@@ -30,16 +33,39 @@ export function CostCalculator({ compact = false }: Props) {
   const fmt = (n: number) => "৳" + toBnDigits(Math.round(n).toLocaleString("en-US"));
 
   return (
-    <div className={`rounded-2xl border border-border bg-card p-6 shadow-sm ${compact ? "" : "md:p-8"}`}>
+    <div
+      className={`rounded-2xl border border-border bg-card p-6 shadow-sm ${compact ? "" : "md:p-8"}`}
+    >
       <div className="flex items-center gap-2">
         <Calculator className="h-5 w-5 text-primary" />
         <h2 className="font-display text-lg font-bold">EV vs পেট্রোল ক্যালকুলেটর</h2>
       </div>
 
       <div className="mt-6 space-y-5">
-        <RangeRow label={`দৈনিক ড্রাইভিং: ${toBnDigits(km)} কিমি`} min={20} max={200} step={5} value={km} onChange={setKm} />
-        <RangeRow label={`পেট্রোলের দাম: ৳${toBnDigits(petrolPrice)}/লিটার`} min={110} max={140} step={1} value={petrolPrice} onChange={setPetrolPrice} />
-        <RangeRow label={`বিদ্যুৎ রেট: ৳${toBnDigits(elecRate)}/kWh`} min={7} max={12} step={0.5} value={elecRate} onChange={setElecRate} />
+        <RangeRow
+          label={`দৈনিক ড্রাইভিং: ${toBnDigits(km)} কিমি`}
+          min={20}
+          max={200}
+          step={5}
+          value={km}
+          onChange={setKm}
+        />
+        <RangeRow
+          label={`পেট্রোলের দাম: ৳${toBnDigits(petrolPrice)}/লিটার`}
+          min={110}
+          max={140}
+          step={1}
+          value={petrolPrice}
+          onChange={setPetrolPrice}
+        />
+        <RangeRow
+          label={`বিদ্যুৎ রেট: ৳${toBnDigits(elecRate)}/kWh`}
+          min={7}
+          max={12}
+          step={0.5}
+          value={elecRate}
+          onChange={setElecRate}
+        />
 
         <div className="flex gap-2">
           {(["ICE", "HEV", "BEV"] as const).map((t) => (
@@ -47,7 +73,9 @@ export function CostCalculator({ compact = false }: Props) {
               key={t}
               onClick={() => setCarType(t)}
               className={`flex-1 rounded-full border px-3 py-2 text-sm font-semibold transition ${
-                carType === t ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground/70 hover:bg-accent"
+                carType === t
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-background text-foreground/70 hover:bg-accent"
               }`}
             >
               {t === "ICE" ? "পেট্রোল" : t === "HEV" ? "হাইব্রিড" : "ফুল EV"}
@@ -75,13 +103,29 @@ export function CostCalculator({ compact = false }: Props) {
 }
 
 function RangeRow({
-  label, min, max, step, value, onChange,
-}: { label: string; min: number; max: number; step: number; value: number; onChange: (n: number) => void }) {
+  label,
+  min,
+  max,
+  step,
+  value,
+  onChange,
+}: {
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  onChange: (n: number) => void;
+}) {
   return (
     <label className="block">
       <span className="mb-2 block text-sm font-medium">{label}</span>
       <input
-        type="range" min={min} max={max} step={step} value={value}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full accent-[oklch(0.66_0.18_148)]"
       />
@@ -89,9 +133,23 @@ function RangeRow({
   );
 }
 
-function Result({ icon: Icon, label, value, accent, big }: { icon: typeof Calculator; label: string; value: string; accent?: boolean; big?: boolean }) {
+function Result({
+  icon: Icon,
+  label,
+  value,
+  accent,
+  big,
+}: {
+  icon: typeof Calculator;
+  label: string;
+  value: string;
+  accent?: boolean;
+  big?: boolean;
+}) {
   return (
-    <div className={`rounded-xl p-4 ${accent ? "bg-accent" : "bg-muted"} ${big ? "sm:col-span-2" : ""}`}>
+    <div
+      className={`rounded-xl p-4 ${accent ? "bg-accent" : "bg-muted"} ${big ? "sm:col-span-2" : ""}`}
+    >
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <Icon className="h-3.5 w-3.5" /> {label}
       </div>

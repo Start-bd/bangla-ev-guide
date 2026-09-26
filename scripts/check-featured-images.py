@@ -83,10 +83,43 @@ async def main():
                     # On /compare, exercise every selectable model chip so every
                     # slug's image is force-mounted at least once at this breakpoint.
                     if route == "/compare":
-                        chips = await page.locator("section.container-page button.rounded-full").all()
-                        chip_labels = [await c.inner_text() for c in chips]
-                        for i, chip in enumerate(chips):
-                            await chip.click()
+                        # Clear the default picks first: with an empty selection each
+                        # click below *adds* a model, so the just-clicked slug is
+                        # always mounted in the row when we validate it.
+                        clear_btn = page.locator("section.container-page button", has_text="সব পরিষ্কার").first
+                        try:
+                            await clear_btn.click(timeout=5000)
+                            await page.wait_for_load_state("networkidle")
+                        except Exception:
+                            pass
+
+                        # Only the selectable model chips carry px-4 padding; picked
+                        # pills and brand filter chips use px-3 and change on every
+                        # click, so they must stay out of the iterated list.
+                        chip_sel = "section.container-page button.px-4.rounded-full"
+                        chip_labels = [
+                            (await page.locator(chip_sel).nth(i).inner_text()).strip()
+                            for i in range(await page.locator(chip_sel).count())
+                        ]
+                        for i, label in enumerate(chip_labels):
+                            chip = page.locator(chip_sel).nth(i)
+                            try:
+                                await chip.click(timeout=5000)
+                            except Exception:
+                                # Model chips only disappear when a brand filter is
+                                # active; retry once by text after resetting it.
+                                try:
+                                    brand_reset = page.locator(
+                                        "section.container-page button.px-3", has_text="সব ব্র্যান্ড"
+                                    ).first
+                                    await brand_reset.click(timeout=3000)
+                                except Exception:
+                                    pass
+                                try:
+                                    await page.locator(chip_sel, has_text=label).first.click(timeout=5000)
+                                except Exception:
+                                    fail(f"{label} compare chip \"{label}\" not clickable")
+                                    continue
                             await page.wait_for_load_state("networkidle")
                             # Poll until row imgs (if any) have decoded, tolerating the
                             # case where the click deselected the last picked model.
@@ -105,16 +138,13 @@ async def main():
                                 ".map(i => ({ src: i.currentSrc || i.src, srcset: i.getAttribute('srcset') || '',"
                                 " alt: i.alt, naturalWidth: i.naturalWidth, complete: i.complete }))"
                             )
-                            if not row_imgs:
-                                # chip may have deselected the last picked model — that's fine, skip
-                                continue
                             for c in row_imgs:
-                                ctxlbl = f'{label} compare chip="{chip_labels[i]}" alt="{c["alt"]}"'
+                                ctxlbl = f'{label} compare chip="{label}" alt="{c["alt"]}"'
                                 if not c["srcset"] or not all(w in c["srcset"] for w in EXPECTED_WIDTHS):
                                     fail(f"{ctxlbl} srcset missing widths: {c['srcset']}")
                                 if not c["complete"] or c["naturalWidth"] == 0:
                                     fail(f"{ctxlbl} image did not load (naturalWidth={c['naturalWidth']})")
-                        print(f"OK {label} exercised {len(chips)} compare chip(s)")
+                        print(f"OK {label} exercised {len(chip_labels)} compare chip(s)")
                 await ctx.close()
         finally:
             await browser.close()
