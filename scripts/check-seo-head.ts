@@ -26,13 +26,7 @@ function countMatches(html: string, re: RegExp): RegExpMatchArray[] {
   return [...html.matchAll(re)];
 }
 
-function expectOne(
-  route: string,
-  html: string,
-  label: string,
-  re: RegExp,
-  expectedHref: string,
-) {
+function expectOne(route: string, html: string, label: string, re: RegExp, expectedHref: string) {
   const matches = countMatches(html, re);
   if (matches.length === 0) {
     failures.push({ route, problem: `missing ${label}` });
@@ -125,11 +119,12 @@ function checkJsonLd(path: string, html: string, canonical: string) {
     return;
   }
 
-  const nodes: any[] = [];
+  const nodes: Record<string, unknown>[] = [];
   blocks.forEach((raw, i) => {
     try {
-      const parsed = JSON.parse(raw);
-      nodes.push(...(Array.isArray(parsed) ? parsed : [parsed]));
+      const parsed: unknown = JSON.parse(raw);
+      const arr = Array.isArray(parsed) ? parsed : [parsed];
+      nodes.push(...(arr.filter((n) => n && typeof n === "object") as Record<string, unknown>[]));
     } catch (err) {
       failures.push({
         route: path,
@@ -158,7 +153,7 @@ function checkJsonLd(path: string, html: string, canonical: string) {
       if (!Array.isArray(items) || items.length < 2) {
         failures.push({ route: path, problem: "BreadcrumbList has fewer than 2 items" });
       } else {
-        items.forEach((it: any, i: number) => {
+        items.forEach((it: { position?: unknown; name?: unknown; item?: unknown }, i: number) => {
           if (it.position !== i + 1 || !it.name || !it.item) {
             failures.push({
               route: path,
@@ -177,8 +172,7 @@ function checkJsonLd(path: string, html: string, canonical: string) {
     }
   }
 
-  const isModelRoute =
-    /^\/models\/[^/]+$/.test(path) || /^\/byd\/[^/]+$/.test(path);
+  const isModelRoute = /^\/models\/[^/]+$/.test(path) || /^\/byd\/[^/]+$/.test(path);
   if (!isModelRoute) return;
 
   const cars = nodes.filter((n) => n && n["@type"] === "Car");
@@ -214,9 +208,7 @@ async function fetchSitemapPaths(baseUrl: string): Promise<string[]> {
   if (!res.ok) throw new Error(`sitemap.xml returned ${res.status}`);
   const xml = await res.text();
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-  return locs
-    .map((u) => u.replace(/^https?:\/\/[^/]+/, ""))
-    .map((p) => (p === "" ? "/" : p));
+  return locs.map((u) => u.replace(/^https?:\/\/[^/]+/, "")).map((p) => (p === "" ? "/" : p));
 }
 
 async function waitForServer(url: string, timeoutMs = 60_000): Promise<void> {
@@ -241,7 +233,10 @@ async function spawnDev(): Promise<{ baseUrl: string; child: ChildProcess }> {
   let baseUrl = "";
   const urlRe = /Local:\s+(https?:\/\/[^\s/]+)/i;
   await new Promise<void>((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error("dev server URL not detected within 60s")), 60_000);
+    const timer = setTimeout(
+      () => reject(new Error("dev server URL not detected within 60s")),
+      60_000,
+    );
     const onData = (buf: Buffer) => {
       const m = buf.toString().match(urlRe);
       if (m) {
@@ -300,7 +295,9 @@ async function main() {
     for (const f of failures) console.error(`  [${f.route}] ${f.problem}`);
     process.exit(1);
   }
-  console.log("\n✅ All routes have a unique canonical + bn/en/x-default hreflang + og:url + valid JSON-LD");
+  console.log(
+    "\n✅ All routes have a unique canonical + bn/en/x-default hreflang + og:url + valid JSON-LD",
+  );
 }
 
 main().catch((err) => {

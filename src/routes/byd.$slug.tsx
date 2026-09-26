@@ -64,7 +64,8 @@ export const Route = createFileRoute("/byd/$slug")({
     const kind = loaderData?.type === "PHEV" ? "প্লাগ-ইন হাইব্রিড" : "ইলেকট্রিক";
     const bits: string[] = [];
     if (loaderData?.range_km) bits.push(`রেঞ্জ ${toBnDigits(loaderData.range_km)} কিমি`);
-    if (loaderData?.battery_kwh) bits.push(`${toBnDigits(String(loaderData.battery_kwh))} kWh ব্যাটারি`);
+    if (loaderData?.battery_kwh)
+      bits.push(`${toBnDigits(String(loaderData.battery_kwh))} kWh ব্যাটারি`);
     if (loaderData?.zero_to_hundred)
       bits.push(`০-১০০ কিমি/ঘণ্টা ${toBnDigits(String(loaderData.zero_to_hundred))} সেকেন্ড`);
     if (loaderData?.charging_time_min)
@@ -76,9 +77,7 @@ export const Route = createFileRoute("/byd/$slug")({
       } সম্পূর্ণ স্পেসিফিকেশন ও কেনার গাইড।`,
     };
     const meta = titles[slug] ?? generated;
-    const modelName = loaderData
-      ? name
-      : meta.t.split(" —")[0].split(" Price")[0].trim();
+    const modelName = loaderData ? name : meta.t.split(" —")[0].split(" Price")[0].trim();
 
     return {
       meta: [
@@ -107,13 +106,20 @@ export const Route = createFileRoute("/byd/$slug")({
   notFoundComponent: () => (
     <div className="container-page py-24 text-center">
       <h1 className="text-3xl font-bold">মডেল পাওয়া যায়নি</h1>
-      <Link to="/byd" className="mt-4 inline-block text-primary underline">BYD হাবে ফিরে যান</Link>
+      <Link to="/byd" className="mt-4 inline-block text-primary underline">
+        BYD হাবে ফিরে যান
+      </Link>
     </div>
   ),
   errorComponent: ({ reset }) => (
     <div className="container-page py-24 text-center">
       <p>লোড করতে সমস্যা হয়েছে।</p>
-      <button onClick={reset} className="mt-3 rounded-full bg-primary px-4 py-2 text-primary-foreground">আবার চেষ্টা</button>
+      <button
+        onClick={reset}
+        className="mt-3 rounded-full bg-primary px-4 py-2 text-primary-foreground"
+      >
+        আবার চেষ্টা
+      </button>
     </div>
   ),
 });
@@ -149,11 +155,19 @@ function ModelPage() {
       <section className="hero-gradient text-white">
         <div className="container-page grid items-center gap-10 py-16 md:grid-cols-2 md:py-20">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-primary">{m.brand} · {m.type}</p>
-            <h1 className="mt-2 text-4xl font-extrabold md:text-5xl">{m.brand} {m.model}</h1>
+            <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+              {m.brand} · {m.type}
+            </p>
+            <h1 className="mt-2 text-4xl font-extrabold md:text-5xl">
+              {m.brand} {m.model}
+            </h1>
             <div className="mt-5 flex flex-wrap gap-3">
-              <span className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">{formatBDTLakh(m.price_bdt)}</span>
-              <span className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold backdrop-blur">{formatKm(m.range_km)} রেঞ্জ</span>
+              <span className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">
+                {formatBDTLakh(m.price_bdt)}
+              </span>
+              <span className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold backdrop-blur">
+                {formatKm(m.range_km)} রেঞ্জ
+              </span>
               {m.zero_to_hundred && (
                 <span className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold backdrop-blur">
                   ০-১০০: {toBnDigits(String(m.zero_to_hundred))}s
@@ -161,7 +175,9 @@ function ModelPage() {
               )}
             </div>
             {m.last_price_update && (
-              <p className="mt-3 text-xs text-white/70">সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}</p>
+              <p className="mt-3 text-xs text-white/70">
+                সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}
+              </p>
             )}
             {slug === "sealion-6" && (
               <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-2 text-sm font-bold text-yellow-950">
@@ -169,10 +185,17 @@ function ModelPage() {
               </div>
             )}
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link to="/byd" hash="showrooms" className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-primary-foreground">
+              <Link
+                to="/byd"
+                hash="showrooms"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-primary-foreground"
+              >
                 শোরুমে যোগাযোগ করুন <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link to="/compare" className="inline-flex rounded-full border border-white/30 bg-white/5 px-5 py-3 font-semibold backdrop-blur hover:bg-white/15">
+              <Link
+                to="/compare"
+                className="inline-flex rounded-full border border-white/30 bg-white/5 px-5 py-3 font-semibold backdrop-blur hover:bg-white/15"
+              >
                 অন্য গাড়ির সাথে তুলনা
               </Link>
               <SaveModelButton slug={m.slug} />
@@ -194,27 +217,68 @@ function ModelPage() {
             <div className="overflow-hidden rounded-2xl border border-border">
               <table className="w-full text-sm">
                 <tbody className="divide-y divide-border">
-                  <SpecRow label="ব্যাটারি" value={m.battery_kwh ? `${toBnDigits(String(m.battery_kwh))} kWh BYD Blade` : "—"} />
+                  <SpecRow
+                    label="ব্যাটারি"
+                    value={
+                      m.battery_kwh ? `${toBnDigits(String(m.battery_kwh))} kWh BYD Blade` : "—"
+                    }
+                  />
                   <SpecRow label="রেঞ্জ" value={formatKm(m.range_km)} />
-                  <SpecRow label="০-১০০ কিমি/ঘণ্টা" value={m.zero_to_hundred ? `${toBnDigits(String(m.zero_to_hundred))} সেকেন্ড` : "—"} />
-                  <SpecRow label="টপ স্পিড" value={specs.top_speed_kmh ? `${toBnDigits(String(specs.top_speed_kmh))} কিমি/ঘণ্টা` : "—"} />
+                  <SpecRow
+                    label="০-১০০ কিমি/ঘণ্টা"
+                    value={
+                      m.zero_to_hundred ? `${toBnDigits(String(m.zero_to_hundred))} সেকেন্ড` : "—"
+                    }
+                  />
+                  <SpecRow
+                    label="টপ স্পিড"
+                    value={
+                      specs.top_speed_kmh
+                        ? `${toBnDigits(String(specs.top_speed_kmh))} কিমি/ঘণ্টা`
+                        : "—"
+                    }
+                  />
                   <SpecRow label="প্ল্যাটফর্ম" value={(specs.platform as string) ?? "—"} />
                   <SpecRow label="সেফটি" value={(specs.safety as string) ?? "—"} />
-                  <SpecRow label="এয়ারব্যাগ" value={specs.airbags ? toBnDigits(String(specs.airbags)) : "—"} />
-                  <SpecRow label="দ্রুত চার্জ" value={m.charging_time_min ? `৩০%→৮০% মাত্র ${toBnDigits(m.charging_time_min)} মিনিটে` : "—"} />
+                  <SpecRow
+                    label="এয়ারব্যাগ"
+                    value={specs.airbags ? toBnDigits(String(specs.airbags)) : "—"}
+                  />
+                  <SpecRow
+                    label="দ্রুত চার্জ"
+                    value={
+                      m.charging_time_min
+                        ? `৩০%→৮০% মাত্র ${toBnDigits(m.charging_time_min)} মিনিটে`
+                        : "—"
+                    }
+                  />
                 </tbody>
               </table>
             </div>
 
-            {(specs.variants as Array<{ name: string; range_km: number; zero_to_hundred: number }> | undefined)?.length && (
+            {(
+              specs.variants as
+                | Array<{ name: string; range_km: number; zero_to_hundred: number }>
+                | undefined
+            )?.length && (
               <>
                 <h3 className="mt-10 mb-4 text-xl font-bold">ভ্যারিয়েন্ট</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  {(specs.variants as Array<{ name: string; range_km: number; zero_to_hundred: number }>).map((v) => (
+                  {(
+                    specs.variants as Array<{
+                      name: string;
+                      range_km: number;
+                      zero_to_hundred: number;
+                    }>
+                  ).map((v) => (
                     <div key={v.name} className="rounded-2xl border border-border bg-card p-5">
                       <h4 className="font-bold">{v.name}</h4>
-                      <p className="mt-2 text-sm text-muted-foreground">রেঞ্জ: {toBnDigits(v.range_km)} কিমি</p>
-                      <p className="text-sm text-muted-foreground">০-১০০: {toBnDigits(String(v.zero_to_hundred))} সেকেন্ড</p>
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        রেঞ্জ: {toBnDigits(v.range_km)} কিমি
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        ০-১০০: {toBnDigits(String(v.zero_to_hundred))} সেকেন্ড
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -228,7 +292,9 @@ function ModelPage() {
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {(specs.colors as string[]).map((c) => (
-                    <span key={c} className="rounded-full border border-border px-3 py-1 text-sm">{c}</span>
+                    <span key={c} className="rounded-full border border-border px-3 py-1 text-sm">
+                      {c}
+                    </span>
                   ))}
                 </div>
               </>
@@ -239,7 +305,9 @@ function ModelPage() {
                 <div className="rounded-2xl border border-primary/30 bg-accent p-5">
                   <h4 className="mb-2 font-bold text-primary">সুবিধা</h4>
                   <ul className="space-y-1 text-sm">
-                    {m.pros.map((p) => <li key={p}>✓ {p}</li>)}
+                    {m.pros.map((p) => (
+                      <li key={p}>✓ {p}</li>
+                    ))}
                   </ul>
                 </div>
               )}
@@ -247,7 +315,9 @@ function ModelPage() {
                 <div className="rounded-2xl border border-border bg-card p-5">
                   <h4 className="mb-2 font-bold">অসুবিধা</h4>
                   <ul className="space-y-1 text-sm">
-                    {m.cons.map((c) => <li key={c}>✗ {c}</li>)}
+                    {m.cons.map((c) => (
+                      <li key={c}>✗ {c}</li>
+                    ))}
                   </ul>
                 </div>
               )}
@@ -258,20 +328,30 @@ function ModelPage() {
             {emi && (
               <div className="rounded-2xl border border-border bg-card p-6">
                 <h3 className="font-bold">মাসিক EMI (আনুমানিক)</h3>
-                <p className="mt-2 text-3xl font-extrabold text-primary">৳{toBnDigits(emi.toLocaleString("en-US"))}</p>
-                <p className="mt-1 text-xs text-muted-foreground">২০% ডাউনপেমেন্ট, ৬% সুদ, ৫ বছর মেয়াদ</p>
+                <p className="mt-2 text-3xl font-extrabold text-primary">
+                  ৳{toBnDigits(emi.toLocaleString("en-US"))}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  ২০% ডাউনপেমেন্ট, ৬% সুদ, ৫ বছর মেয়াদ
+                </p>
               </div>
             )}
             <div className="rounded-2xl bg-[var(--color-navy)] p-6 text-white">
               <Shield className="h-6 w-6 text-primary" />
               <h3 className="mt-3 font-bold">নিরাপত্তা</h3>
-              <p className="mt-2 text-sm opacity-90">BYD Blade Battery, ৫-স্টার Euro NCAP, ADAS — শিল্পের সর্বোচ্চ মান।</p>
+              <p className="mt-2 text-sm opacity-90">
+                BYD Blade Battery, ৫-স্টার Euro NCAP, ADAS — শিল্পের সর্বোচ্চ মান।
+              </p>
             </div>
             <div className="rounded-2xl border border-border bg-card p-6">
               <Battery className="h-6 w-6 text-primary" />
               <h3 className="mt-3 font-bold">চার্জিং</h3>
-              <p className="mt-2 text-sm text-muted-foreground">হোম চার্জিং সবচেয়ে সাশ্রয়ী। দেশে ১৪+ পাবলিক স্টেশন।</p>
-              <Link to="/charging" className="mt-3 inline-flex text-sm font-semibold text-primary">গাইড দেখুন →</Link>
+              <p className="mt-2 text-sm text-muted-foreground">
+                হোম চার্জিং সবচেয়ে সাশ্রয়ী। দেশে ১৪+ পাবলিক স্টেশন।
+              </p>
+              <Link to="/charging" className="mt-3 inline-flex text-sm font-semibold text-primary">
+                গাইড দেখুন →
+              </Link>
             </div>
           </aside>
         </div>
@@ -281,7 +361,9 @@ function ModelPage() {
         <div className="container-page">
           <h2 className="mb-8 text-2xl font-bold">অন্য BYD মডেল</h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {others.map((o) => <ModelCard key={o.id} {...o} />)}
+            {others.map((o) => (
+              <ModelCard key={o.id} {...o} />
+            ))}
           </div>
         </div>
       </section>

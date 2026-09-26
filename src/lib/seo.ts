@@ -3,13 +3,17 @@ export const SITE_URL = (() => {
   try {
     // Node.js
     if (typeof process !== "undefined" && process.env?.SITE_URL) return process.env.SITE_URL;
-  } catch {}
+  } catch {
+    /* fall through to import.meta.env */
+  }
 
   try {
-    // Vite / browser build-time env (import.meta.env may not be typed here)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (typeof import.meta !== "undefined" && (import.meta as any).env?.SITE_URL) return (import.meta as any).env.SITE_URL;
-  } catch {}
+    // Vite / browser build-time env
+    const metaEnv = (import.meta as ImportMeta & { env?: Record<string, string> }).env;
+    if (typeof import.meta !== "undefined" && metaEnv?.SITE_URL) return metaEnv.SITE_URL;
+  } catch {
+    /* fall through to default */
+  }
 
   return "https://banglaev.com";
 })();

@@ -21,12 +21,7 @@ const LOG_PATH = resolve(ROOT, "logs/ssr-byd.jsonl");
 const PORT = Number(process.env.PORT ?? 5273);
 const BASE = `http://localhost:${PORT}`;
 const ROUTES = ["/byd", "/byd/seal", "/"];
-const WATCH_FNS = new Set([
-  "getBydModels",
-  "getFeaturedModels",
-  "getAllModels",
-  "getModelBySlug",
-]);
+const WATCH_FNS = new Set(["getBydModels", "getFeaturedModels", "getAllModels", "getModelBySlug"]);
 const WATCH_ROUTES = new Set(["/byd", "/byd/$slug"]);
 
 type SsrLine = {
@@ -79,6 +74,12 @@ async function waitForServer(timeoutMs = 45_000) {
  * the PostgREST root with the anon key (HEAD /rest/v1/) and treat any
  * <500 response as healthy — 401/404 both prove the edge is up. When no
  * Supabase env is configured we skip the wait (nothing to check).
+ *
+ * If the backend never becomes reachable the run continues with a warning
+ * instead of failing: the app falls back to local seed data when the backend
+ * is unreachable (see src/lib/models.functions.ts), so SSR itself cannot fail
+ * because of a dead backend. Unreachable-host false negatives used to abort
+ * CI even though the SSR surface under test was healthy.
  */
 async function waitForBackend(timeoutMs = 60_000) {
   const url = process.env.VITE_SUPABASE_URL;
@@ -110,11 +111,10 @@ async function waitForBackend(timeoutMs = 60_000) {
     }
     await new Promise((r) => setTimeout(r, 1000));
   }
-  throw new Error(
-    `backend did not become healthy within ${timeoutMs}ms (last status: ${lastStatus})`,
+  console.warn(
+    `[check-ssr-byd] backend not reachable within ${timeoutMs}ms (last status: ${lastStatus}) — continuing: the app serves local seed data when the backend is down.`,
   );
 }
-
 
 async function main() {
   await mkdir(dirname(LOG_PATH), { recursive: true });

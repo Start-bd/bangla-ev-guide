@@ -72,7 +72,10 @@ def contrast(a: str, b: str) -> float:
 
 
 async def check_card(page, route: str, state: str, first: bool):
-    card = page.locator("a", has_text=BUTTON_TEXT).first
+    # Only the ModelCard link carries the CTA span — matching any <a> also hits
+    # same-href links elsewhere (e.g. the price table on /byd), which skews
+    # both the hover target and the Tab-focus loop.
+    card = page.locator("a.group.block", has_text=BUTTON_TEXT).first
     btn = card.locator(f"span:has-text('{BUTTON_TEXT}')").first
 
     if state == "hover":
@@ -83,8 +86,16 @@ async def check_card(page, route: str, state: str, first: bool):
         await page.keyboard.press("Home")  # scroll top so tab order starts fresh
         for _ in range(60):
             await page.keyboard.press("Tab")
+            # Stop only when the *ModelCard* link is focused — pages can contain
+            # other <a href> elements with the same href (e.g. the price table
+            # on /byd links each model row to the same URL as the card).
             active = await page.evaluate(
-                "(href) => { const el = document.activeElement; return !!el && el.getAttribute('href') === href; }",
+                """(href) => {
+                    const el = document.activeElement;
+                    return !!el && el.tagName === 'A' && el.classList.contains('group')
+                        && el.classList.contains('block')
+                        && el.getAttribute('href') === href;
+                }""",
                 href,
             )
             if active:
