@@ -9,4 +9,4 @@
 
 [build.environment]
   # Pinned to the version the build has actually been verified on.
-  NODE_VERSION = "24"
+  NODE_VERSION = "22"
