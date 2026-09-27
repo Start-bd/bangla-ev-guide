@@ -1,5 +1,5 @@
 [build]
-  command = "bun run build"
+  command = "npm run build"
   # Nitro auto-detects its `netlify` preset when NETLIFY=true, which emits static
   # assets to `dist/` (preset publicDir is `dist/{{ baseURL }}`) and the SSR handler
   # to `.netlify/functions-internal/server/`. Publishing `dist/client` instead fails
