@@ -6,7 +6,7 @@ import type { Database } from "@/integrations/supabase/types";
 type EvModel = Database["public"]["Tables"]["ev_models"]["Row"];
 type Post = Database["public"]["Tables"]["posts"]["Row"];
 
-const TODAY = "2026-09-23";
+const TODAY = new Date().toISOString().slice(0, 10);
 const CREATED = "2026-06-18T00:00:00Z";
 
 export const LOCAL_EV_MODELS: EvModel[] = [

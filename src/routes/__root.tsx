@@ -113,8 +113,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           publisher: { "@id": "https://banglaev.com/#organization" },
           potentialAction: {
             "@type": "SearchAction",
-            target: "https://banglaev.com/news?q={search_term_string}",
-            "query-input": "required name=search_term_string",
+            target: "https://banglaev.com/news",
           },
         }),
       },
