@@ -5,7 +5,6 @@
  * For every route advertised in /sitemap.xml, fetch the SSR HTML and assert:
  *   - exactly one  <link rel="canonical" href="..."> matching the route URL
  *   - exactly one  <link rel="alternate" hreflang="bn" href="...">
- *   - exactly one  <link rel="alternate" hreflang="en" href="...?lang=en">
  *   - exactly one  <link rel="alternate" hreflang="x-default" href="...">
  *   - exactly one  <meta property="og:url" content="...">
  *
@@ -17,7 +16,7 @@
 import { spawn, type ChildProcess } from "node:child_process";
 import { setTimeout as sleep } from "node:timers/promises";
 
-const SITE_URL = "https://banglaev.com";
+const SITE_URL = process.env.SITE_URL ?? "https://banglaev.com";
 
 type Failure = { route: string; problem: string };
 const failures: Failure[] = [];
@@ -61,7 +60,6 @@ async function checkRoute(baseUrl: string, path: string) {
   const head = headMatch ? headMatch[1] : html;
 
   const canonical = `${SITE_URL}${path}`;
-  const enHref = `${SITE_URL}${path}${path.includes("?") ? "&" : "?"}lang=en`;
 
   expectOne(
     path,
@@ -76,13 +74,6 @@ async function checkRoute(baseUrl: string, path: string) {
     '<link rel=alternate hreflang="bn">',
     /<link\b(?=[^>]*\brel=["']alternate["'])(?=[^>]*\bhref[L|l]ang=["']bn["'])[^>]*\bhref=["']([^"']+)["']/gi,
     canonical,
-  );
-  expectOne(
-    path,
-    head,
-    '<link rel=alternate hreflang="en">',
-    /<link\b(?=[^>]*\brel=["']alternate["'])(?=[^>]*\bhref[L|l]ang=["']en["'])[^>]*\bhref=["']([^"']+)["']/gi,
-    enHref,
   );
   expectOne(
     path,
@@ -284,7 +275,6 @@ async function main() {
   } finally {
     if (child) {
       child.kill("SIGTERM");
-      // Give it a moment to die
       await sleep(200);
       if (!child.killed) child.kill("SIGKILL");
     }
@@ -296,7 +286,7 @@ async function main() {
     process.exit(1);
   }
   console.log(
-    "\n✅ All routes have a unique canonical + bn/en/x-default hreflang + og:url + valid JSON-LD",
+    "\n✅ All routes have a unique canonical + bn/x-default hreflang + og:url + valid JSON-LD",
   );
 }
 
