@@ -47,6 +47,11 @@ export function absUrl(path: string) {
   return url.toString();
 }
 
+/** Serialize JSON-LD for an HTML script element without allowing data to end it. */
+export function serializeJsonLd(value: unknown): string {
+  return (JSON.stringify(value) ?? "null").replace(/</g, "\\u003c");
+}
+
 /**
  * Resolve any image reference (absolute URL, protocol-relative, or site-relative
  * path) into an absolute https URL suitable for og:image / twitter:image.
@@ -101,7 +106,7 @@ export function ogMeta(opts: {
 export function breadcrumbLd(items: Array<{ name: string; path: string }>) {
   return {
     type: "application/ld+json" as const,
-    children: JSON.stringify({
+    children: serializeJsonLd({
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       itemListElement: items.map((it, i) => ({

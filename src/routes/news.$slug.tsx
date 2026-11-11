@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getPostBySlug } from "@/lib/posts.functions";
-import { localeLinks, ogMeta, breadcrumbLd, absUrl, ogImage } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd, absUrl, ogImage, serializeJsonLd } from "@/lib/seo";
 
 const postQO = (slug: string) =>
   queryOptions({
@@ -80,7 +80,7 @@ function PostPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: serializeJsonLd({
             "@context": "https://schema.org",
             "@type": "NewsArticle",
             headline: p.title_bn,
