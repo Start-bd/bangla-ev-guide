@@ -10,3 +10,5 @@
 > the editor, so keep the branch in a working state.
 
 <!-- LOVABLE:END -->
+
+Keep fallback-record provenance in a small browser-safe helper, using existing `local-*` IDs, so UI can disclose stale local data without changing server-function response shapes.
