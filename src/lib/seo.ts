@@ -49,7 +49,7 @@ export function absUrl(path: string) {
 
 /** Serialize JSON-LD for an HTML script element without allowing data to end it. */
 export function serializeJsonLd(value: unknown): string {
-  return JSON.stringify(value).replace(/</g, "\\u003c");
+  return (JSON.stringify(value) ?? "null").replace(/</g, "\\u003c");
 }
 
 /**
