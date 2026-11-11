@@ -106,7 +106,7 @@ export function ogMeta(opts: {
 export function breadcrumbLd(items: Array<{ name: string; path: string }>) {
   return {
     type: "application/ld+json" as const,
-    children: JSON.stringify({
+    children: serializeJsonLd({
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       itemListElement: items.map((it, i) => ({

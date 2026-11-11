@@ -5,7 +5,7 @@ import { getModelBySlug, getBydModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits, formatBnDate } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
 import { SaveModelButton } from "@/components/site/SaveModelButton";
-import { localeLinks, ogMeta, breadcrumbLd, carLd } from "@/lib/seo";
+import { localeLinks, ogMeta, breadcrumbLd, carLd, serializeJsonLd } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
@@ -148,7 +148,7 @@ function ModelPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(carLd(m, `/byd/${m.slug}`)),
+          __html: serializeJsonLd(carLd(m, `/byd/${m.slug}`)),
         }}
       />
 
