@@ -47,6 +47,11 @@ export function absUrl(path: string) {
   return url.toString();
 }
 
+/** Serialize JSON-LD for an HTML script element without allowing data to end it. */
+export function serializeJsonLd(value: unknown): string {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
 /**
  * Resolve any image reference (absolute URL, protocol-relative, or site-relative
  * path) into an absolute https URL suitable for og:image / twitter:image.
