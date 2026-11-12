@@ -3,6 +3,8 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { getAllModels } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
+import { DataSourceNotice } from "@/components/site/DataSourceNotice";
+import { isLocalFallbackRecord } from "@/lib/data-source";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import modelsHero from "@/assets/pages/models-hero.jpg";
 
@@ -110,11 +112,16 @@ function ModelsBrowse() {
             </button>
           </div>
         ) : (
+          <>
+            {filtered.some((m) => isLocalFallbackRecord(m.id)) && (
+              <DataSourceNotice kind="models" />
+            )}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((m) => (
               <ModelCard key={m.id} {...m} />
             ))}
           </div>
+          </>
         )}
 
         <div className="mt-12 rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">

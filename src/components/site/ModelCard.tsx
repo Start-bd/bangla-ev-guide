@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Battery, Gauge, Zap } from "lucide-react";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
+import { isLocalFallbackRecord } from "@/lib/data-source";
 import { ssrLog } from "@/lib/ssr-logger";
 import sealSrc from "@/assets/models/seal.webp?w=480;800;1280&format=webp&as=srcset";
 import sealion6Src from "@/assets/models/sealion-6.webp?w=480;800;1280&format=webp&as=srcset";
@@ -83,6 +84,7 @@ const BRAND_TINTS: Record<string, string> = {
 };
 
 interface ModelCardProps {
+  id?: string;
   brand: string;
   model: string;
   slug: string;
@@ -140,6 +142,9 @@ export function ModelCard(p: ModelCardProps) {
             {p.brand} {p.model}
           </h3>
           <p className="mt-1 text-lg font-semibold text-primary">{formatBDTLakh(p.price_bdt)}</p>
+          {isLocalFallbackRecord(p.id) && (
+            <p className="mt-1 text-xs font-medium text-destructive">পুরোনো তালিকার দাম</p>
+          )}
         </div>
 
         <ul className="grid grid-cols-3 gap-2 text-xs">

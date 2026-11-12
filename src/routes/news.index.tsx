@@ -3,6 +3,8 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Zap } from "lucide-react";
 import { getPosts } from "@/lib/posts.functions";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
+import { DataSourceNotice } from "@/components/site/DataSourceNotice";
+import { isLocalFallbackRecord } from "@/lib/data-source";
 import newsHero from "@/assets/pages/news-hero.jpg";
 
 const postsQO = queryOptions({
@@ -58,6 +60,7 @@ function NewsPage() {
       </section>
 
       <section className="container-page py-16">
+        {posts.some((p) => isLocalFallbackRecord(p.id)) && <DataSourceNotice kind="news" />}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((p) => (
             <Link
