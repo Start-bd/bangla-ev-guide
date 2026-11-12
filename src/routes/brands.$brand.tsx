@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-route
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getModelsByBrand } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
+import { DataSourceNotice } from "@/components/site/DataSourceNotice";
+import { isLocalFallbackRecord } from "@/lib/data-source";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 
 const brandQO = (brand: string) =>
@@ -116,6 +118,7 @@ function BrandHub() {
 
       <section className="container-page py-16">
         <h2 className="mb-8 text-3xl font-bold">{display} লাইনআপ</h2>
+        {models.some((m) => isLocalFallbackRecord(m.id)) && <DataSourceNotice kind="models" />}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {models.map((m) => (
             <ModelCard key={m.id} {...m} />

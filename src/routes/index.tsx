@@ -4,7 +4,9 @@ import { Zap, Leaf, Wrench, ArrowRight, Calculator } from "lucide-react";
 import { getFeaturedModels } from "@/lib/models.functions";
 import { getPosts } from "@/lib/posts.functions";
 import { ModelCard } from "@/components/site/ModelCard";
+import { DataSourceNotice } from "@/components/site/DataSourceNotice";
 import { CostCalculator } from "@/components/site/CostCalculator";
+import { isLocalFallbackRecord } from "@/lib/data-source";
 import { localeLinks, ogMeta } from "@/lib/seo";
 import heroCar from "@/assets/hero-car.jpg";
 import whyEv from "@/assets/why-ev.jpg";
@@ -210,6 +212,11 @@ function HomePage() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {models.some((m) => isLocalFallbackRecord(m.id)) && (
+            <div className="sm:col-span-2 lg:col-span-3">
+              <DataSourceNotice kind="models" />
+            </div>
+          )}
           {models.map((m) => (
             <ModelCard key={m.id} {...m} />
           ))}
@@ -311,6 +318,7 @@ function HomePage() {
               সব দেখুন →
             </Link>
           </div>
+          {posts.some((p) => isLocalFallbackRecord(p.id)) && <DataSourceNotice kind="news" />}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {posts.map((p, i) => {
               const cover = p.cover_url || NEWS_FALLBACKS[i % NEWS_FALLBACKS.length];

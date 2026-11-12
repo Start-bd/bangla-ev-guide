@@ -13,6 +13,7 @@
     "test:seo": "bun scripts/check-seo-head.ts",
     "test:ssr-byd": "bun scripts/check-ssr-byd.ts",
     "test:rls": "bun scripts/check-rls.ts",
+    "test:fallback-data": "bun scripts/check-fallback-data.ts",
     "test:modelcard-hover": "python scripts/check-modelcard-hover.py"
   },
   "dependencies": {
@@ -51,9 +52,9 @@
     "@supabase/supabase-js": "^2.108.2",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.83.0",
-    "@tanstack/react-router": "^1.170.32",
-    "@tanstack/react-start": "^1.168.49",
-    "@tanstack/router-plugin": "^1.168.35",
+    "@tanstack/react-router": "1.170.41",
+    "@tanstack/react-start": "1.168.60",
+    "@tanstack/router-plugin": "1.168.42",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -101,6 +102,6 @@
     "seroval-plugins": "^1.6.2"
   },
   "patchedDependencies": {
-    "@tanstack/start-server-core@1.169.31": "patches/@tanstack%2Fstart-server-core@1.169.31.patch"
+    "@tanstack/start-server-core@1.169.39": "patches/@tanstack%2Fstart-server-core@1.169.39.patch"
   }
 }

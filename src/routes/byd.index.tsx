@@ -7,6 +7,8 @@ import type { Database } from "@/integrations/supabase/types";
 
 type EvModel = Database["public"]["Tables"]["ev_models"]["Row"];
 import { ModelCard } from "@/components/site/ModelCard";
+import { DataSourceNotice } from "@/components/site/DataSourceNotice";
+import { isLocalFallbackRecord } from "@/lib/data-source";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 import { ssrLog } from "@/lib/ssr-logger";
 import bydHero from "@/assets/pages/byd-hero.jpg";
@@ -273,11 +275,16 @@ function BydHub() {
             </button>
           </div>
         ) : (
+          <>
+            {models.some((m) => isLocalFallbackRecord(m.id)) && (
+              <DataSourceNotice kind="models" />
+            )}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {models.map((m) => (
               <ModelCard key={m.id} {...m} />
             ))}
           </div>
+          </>
         )}
       </section>
 

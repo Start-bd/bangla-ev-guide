@@ -1,3 +1,3 @@
-- [ ] Verify and resolve the reported production build/lockfile finding.
+- [x] Verify and resolve the reported production build/lockfile finding.
 - [ ] Disclose fallback data and remove misleading current-date stamps; test and resolve the stale-price finding.
 - [ ] Apply the required routine package security update and verify the app remains healthy.

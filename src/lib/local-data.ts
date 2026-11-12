@@ -6,7 +6,6 @@ import type { Database } from "@/integrations/supabase/types";
 type EvModel = Database["public"]["Tables"]["ev_models"]["Row"];
 type Post = Database["public"]["Tables"]["posts"]["Row"];
 
-const TODAY = new Date().toISOString().slice(0, 10);
 const CREATED = "2026-06-18T00:00:00Z";
 
 export const LOCAL_EV_MODELS: EvModel[] = [
@@ -33,7 +32,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: true,
     display_order: 1,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-sealion-6",
@@ -53,7 +52,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: true,
     display_order: 2,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-atto-3",
@@ -78,7 +77,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: true,
     display_order: 3,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-dolphin",
@@ -103,7 +102,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: true,
     display_order: 4,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-mg-4",
@@ -123,7 +122,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: true,
     display_order: 5,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-hyundai-ioniq-5",
@@ -143,7 +142,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: true,
     display_order: 6,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-kia-ev6",
@@ -163,7 +162,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: false,
     display_order: 7,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-tesla-model-y",
@@ -188,7 +187,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: false,
     display_order: 8,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-tesla-model-3",
@@ -213,7 +212,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: false,
     display_order: 9,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-mg-zs-ev",
@@ -233,7 +232,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: false,
     display_order: 10,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-hyundai-kona-electric",
@@ -253,7 +252,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: false,
     display_order: 11,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-neta-v",
@@ -273,7 +272,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: false,
     display_order: 12,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-zeekr-x",
@@ -293,7 +292,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: false,
     display_order: 13,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-deepal-s07",
@@ -313,7 +312,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: false,
     display_order: 14,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-dongfeng-nano-box",
@@ -333,7 +332,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: false,
     display_order: 15,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
   {
     id: "local-wuling-bingo",
@@ -353,7 +352,7 @@ export const LOCAL_EV_MODELS: EvModel[] = [
     is_featured: false,
     display_order: 16,
     created_at: CREATED,
-    last_price_update: TODAY,
+    last_price_update: null,
   },
 ];
 

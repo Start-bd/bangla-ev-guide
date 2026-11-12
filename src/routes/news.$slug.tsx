@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getPostBySlug } from "@/lib/posts.functions";
 import { localeLinks, ogMeta, breadcrumbLd, absUrl, ogImage, serializeJsonLd } from "@/lib/seo";
+import { DataSourceNotice } from "@/components/site/DataSourceNotice";
+import { isLocalFallbackRecord } from "@/lib/data-source";
 
 const postQO = (slug: string) =>
   queryOptions({
@@ -77,6 +79,7 @@ function PostPage() {
 
   return (
     <>
+      {isLocalFallbackRecord(p.id) && <DataSourceNotice kind="news" />}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

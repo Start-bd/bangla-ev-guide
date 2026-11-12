@@ -5,6 +5,8 @@ import { getModelBySlug, getBydModels } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits, formatBnDate } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
 import { SaveModelButton } from "@/components/site/SaveModelButton";
+import { DataSourceNotice } from "@/components/site/DataSourceNotice";
+import { isLocalFallbackRecord } from "@/lib/data-source";
 import { localeLinks, ogMeta, breadcrumbLd, carLd, serializeJsonLd } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
@@ -131,6 +133,7 @@ function ModelPage() {
 
   const specs = (m.specs ?? {}) as Record<string, unknown>;
   const others = siblings.filter((s) => s.slug !== slug).slice(0, 3);
+  const isFallback = isLocalFallbackRecord(m.id);
 
   // Loan EMI (simple): P*r*(1+r)^n / ((1+r)^n - 1), 6% annual, 5 years
   const emi = m.price_bdt
@@ -151,6 +154,7 @@ function ModelPage() {
           __html: serializeJsonLd(carLd(m, `/byd/${m.slug}`)),
         }}
       />
+      {isFallback && <DataSourceNotice kind="models" />}
 
       <section className="hero-gradient text-white">
         <div className="container-page grid items-center gap-10 py-16 md:grid-cols-2 md:py-20">
@@ -174,7 +178,7 @@ function ModelPage() {
                 </span>
               )}
             </div>
-            {m.last_price_update && (
+            {!isFallback && m.last_price_update && (
               <p className="mt-3 text-xs text-white/70">
                 সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}
               </p>
