@@ -5,7 +5,9 @@ import { getModelBySlug, getModelsByBrand } from "@/lib/models.functions";
 import { formatBDTLakh, formatKm, toBnDigits, formatBnDate } from "@/lib/format";
 import { ModelCard } from "@/components/site/ModelCard";
 import { SaveModelButton } from "@/components/site/SaveModelButton";
-import { localeLinks, ogMeta, breadcrumbLd, carLd } from "@/lib/seo";
+import { DataSourceNotice } from "@/components/site/DataSourceNotice";
+import { isLocalFallbackRecord } from "@/lib/data-source";
+import { localeLinks, ogMeta, breadcrumbLd, carLd, serializeJsonLd } from "@/lib/seo";
 
 const modelQO = (slug: string) =>
   queryOptions({
@@ -43,9 +45,7 @@ export const Route = createFileRoute("/models/$slug")({
   },
   head: ({ params, loaderData }) => {
     const slug = params.slug;
-    const label = loaderData
-      ? `${loaderData.brand} ${loaderData.model}`
-      : slug.replace(/-/g, " ");
+    const label = loaderData ? `${loaderData.brand} ${loaderData.model}` : slug.replace(/-/g, " ");
     const t = `${label} — Price in Bangladesh 2026 | BanglaEV`;
     const d = `${label} বাংলাদেশে — রেঞ্জ, ব্যাটারি, দাম ও সম্পূর্ণ স্পেসিফিকেশন।`;
     return {
@@ -65,7 +65,10 @@ export const Route = createFileRoute("/models/$slug")({
       scripts: [
         breadcrumbLd([
           { name: "হোম", path: "/" },
-          { name: loaderData?.brand ?? "মডেল", path: `/brands/${(loaderData?.brand ?? "").toLowerCase()}` },
+          {
+            name: loaderData?.brand ?? "মডেল",
+            path: `/brands/${(loaderData?.brand ?? "").toLowerCase()}`,
+          },
           { name: label, path: `/models/${slug}` },
         ]),
       ],
@@ -100,6 +103,7 @@ function ModelDetail() {
 
   const specs = (m.specs ?? {}) as Record<string, unknown>;
   const others = siblings.filter((s) => s.slug !== slug).slice(0, 3);
+  const isFallback = isLocalFallbackRecord(m.id);
 
   return (
     <>
@@ -107,9 +111,10 @@ function ModelDetail() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(carLd(m, `/models/${m.slug}`)),
+          __html: serializeJsonLd(carLd(m, `/models/${m.slug}`)),
         }}
       />
+      {isFallback && <DataSourceNotice kind="models" />}
 
       <section className="hero-gradient text-white">
         <div className="container-page grid items-center gap-10 py-16 md:grid-cols-2 md:py-20">
@@ -133,8 +138,10 @@ function ModelDetail() {
                 </span>
               )}
             </div>
-            {m.last_price_update && (
-              <p className="mt-3 text-xs text-white/70">সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}</p>
+            {!isFallback && m.last_price_update && (
+              <p className="mt-3 text-xs text-white/70">
+                সর্বশেষ আপডেট: {formatBnDate(m.last_price_update)}
+              </p>
             )}
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
@@ -177,9 +184,7 @@ function ModelDetail() {
                   <SpecRow
                     label="০-১০০ কিমি/ঘণ্টা"
                     value={
-                      m.zero_to_hundred
-                        ? `${toBnDigits(String(m.zero_to_hundred))} সেকেন্ড`
-                        : "—"
+                      m.zero_to_hundred ? `${toBnDigits(String(m.zero_to_hundred))} সেকেন্ড` : "—"
                     }
                   />
                   <SpecRow

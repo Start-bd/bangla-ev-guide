@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -15,6 +16,7 @@ import { initMonitoring, captureError } from "../lib/monitoring";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { authorLd } from "@/lib/seo";
 
 function NotFoundComponent() {
   return (
@@ -38,7 +40,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -50,7 +52,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-[60vh] items-center justify-center px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold">পেজটি লোড হয়নি</h1>
-        <p className="mt-2 text-sm text-muted-foreground">কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।
+        </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -61,7 +65,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           >
             আবার চেষ্টা করুন
           </button>
-          <a href="/" className="inline-flex rounded-full border border-input px-4 py-2 text-sm font-semibold">হোম</a>
+          <a
+            href="/"
+            className="inline-flex rounded-full border border-input px-4 py-2 text-sm font-semibold"
+          >
+            হোম
+          </a>
         </div>
       </div>
     </div>
@@ -77,11 +86,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // and duplicating them at the root emits two tags per page.
 
       // No sitewide description — each leaf route sets its own unique one.
-      { name: "author", content: "BanglaEV" },
+      { name: "author", content: "Tawhid Hasan" },
       { name: "theme-color", content: "#00A651" },
       { name: "google-site-verification", content: "aYtVVCKYq_a0JYv7vCMiSRjULEP1APY3qIYqtmg-ofI" },
       { property: "og:site_name", content: "BanglaEV" },
-      
+
       { property: "og:locale", content: "bn_BD" },
       { property: "og:locale:alternate", content: "en_US" },
       // og:image / twitter:image are set per-leaf-route via ogMeta() in src/lib/seo.ts.
@@ -105,8 +114,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           publisher: { "@id": "https://banglaev.com/#organization" },
           potentialAction: {
             "@type": "SearchAction",
-            target: "https://banglaev.com/news?q={search_term_string}",
-            "query-input": "required name=search_term_string",
+            target: "https://banglaev.com/news",
           },
         }),
       },
@@ -123,6 +131,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "@type": "ImageObject",
             url: "https://banglaev.com/favicon.png",
           },
+          founder: { "@id": "https://banglaev.com/#author" },
           sameAs: [
             "https://facebook.com/banglaev",
             "https://youtube.com/@banglaev",
@@ -132,6 +141,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "Bangladesh's guide to electric vehicles — BYD, MG, Hyundai prices, reviews, comparisons, charging and cost calculators.",
           areaServed: { "@type": "Country", name: "Bangladesh" },
           knowsLanguage: ["bn", "en"],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          ...authorLd(),
         }),
       },
       {

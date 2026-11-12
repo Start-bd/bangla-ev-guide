@@ -9,77 +9,36 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TermsRouteImport } from './routes/terms'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as NewsRouteImport } from './routes/news'
-import { Route as ModelsRouteImport } from './routes/models'
-import { Route as CompareRouteImport } from './routes/compare'
-import { Route as ChargingRouteImport } from './routes/charging'
-import { Route as CalculatorRouteImport } from './routes/calculator'
-import { Route as BydRouteImport } from './routes/byd'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as NewsIndexRouteImport } from './routes/news.index'
-import { Route as ModelsIndexRouteImport } from './routes/models.index'
-import { Route as BydIndexRouteImport } from './routes/byd.index'
-import { Route as NewsSlugRouteImport } from './routes/news.$slug'
-import { Route as ModelsSlugRouteImport } from './routes/models.$slug'
-import { Route as GuideBestElectricBikesBangladeshRouteImport } from './routes/guide.best-electric-bikes-bangladesh'
-import { Route as BydSlugRouteImport } from './routes/byd.$slug'
-import { Route as BrandsBrandRouteImport } from './routes/brands.$brand'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BydRouteImport } from './routes/byd'
+import { Route as CalculatorRouteImport } from './routes/calculator'
+import { Route as ChargingRouteImport } from './routes/charging'
+import { Route as CompareRouteImport } from './routes/compare'
+import { Route as ModelsRouteImport } from './routes/models'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/saved'
+import { Route as BrandsBrandRouteImport } from './routes/brands.$brand'
+import { Route as BydIndexRouteImport } from './routes/byd.index'
+import { Route as BydSlugRouteImport } from './routes/byd.$slug'
+import { Route as GuideBestElectricBikesBangladeshRouteImport } from './routes/guide.best-electric-bikes-bangladesh'
+import { Route as ModelsIndexRouteImport } from './routes/models.index'
+import { Route as ModelsSlugRouteImport } from './routes/models.$slug'
+import { Route as NewsIndexRouteImport } from './routes/news.index'
+import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewsRoute = NewsRouteImport.update({
-  id: '/news',
-  path: '/news',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ModelsRoute = ModelsRouteImport.update({
-  id: '/models',
-  path: '/models',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompareRoute = CompareRouteImport.update({
-  id: '/compare',
-  path: '/compare',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChargingRoute = ChargingRouteImport.update({
-  id: '/charging',
-  path: '/charging',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CalculatorRoute = CalculatorRouteImport.update({
-  id: '/calculator',
-  path: '/calculator',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BydRoute = BydRouteImport.update({
-  id: '/byd',
-  path: '/byd',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -87,39 +46,75 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BydRoute = BydRouteImport.update({
+  id: '/byd',
+  path: '/byd',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewsIndexRoute = NewsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => NewsRoute,
+const CalculatorRoute = CalculatorRouteImport.update({
+  id: '/calculator',
+  path: '/calculator',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ModelsIndexRoute = ModelsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ModelsRoute,
+const ChargingRoute = ChargingRouteImport.update({
+  id: '/charging',
+  path: '/charging',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelsRoute = ModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedSavedRoute = AuthenticatedSavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const BrandsBrandRoute = BrandsBrandRouteImport.update({
+  id: '/brands/$brand',
+  path: '/brands/$brand',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const BydIndexRoute = BydIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => BydRoute,
 } as any)
-const NewsSlugRoute = NewsSlugRouteImport.update({
+const BydSlugRoute = BydSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
-  getParentRoute: () => NewsRoute,
-} as any)
-const ModelsSlugRoute = ModelsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ModelsRoute,
+  getParentRoute: () => BydRoute,
 } as any)
 const GuideBestElectricBikesBangladeshRoute =
   GuideBestElectricBikesBangladeshRouteImport.update({
@@ -127,20 +122,25 @@ const GuideBestElectricBikesBangladeshRoute =
     path: '/guide/best-electric-bikes-bangladesh',
     getParentRoute: () => rootRouteImport,
   } as any)
-const BydSlugRoute = BydSlugRouteImport.update({
+const ModelsIndexRoute = ModelsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ModelsRoute,
+} as any)
+const ModelsSlugRoute = ModelsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
-  getParentRoute: () => BydRoute,
+  getParentRoute: () => ModelsRoute,
 } as any)
-const BrandsBrandRoute = BrandsBrandRouteImport.update({
-  id: '/brands/$brand',
-  path: '/brands/$brand',
-  getParentRoute: () => rootRouteImport,
+const NewsIndexRoute = NewsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => NewsRoute,
 } as any)
-const AuthenticatedSavedRoute = AuthenticatedSavedRouteImport.update({
-  id: '/saved',
-  path: '/saved',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const NewsSlugRoute = NewsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => NewsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -301,81 +301,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/news': {
-      id: '/news'
-      path: '/news'
-      fullPath: '/news'
-      preLoaderRoute: typeof NewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/models': {
-      id: '/models'
-      path: '/models'
-      fullPath: '/models'
-      preLoaderRoute: typeof ModelsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/compare': {
-      id: '/compare'
-      path: '/compare'
-      fullPath: '/compare'
-      preLoaderRoute: typeof CompareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/charging': {
-      id: '/charging'
-      path: '/charging'
-      fullPath: '/charging'
-      preLoaderRoute: typeof ChargingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/calculator': {
-      id: '/calculator'
-      path: '/calculator'
-      fullPath: '/calculator'
-      preLoaderRoute: typeof CalculatorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/byd': {
-      id: '/byd'
-      path: '/byd'
-      fullPath: '/byd'
-      preLoaderRoute: typeof BydRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -385,67 +315,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/news/': {
-      id: '/news/'
-      path: '/'
-      fullPath: '/news/'
-      preLoaderRoute: typeof NewsIndexRouteImport
-      parentRoute: typeof NewsRoute
-    }
-    '/models/': {
-      id: '/models/'
-      path: '/'
-      fullPath: '/models/'
-      preLoaderRoute: typeof ModelsIndexRouteImport
-      parentRoute: typeof ModelsRoute
-    }
-    '/byd/': {
-      id: '/byd/'
-      path: '/'
-      fullPath: '/byd/'
-      preLoaderRoute: typeof BydIndexRouteImport
-      parentRoute: typeof BydRoute
-    }
-    '/news/$slug': {
-      id: '/news/$slug'
-      path: '/$slug'
-      fullPath: '/news/$slug'
-      preLoaderRoute: typeof NewsSlugRouteImport
-      parentRoute: typeof NewsRoute
-    }
-    '/models/$slug': {
-      id: '/models/$slug'
-      path: '/$slug'
-      fullPath: '/models/$slug'
-      preLoaderRoute: typeof ModelsSlugRouteImport
-      parentRoute: typeof ModelsRoute
-    }
-    '/guide/best-electric-bikes-bangladesh': {
-      id: '/guide/best-electric-bikes-bangladesh'
-      path: '/guide/best-electric-bikes-bangladesh'
-      fullPath: '/guide/best-electric-bikes-bangladesh'
-      preLoaderRoute: typeof GuideBestElectricBikesBangladeshRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/byd/$slug': {
-      id: '/byd/$slug'
-      path: '/$slug'
-      fullPath: '/byd/$slug'
-      preLoaderRoute: typeof BydSlugRouteImport
-      parentRoute: typeof BydRoute
+    '/byd': {
+      id: '/byd'
+      path: '/byd'
+      fullPath: '/byd'
+      preLoaderRoute: typeof BydRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/brands/$brand': {
-      id: '/brands/$brand'
-      path: '/brands/$brand'
-      fullPath: '/brands/$brand'
-      preLoaderRoute: typeof BrandsBrandRouteImport
+    '/calculator': {
+      id: '/calculator'
+      path: '/calculator'
+      fullPath: '/calculator'
+      preLoaderRoute: typeof CalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/charging': {
+      id: '/charging'
+      path: '/charging'
+      fullPath: '/charging'
+      preLoaderRoute: typeof ChargingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/models': {
+      id: '/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof ModelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/saved': {
@@ -454,6 +398,62 @@ declare module '@tanstack/react-router' {
       fullPath: '/saved'
       preLoaderRoute: typeof AuthenticatedSavedRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/brands/$brand': {
+      id: '/brands/$brand'
+      path: '/brands/$brand'
+      fullPath: '/brands/$brand'
+      preLoaderRoute: typeof BrandsBrandRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/byd/': {
+      id: '/byd/'
+      path: '/'
+      fullPath: '/byd/'
+      preLoaderRoute: typeof BydIndexRouteImport
+      parentRoute: typeof BydRoute
+    }
+    '/byd/$slug': {
+      id: '/byd/$slug'
+      path: '/$slug'
+      fullPath: '/byd/$slug'
+      preLoaderRoute: typeof BydSlugRouteImport
+      parentRoute: typeof BydRoute
+    }
+    '/guide/best-electric-bikes-bangladesh': {
+      id: '/guide/best-electric-bikes-bangladesh'
+      path: '/guide/best-electric-bikes-bangladesh'
+      fullPath: '/guide/best-electric-bikes-bangladesh'
+      preLoaderRoute: typeof GuideBestElectricBikesBangladeshRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/models/': {
+      id: '/models/'
+      path: '/'
+      fullPath: '/models/'
+      preLoaderRoute: typeof ModelsIndexRouteImport
+      parentRoute: typeof ModelsRoute
+    }
+    '/models/$slug': {
+      id: '/models/$slug'
+      path: '/$slug'
+      fullPath: '/models/$slug'
+      preLoaderRoute: typeof ModelsSlugRouteImport
+      parentRoute: typeof ModelsRoute
+    }
+    '/news/': {
+      id: '/news/'
+      path: '/'
+      fullPath: '/news/'
+      preLoaderRoute: typeof NewsIndexRouteImport
+      parentRoute: typeof NewsRoute
+    }
+    '/news/$slug': {
+      id: '/news/$slug'
+      path: '/$slug'
+      fullPath: '/news/$slug'
+      preLoaderRoute: typeof NewsSlugRouteImport
+      parentRoute: typeof NewsRoute
     }
   }
 }

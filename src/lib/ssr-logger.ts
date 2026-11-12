@@ -22,7 +22,10 @@ function serializeError(err: unknown) {
       name: err.name,
       message: err.message,
       stack: err.stack,
-      cause: err.cause instanceof Error ? { name: err.cause.name, message: err.cause.message } : err.cause,
+      cause:
+        err.cause instanceof Error
+          ? { name: err.cause.name, message: err.cause.message }
+          : err.cause,
     };
   }
   if (typeof err === "object" && err !== null) {

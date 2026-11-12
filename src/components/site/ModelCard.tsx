@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Battery, Gauge, Zap } from "lucide-react";
 import { formatBDTLakh, formatKm, toBnDigits } from "@/lib/format";
+import { isLocalFallbackRecord } from "@/lib/data-source";
 import { ssrLog } from "@/lib/ssr-logger";
 import sealSrc from "@/assets/models/seal.webp?w=480;800;1280&format=webp&as=srcset";
 import sealion6Src from "@/assets/models/sealion-6.webp?w=480;800;1280&format=webp&as=srcset";
@@ -27,7 +28,6 @@ export const MODEL_IMAGES: Record<string, { src: string; srcSet: string }> = {
   "atto-3": { src: atto3Img, srcSet: atto3Src },
   dolphin: { src: dolphinImg, srcSet: dolphinSrc },
   "mg-4": { src: mg4Img, srcSet: mg4Src },
-  "ioniq-5": { src: ioniq5Img, srcSet: ioniq5Src },
   "hyundai-ioniq-5": { src: ioniq5Img, srcSet: ioniq5Src },
   "zeekr-x": { src: zeekrXImg, srcSet: zeekrXSrc },
   "deepal-s07": { src: deepalS07Img, srcSet: deepalS07Src },
@@ -55,7 +55,9 @@ function warnFallback(slug: string, brand: string, model: string) {
   warnedSlugs.add(slug);
   ssrLog.error(
     { scope: "model-card", event: "fallback_image_used", slug, brand, model },
-    new Error(`ModelCard has no srcset image for slug "${slug}" — falling back to placeholder icon`),
+    new Error(
+      `ModelCard has no srcset image for slug "${slug}" — falling back to placeholder icon`,
+    ),
   );
 }
 
@@ -67,7 +69,6 @@ if (process.env.NODE_ENV === "development") {
     assertValidMapping(slug, entry);
   }
 }
-
 
 const BRAND_TINTS: Record<string, string> = {
   BYD: "from-[#0b3d91] to-[#1a1a2e]",
@@ -83,6 +84,7 @@ const BRAND_TINTS: Record<string, string> = {
 };
 
 interface ModelCardProps {
+  id?: string;
   brand: string;
   model: string;
   slug: string;
@@ -140,6 +142,9 @@ export function ModelCard(p: ModelCardProps) {
             {p.brand} {p.model}
           </h3>
           <p className="mt-1 text-lg font-semibold text-primary">{formatBDTLakh(p.price_bdt)}</p>
+          {isLocalFallbackRecord(p.id) && (
+            <p className="mt-1 text-xs font-medium text-destructive">পুরোনো তালিকার দাম</p>
+          )}
         </div>
 
         <ul className="grid grid-cols-3 gap-2 text-xs">
@@ -150,18 +155,22 @@ export function ModelCard(p: ModelCardProps) {
           </li>
           <li className="rounded-lg bg-muted px-2 py-2 text-center">
             <Zap className="mx-auto mb-1 h-4 w-4 text-primary" />
-            <span className="block font-semibold">{p.battery_kwh ? `${toBnDigits(String(p.battery_kwh))} kWh` : "—"}</span>
+            <span className="block font-semibold">
+              {p.battery_kwh ? `${toBnDigits(String(p.battery_kwh))} kWh` : "—"}
+            </span>
             <span className="text-muted-foreground">ব্যাটারি</span>
           </li>
           <li className="rounded-lg bg-muted px-2 py-2 text-center">
             <Gauge className="mx-auto mb-1 h-4 w-4 text-primary" />
-            <span className="block font-semibold">{p.zero_to_hundred ? `${toBnDigits(String(p.zero_to_hundred))}s` : "—"}</span>
+            <span className="block font-semibold">
+              {p.zero_to_hundred ? `${toBnDigits(String(p.zero_to_hundred))}s` : "—"}
+            </span>
             <span className="text-muted-foreground">০-১০০</span>
           </li>
         </ul>
 
         <div className="mt-auto">
-          <span className="inline-flex w-full items-center justify-center rounded-lg bg-foreground/5 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors group-hover:bg-primary gro[...]">
+          <span className="inline-flex w-full items-center justify-center rounded-lg bg-foreground/5 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground group-focus-visible:bg-primary group-focus-visible:text-primary-foreground group-focus-visible:outline-none group-focus-visible:ring-2 group-focus-visible:ring-ring group-focus-visible:ring-offset-2">
             বিস্তারিত দেখুন →
           </span>
         </div>
@@ -171,11 +180,19 @@ export function ModelCard(p: ModelCardProps) {
 
   // BYD keeps its dedicated hub URL (SEO); other brands route through /models/$slug.
   return isByd ? (
-    <Link to="/byd/$slug" params={{ slug: p.slug }} className="block h-full">
+    <Link
+      to="/byd/$slug"
+      params={{ slug: p.slug }}
+      className="group block h-full focus-visible:outline-none"
+    >
       {Inner}
     </Link>
   ) : (
-    <Link to="/models/$slug" params={{ slug: p.slug }} className="block h-full">
+    <Link
+      to="/models/$slug"
+      params={{ slug: p.slug }}
+      className="group block h-full focus-visible:outline-none"
+    >
       {Inner}
     </Link>
   );

@@ -3,13 +3,17 @@ export const SITE_URL = (() => {
   try {
     // Node.js
     if (typeof process !== "undefined" && process.env?.SITE_URL) return process.env.SITE_URL;
-  } catch {}
+  } catch {
+    /* fall through to import.meta.env */
+  }
 
   try {
-    // Vite / browser build-time env (import.meta.env may not be typed here)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (typeof import.meta !== "undefined" && (import.meta as any).env?.SITE_URL) return (import.meta as any).env.SITE_URL;
-  } catch {}
+    // Vite / browser build-time env
+    const metaEnv = (import.meta as ImportMeta & { env?: Record<string, string> }).env;
+    if (typeof import.meta !== "undefined" && metaEnv?.SITE_URL) return metaEnv.SITE_URL;
+  } catch {
+    /* fall through to default */
+  }
 
   return "https://banglaev.com";
 })();
@@ -41,6 +45,11 @@ export function localeLinks(path: string) {
 export function absUrl(path: string) {
   const url = new URL(path, SITE_URL);
   return url.toString();
+}
+
+/** Serialize JSON-LD for an HTML script element without allowing data to end it. */
+export function serializeJsonLd(value: unknown): string {
+  return (JSON.stringify(value) ?? "null").replace(/</g, "\\u003c");
 }
 
 /**
@@ -97,7 +106,7 @@ export function ogMeta(opts: {
 export function breadcrumbLd(items: Array<{ name: string; path: string }>) {
   return {
     type: "application/ld+json" as const,
-    children: JSON.stringify({
+    children: serializeJsonLd({
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       itemListElement: items.map((it, i) => ({
@@ -203,5 +212,32 @@ export function carLd(m: CarLdModel, path: string) {
       seller: { "@id": `${SITE_URL}/#organization` },
       ...(m.price_valid_until ? { priceValidUntil: m.price_valid_until } : {}),
     },
+  };
+}
+
+/**
+ * Named human author for Article / NewsArticle structured data and the
+ * Organization founder. Real person — do not edit these values without
+ * confirmation from the author.
+ */
+export const AUTHOR = {
+  name: "Tawhid Hasan",
+  jobTitle: "Founder",
+  url: "https://www.linkedin.com/in/tawhid03",
+} as const;
+
+/**
+ * Person JSON-LD node for the site author. Reference via `{ "@id": SITE_URL/#author }`
+ * from Article/NewsArticle author fields, or embed directly.
+ */
+export function authorLd() {
+  return {
+    "@type": "Person",
+    "@id": `${SITE_URL}/#author`,
+    name: AUTHOR.name,
+    jobTitle: AUTHOR.jobTitle,
+    url: AUTHOR.url,
+    sameAs: [AUTHOR.url],
+    worksFor: { "@id": `${SITE_URL}/#organization` },
   };
 }

@@ -1,191 +1,110 @@
-/**
- * RLS regression check.
- *
- * Talks to the backend Data API with the *anonymous* publishable key only and
- * asserts that private tables stay unreadable while public content stays
- * readable. Run in CI so a permissive policy (e.g. `USING (true)` on profiles)
- * can never silently reappear.
- *
- * Usage: bun scripts/check-rls.ts
- * Env:   VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY (falls back to .env)
- */
+import { mkdir, writeFile } from "node:fs/promises";
 
-import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'node:fs'
-
-function loadEnvFile(path: string): Record<string, string> {
-  if (!existsSync(path)) return {}
-  const out: Record<string, string> = {}
-  for (const line of readFileSync(path, 'utf8').split('\n')) {
-    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/i)
-    if (m) out[m[1]] = m[2].replace(/^["']|["']$/g, '')
-  }
-  return out
-}
-
-const fileEnv = loadEnvFile('.env')
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || fileEnv.VITE_SUPABASE_URL
-const ANON_KEY =
-  process.env.VITE_SUPABASE_PUBLISHABLE_KEY || fileEnv.VITE_SUPABASE_PUBLISHABLE_KEY
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
+const ANON_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 if (!SUPABASE_URL || !ANON_KEY) {
-  console.error(
-    'Missing VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY. Set them as CI secrets.',
-  )
-  process.exit(1)
+  console.error("Missing VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY. Set them as CI secrets.");
+  process.exit(1);
 }
 
-type Expectation = 'denied' | 'public-read'
+type Expectation = "denied" | "public-read";
+type TableCheck = { table: string; expect: Expectation; why: string };
+type CheckResult = {
+  table: string;
+  expect: Expectation;
+  status: number | string;
+  rows: number | "n/a";
+  ok: boolean;
+  detail: string;
+};
 
-interface TableCheck {
-  table: string
-  expect: Expectation
-  why: string
-}
-
-/**
- * Keep this list in sync with the database policies.
- * `denied`      -> anonymous visitors must NOT be able to read any row.
- * `public-read` -> intentionally public content (marketing data only, no PII).
- */
+// Keep this list aligned with Supabase RLS policies and grants.
 const CHECKS: TableCheck[] = [
-  { table: 'profiles', expect: 'denied', why: 'contains user display names / avatars (PII)' },
-  { table: 'saved_models', expect: 'denied', why: 'per-user private data' },
-  { table: 'leads', expect: 'denied', why: 'contains contact details submitted by visitors' },
-  { table: 'ev_models', expect: 'public-read', why: 'public EV catalogue' },
-  { table: 'posts', expect: 'public-read', why: 'public news articles' },
-]
+  { table: "profiles", expect: "denied", why: "contains user display names / avatars (PII)" },
+  { table: "saved_models", expect: "denied", why: "contains per-user private data" },
+  { table: "leads", expect: "denied", why: "contains visitor contact details" },
+  { table: "ev_models", expect: "public-read", why: "public EV catalogue" },
+  { table: "posts", expect: "public-read", why: "published news articles" },
+];
 
 async function selectAnon(table: string) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*&limit=1`, {
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*&limit=1`, {
     headers: { apikey: ANON_KEY!, Authorization: `Bearer ${ANON_KEY}` },
-  })
-  const text = await res.text()
-  let body: unknown = text
+    signal: AbortSignal.timeout(15_000),
+  });
+  const text = await response.text();
+  let body: unknown = text;
   try {
-    body = JSON.parse(text)
+    body = JSON.parse(text);
   } catch {
-    /* keep raw text */
+    // Keep a short raw response for diagnostics.
   }
-  return { status: res.status, body }
+  return { status: response.status, body };
 }
 
-const failures: string[] = []
-const failureRepros: string[] = []
-const reportRows: string[] = []
-const logLines: string[] = []
-
-// GitHub inline annotations: point reviewers at the exact CHECKS entry that failed.
-const SELF_PATH = 'scripts/check-rls.ts'
-const selfLines = existsSync(SELF_PATH) ? readFileSync(SELF_PATH, 'utf8').split('\n') : []
-
-function checkLineNumber(table: string): number {
-  const idx = selfLines.findIndex((l) => l.includes(`table: '${table}'`) || l.includes(`table: "${table}"`))
-  return idx === -1 ? 1 : idx + 1
-}
-
-function ghEscape(s: string): string {
-  return s.replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A').replace(/:/g, '%3A').replace(/,/g, '%2C')
-}
-
-function annotate(level: 'error' | 'notice', table: string, title: string, message: string) {
-  if (!process.env.GITHUB_ACTIONS) return
-  const line = checkLineNumber(table)
-  console.log(
-    `::${level} file=${SELF_PATH},line=${line},col=1,title=${ghEscape(title)}::${ghEscape(message)}`,
-  )
-}
-
-
-function curlFor(table: string): string {
-  return [
-    `curl -s -i "$SUPABASE_URL/rest/v1/${table}?select=*&limit=1" \\`,
-    `  -H "apikey: $SUPABASE_ANON_KEY" \\`,
-    `  -H "Authorization: Bearer $SUPABASE_ANON_KEY"`,
-  ].join('\n')
-}
-
+const results: CheckResult[] = [];
 for (const check of CHECKS) {
-  const query = `GET ${SUPABASE_URL}/rest/v1/${check.table}?select=*&limit=1 (role: anon)`
-  const curl = curlFor(check.table)
-  const { status, body } = await selectAnon(check.table)
-  const rows = Array.isArray(body) ? body.length : null
-  const snippet = JSON.stringify(body).slice(0, 300)
+  let status: number | string = "request failed";
+  let rows: number | "n/a" = "n/a";
+  let ok = false;
+  let detail = "";
+  let snippet = "";
 
-  let ok: boolean
-  let detail: string
+  try {
+    const result = await selectAnon(check.table);
+    status = result.status;
+    rows = Array.isArray(result.body) ? result.body.length : "n/a";
+    snippet = JSON.stringify(result.body).slice(0, 300);
 
-  if (check.expect === 'denied') {
-    ok = !(status === 200 && (rows ?? 0) > 0)
-    detail = ok
-      ? `anonymous read blocked (status ${status})`
-      : `anonymous SELECT returned ${rows} row(s) — ${check.why}. Restrict the SELECT policy (e.g. \`auth.uid() = user_id\`) and \`REVOKE SELECT ON public.${check.table} FROM anon;\``
-  } else {
-    ok = status === 200
-    detail = ok
-      ? `public read works (status ${status})`
-      : `expected public read access but got status ${status} — ${snippet}. Ensure a \`TO anon\` SELECT policy plus \`GRANT SELECT ON public.${check.table} TO anon;\` exist.`
+    if (check.expect === "denied") {
+      // Any HTTP 200 means the anon role has table SELECT access. An empty
+      // result is not proof of denial: a permissive policy can return [].
+      ok = status !== 200;
+      detail = ok
+        ? `anonymous SELECT denied (HTTP ${status})`
+        : `anonymous SELECT returned HTTP 200 (${rows} rows); ${check.why}. Remove anon SELECT grants/policies unless access is intentional.`;
+    } else {
+      ok = status === 200;
+      detail = ok
+        ? "public read works"
+        : `expected public read, got HTTP ${status}: ${snippet}`;
+    }
+  } catch (error) {
+    status = error instanceof Error ? error.message : String(error);
+    detail = `request failed: ${status}`;
   }
 
-  const label = ok ? 'PASS' : 'FAIL'
-  console.log(`${label} ${check.table}: ${detail}`)
-  logLines.push(`${label} ${check.table}\n  expectation: ${check.expect}\n  query: ${query}\n  status: ${status}\n  rows: ${rows ?? 'n/a'}\n  response: ${snippet}\n  detail: ${detail}\n  reproduce:\n${curl.split('\n').map((l) => '    ' + l).join('\n')}\n`)
-  reportRows.push(
-    `| \`${check.table}\` | ${check.expect} | ${label === 'PASS' ? '✅ pass' : '❌ fail'} | ${status} | ${rows ?? 'n/a'} | ${detail.replace(/\|/g, '\\|')} |`,
-  )
-
-  if (!ok) {
-    failures.push(`${check.table} (${check.expect}) — ${detail}`)
-    failureRepros.push(
-      [`**\`${check.table}\`** — reproduce the failing anonymous request:`, '', '```bash', curl, '```'].join('\n'),
-    )
-    annotate(
-      'error',
-      check.table,
-      `RLS regression: ${check.table} (${check.expect})`,
-      `${query}\nHTTP ${status} · rows ${rows ?? 'n/a'}\n${detail}\n\nReproduce:\n${curl}`,
-    )
-  }
+  const result = { table: check.table, expect: check.expect, status, rows, ok, detail };
+  results.push(result);
+  console.log(`${ok ? "PASS" : "FAIL"} ${check.table}: ${detail}`);
 }
 
-
-
-// Write artifacts consumed by the CI PR-comment step.
+const failures = results.filter((result) => !result.ok);
 const report = [
-  '### 🔐 RLS regression check',
-  '',
+  "### 🔐 RLS regression check",
+  "",
   failures.length === 0
-    ? 'All anonymous-access expectations held. No RLS policy regressions detected.'
-    : `**${failures.length} check(s) failed.** An RLS policy or grant lets the anonymous role reach data it must not (or blocks public content it must serve).`,
-  '',
-  '| Table | Expectation | Result | HTTP | Rows | What happened / how to fix |',
-  '| --- | --- | --- | --- | --- | --- |',
-  ...reportRows,
-  '',
-  ...(failureRepros.length > 0
-    ? [
-        '<details><summary>Reproduce the failing query locally (cURL)</summary>',
-        '',
-        'Set `SUPABASE_URL` and `SUPABASE_ANON_KEY` (publishable key) first, then run:',
-        '',
-        ...failureRepros,
-        '',
-        '</details>',
-        '',
-      ]
-    : []),
-  `Full test output: [\`rls-check\` job log](${process.env.GITHUB_SERVER_URL ?? 'https://github.com'}/${process.env.GITHUB_REPOSITORY ?? ''}/actions/runs/${process.env.GITHUB_RUN_ID ?? ''}) · artifact \`rls-check-logs\` (\`logs/rls-check.log\`)`,
-  '',
-  '_Source of truth: `scripts/check-rls.ts` (`CHECKS` list)._',
-].join('\n')
+    ? "All anonymous-access expectations held."
+    : `**${failures.length} check(s) failed.** Review the table grants and RLS policies.`,
+  "",
+  "| Table | Expectation | Result | HTTP/status | Rows | Details |",
+  "| --- | --- | --- | --- | --- | --- |",
+  ...results.map(
+    (result) =>
+      `| ${result.table} | ${result.expect} | ${result.ok ? "✅ pass" : "❌ fail"} | ${result.status} | ${result.rows} | ${result.detail.replace(/\|/g, "\\|")} |`,
+  ),
+  "",
+  "A private table is considered exposed if an anonymous SELECT returns HTTP 200, even when it contains no rows.",
+].join("\n");
 
-mkdirSync('logs', { recursive: true })
-writeFileSync('logs/rls-check.log', logLines.join('\n'))
-writeFileSync('logs/rls-report.md', report + '\n')
+await mkdir("logs", { recursive: true });
+await writeFile("logs/rls-check.log", results.map((result) => `${result.table}: ${result.detail}`).join("\n") + "\n");
+await writeFile("logs/rls-report.md", `${report}\n`);
 
 if (failures.length > 0) {
-  console.error('\nRLS regression check failed:\n' + failures.map((f) => ' - ' + f).join('\n'))
-  process.exit(1)
+  console.error(`\nRLS regression check failed: ${failures.map((result) => result.table).join(", ")}`);
+  process.exit(1);
 }
 
-console.log('\nAll RLS regression checks passed.')
-
+console.log("\nAll anonymous-access regression checks passed.");

@@ -1,85 +1,113 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
-import type { Database } from "@/integrations/supabase/types";
+import { LOCAL_EV_MODELS } from "@/lib/local-data";
+import { pub, backendCircuitOpen, noteBackendFailure } from "@/lib/backend-client";
 import { ssrLog } from "@/lib/ssr-logger";
 
-function pub() {
-  return createClient<Database>(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_PUBLISHABLE_KEY!,
-    { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
-  );
+let warnedUnreachable = false;
+function logFallback(source: string, e: unknown) {
+  if (warnedUnreachable) return;
+  warnedUnreachable = true;
+  ssrLog.warn({ scope: "server-fn", event: "backend_unreachable_using_local_data", source }, e);
 }
 
-async function safeQuery<T>(fn: string, run: () => Promise<T>, fallback: T): Promise<T> {
+async function withBackend<T>(
+  source: string,
+  run: (client: NonNullable<ReturnType<typeof pub>>) => Promise<T>,
+  fallback: T,
+): Promise<T> {
+  if (backendCircuitOpen()) return fallback;
+  const client = pub();
+  if (!client) return fallback;
   try {
-    return await run();
+    const result = await run(client);
+    return result;
   } catch (e) {
-    ssrLog.error({ scope: "server-fn", event: "db_read_failed", fn }, e);
+    noteBackendFailure();
+    logFallback(source, e);
     return fallback;
   }
 }
 
 export const getAllModels = createServerFn({ method: "GET" }).handler(() =>
-  safeQuery("getAllModels", async () => {
-    const { data, error } = await pub()
-      .from("ev_models")
-      .select("*")
-      .order("display_order", { ascending: true });
-    if (error) throw new Error(error.message);
-    return data ?? [];
-  }, []),
+  withBackend(
+    "getAllModels",
+    async (client) => {
+      const { data, error } = await client
+        .from("ev_models")
+        .select("*")
+        .order("display_order", { ascending: true });
+      if (error) throw new Error(error.message);
+      return data ?? [];
+    },
+    LOCAL_EV_MODELS,
+  ),
 );
 
 export const getFeaturedModels = createServerFn({ method: "GET" }).handler(() =>
-  safeQuery("getFeaturedModels", async () => {
-    const { data, error } = await pub()
-      .from("ev_models")
-      .select("*")
-      .eq("is_featured", true)
-      .order("display_order", { ascending: true });
-    if (error) throw new Error(error.message);
-    return data ?? [];
-  }, []),
+  withBackend(
+    "getFeaturedModels",
+    async (client) => {
+      const { data, error } = await client
+        .from("ev_models")
+        .select("*")
+        .eq("is_featured", true)
+        .order("display_order", { ascending: true });
+      if (error) throw new Error(error.message);
+      return data ?? [];
+    },
+    LOCAL_EV_MODELS.filter((m) => m.is_featured),
+  ),
 );
 
 export const getBydModels = createServerFn({ method: "GET" }).handler(() =>
-  safeQuery("getBydModels", async () => {
-    const { data, error } = await pub()
-      .from("ev_models")
-      .select("*")
-      .eq("brand", "BYD")
-      .order("display_order", { ascending: true });
-    if (error) throw new Error(error.message);
-    return data ?? [];
-  }, []),
+  withBackend(
+    "getBydModels",
+    async (client) => {
+      const { data, error } = await client
+        .from("ev_models")
+        .select("*")
+        .eq("brand", "BYD")
+        .order("display_order", { ascending: true });
+      if (error) throw new Error(error.message);
+      return data ?? [];
+    },
+    LOCAL_EV_MODELS.filter((m) => m.brand === "BYD"),
+  ),
 );
 
 export const getModelsByBrand = createServerFn({ method: "GET" })
   .inputValidator((d) => z.object({ brand: z.string() }).parse(d))
   .handler(({ data }) =>
-    safeQuery(`getModelsByBrand(${data.brand})`, async () => {
-      const { data: rows, error } = await pub()
-        .from("ev_models")
-        .select("*")
-        .ilike("brand", data.brand)
-        .order("display_order", { ascending: true });
-      if (error) throw new Error(error.message);
-      return rows ?? [];
-    }, []),
+    withBackend(
+      `getModelsByBrand(${data.brand})`,
+      async (client) => {
+        const { data: rows, error } = await client
+          .from("ev_models")
+          .select("*")
+          .ilike("brand", data.brand)
+          .order("display_order", { ascending: true });
+        if (error) throw new Error(error.message);
+        return rows ?? [];
+      },
+      LOCAL_EV_MODELS.filter((m) => m.brand.toLowerCase() === data.brand.toLowerCase()),
+    ),
   );
 
 export const getModelBySlug = createServerFn({ method: "GET" })
   .inputValidator((d) => z.object({ slug: z.string() }).parse(d))
   .handler(({ data }) =>
-    safeQuery(`getModelBySlug(${data.slug})`, async () => {
-      const { data: row, error } = await pub()
-        .from("ev_models")
-        .select("*")
-        .eq("slug", data.slug)
-        .maybeSingle();
-      if (error) throw new Error(error.message);
-      return row;
-    }, null),
+    withBackend(
+      `getModelBySlug(${data.slug})`,
+      async (client) => {
+        const { data: row, error } = await client
+          .from("ev_models")
+          .select("*")
+          .eq("slug", data.slug)
+          .maybeSingle();
+        if (error) throw new Error(error.message);
+        return row;
+      },
+      LOCAL_EV_MODELS.find((m) => m.slug === data.slug) ?? null,
+    ),
   );

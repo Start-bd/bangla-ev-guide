@@ -46,8 +46,14 @@ function AuthPage() {
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
           সাইন ইন করলে আপনি আমাদের{" "}
-          <Link to="/terms" className="underline">শর্তাবলি</Link> ও{" "}
-          <Link to="/privacy" className="underline">প্রাইভেসি পলিসি</Link> মেনে নিচ্ছেন।
+          <Link to="/terms" className="underline">
+            শর্তাবলি
+          </Link>{" "}
+          ও{" "}
+          <Link to="/privacy" className="underline">
+            প্রাইভেসি পলিসি
+          </Link>{" "}
+          মেনে নিচ্ছেন।
         </p>
       </div>
     </div>

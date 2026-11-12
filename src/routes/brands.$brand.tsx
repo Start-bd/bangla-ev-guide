@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-route
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { getModelsByBrand } from "@/lib/models.functions";
 import { ModelCard } from "@/components/site/ModelCard";
+import { DataSourceNotice } from "@/components/site/DataSourceNotice";
+import { isLocalFallbackRecord } from "@/lib/data-source";
 import { localeLinks, ogMeta, breadcrumbLd } from "@/lib/seo";
 
 const brandQO = (brand: string) =>
@@ -47,11 +49,10 @@ export const Route = createFileRoute("/brands/$brand")({
       throw redirect({ to: "/byd" });
     }
   },
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(brandQO(params.brand)),
+  loader: ({ context, params }) => context.queryClient.ensureQueryData(brandQO(params.brand)),
   head: ({ params, loaderData }) => {
     const b = params.brand;
-    const display = BRAND_NAMES[b.toLowerCase()] ?? (b.charAt(0).toUpperCase() + b.slice(1));
+    const display = BRAND_NAMES[b.toLowerCase()] ?? b.charAt(0).toUpperCase() + b.slice(1);
     const t = `${display} Electric Cars in Bangladesh 2026 | Price & Specs — BanglaEV`;
     const d = `${display} EV লাইনআপ বাংলাদেশে — সকল মডেলের দাম, রেঞ্জ, ব্যাটারি ও স্পেসিফিকেশন।`;
     const firstImage = loaderData?.find((m) => m.image_url)?.image_url ?? null;
@@ -117,6 +118,7 @@ function BrandHub() {
 
       <section className="container-page py-16">
         <h2 className="mb-8 text-3xl font-bold">{display} লাইনআপ</h2>
+        {models.some((m) => isLocalFallbackRecord(m.id)) && <DataSourceNotice kind="models" />}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {models.map((m) => (
             <ModelCard key={m.id} {...m} />
