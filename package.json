@@ -13,6 +13,7 @@
     "test:seo": "bun scripts/check-seo-head.ts",
     "test:ssr-byd": "bun scripts/check-ssr-byd.ts",
     "test:rls": "bun scripts/check-rls.ts",
+    "test:fallback-data": "bun scripts/check-fallback-data.ts",
     "test:modelcard-hover": "python scripts/check-modelcard-hover.py"
   },
   "dependencies": {
